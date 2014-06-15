@@ -102,11 +102,11 @@
                     d = d.parent();
                 }
                 c.update(d.data("pickerValue"));
-                c._trigger("pickerPick", {
+                c._trigger("pickerSelect", {
                     pickerItem: this,
                     pickerValue: c.pickerValue
                 });
-                if (c.options.hideOnPick) {
+                if (c.options.hideOnPick && c.getAcceptButton().length === 0) {
                     c.hide();
                 }
             };
@@ -118,6 +118,13 @@
             }
             if (this.options.displayButtons) {
                 this.picker.element.append(a(this.options.templates.buttons));
+                this.getAcceptButton().on("click", function() {
+                    c.update(c.pickerValue, true);
+                    c.hide();
+                });
+                this.getCancelButton().on("click", function() {
+                    c.hide();
+                });
             }
             this.picker = a.extend(true, this.picker, b);
         },
@@ -197,7 +204,7 @@
             if (a.inArray(b, this.selectableItems) !== -1 || !this.options.onlyValid) {
                 this.pickerValue = b;
                 this._updateComponents();
-                this._trigger("pickerChange", {
+                this._trigger("pickerSetValue", {
                     pickerValue: b
                 });
                 return this.pickerValue;
@@ -221,6 +228,9 @@
                 } else {
                     this.element.data("pickerValue", this.getValue());
                 }
+                this._trigger("pickerSetSourceValue", {
+                    pickerValue: a
+                });
             }
             return a;
         },
@@ -246,6 +256,12 @@
         hasContainer: function() {
             return this.container !== false;
         },
+        getAcceptButton: function() {
+            return this.picker.element.find(".picker-button-accept");
+        },
+        getCancelButton: function() {
+            return this.picker.element.find(".picker-button-cancel");
+        },
         isDisabled: function() {
             if (this.hasInput()) {
                 return this.input.prop("disabled") === true;
@@ -258,10 +274,14 @@
         hide: function() {
             this.element.popover("hide");
         },
-        update: function(a) {
+        update: function(a, b) {
             a = a ? a : this.getSourceValue(this.pickerValue);
             this._trigger("pickerUpdating");
-            this.setSourceValue(a);
+            if (this.getAcceptButton().length === 0 || b === true) {
+                this.setSourceValue(a);
+            } else {
+                this.setValue(a);
+            }
             this._trigger("pickerUpdated");
             return a;
         },

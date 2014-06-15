@@ -95,7 +95,7 @@ $('.icp-2').picker({
         <script>
             $(function() {
                 // Event sample:
-                $('.icp').on('pickerPick', function(e) {
+                $('.icp').on('pickerSetSourceValue', function(e) {
                     $('.lead .fa').get(0).className = 'fa fa-3x fa-' + e.pickerValue;
                 });
                 $('.action-destroy').on('click', function() {

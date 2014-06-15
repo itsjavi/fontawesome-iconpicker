@@ -4,15 +4,6 @@ bootstrap-popover-picker
 Generic jQuery plugin template for building pickers using Bootstrap popovers,
 fully customizable with a powerful base API.
 
-## Popover placement extensions
-
-This plugin extends Popover adding new placement options to the existing ones,
-so all the possibilities are:
-
-* top, right, bottom, left
-* topRight, bottomRight, bottomLeft, topLeft
-* rightTop, rightBottom, leftBottom, leftTop
-
 ## Instantiation
 
 You can call the plugin in several ways:
@@ -39,13 +30,24 @@ All of them exposes the plugin instance through event.picker
 In order of call:
 
 * pickerCreate
-* pickerPick (also exposes event.pickerItem and event.pickerValue)
+* pickerSelect (also exposes event.pickerItem and event.pickerValue)
 * pickerUpdating
-* pickerChange (also exposes event.pickerValue)
+* pickerSetValue (also exposes event.pickerValue)
+* pickerSetSourceValue (also exposes event.pickerValue)
 * pickerUpdated
 * pickerDestroy
 
+## Popover placement extensions (WIP)
+
+This plugin extends Popover adding new placement options to the existing ones,
+so all the possibilities are:
+
+* top, right, bottom, left
+* topRight, bottomRight, bottomLeft, topLeft
+* rightTop, rightBottom, leftBottom, leftTop
+
 ## To-Do
+- [ ] Implement popover extra placements
 - [ ] Implement inline mode
-- [ ] Implement optional accept/cancel buttons
+- [x] Implement optional accept/cancel buttons
 - [ ] Hide on blur input, but not if the blur is caused because we clicked the popover

@@ -4,23 +4,25 @@ bootstrap-popover-picker
 Generic jQuery plugin template for building pickers using Bootstrap popovers,
 fully customizable with a powerful base API.
 
+[View demos](http://mjolnic.github.io/bootstrap-popover-picker/)
+
 ## Instantiation
 
 You can call the plugin in several ways:
 
 ```javascript
-    // Create instance if not exists (returns a jQuery object)
-    $('.my').picker();
-    $('.my').picker({ /*options*/ });
-    
-    // For the first matched element, return a plugin property value
-    $('.my').picker('pickerProperty');
+// Create instance if not exists (returns a jQuery object)
+$('.my').picker();
+$('.my').picker({ /*options*/ });
 
-    // For the first matched element, call a plugin method with the given args and return the value
-    $('.my').picker('pickerMethod', 'methodArg1', 'methodArg2' /* , other args */);
-    
-    // Call and apply a plugin method to EACH matched element. Returns a jQuery object.
-    $('.my').picker(true, 'pickerMethod', methodArg1, ...); ->
+// For the first matched element, return a plugin property value
+$('.my').picker('pickerProperty');
+
+// For the first matched element, call a plugin method with the given args and return the value
+$('.my').picker('pickerMethod', 'methodArg1', 'methodArg2' /* , other args */);
+
+// Call and apply a plugin method to EACH matched element. Returns a jQuery object.
+$('.my').picker(true, 'pickerMethod', methodArg1, ...); ->
 ```
 
 ## Triggered Events

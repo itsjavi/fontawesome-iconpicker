@@ -3,7 +3,11 @@
     <head>
         <meta charset="utf-8">
         <title>Bootstrap Popover Picker for Twitter Bootstrap 3</title>
-        
+<!--        <style>
+            body * {
+                position: relative;
+            }
+        </style>-->
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="dist/css/bootstrap-picker.min.css" rel="stylesheet">
@@ -57,25 +61,36 @@ fully customizable with a powerful base API.
                         <i class="fa fa-github fa-3x"></i>
                     </p>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label>Standard</label>
+                                <label>Default</label>
                                 <input class="form-control icp icp-1" value="fa-angle-double-down" type="text" />
                             </div>
-                            <pre class="well">$('.icp-1').picker();</pre>
+                            <div class="form-group">
+                                <label>With data-placement=bottomLeft attribute and a component</label>
+                                
+                                <div class="input-group">
+                                    <input data-placement="bottomLeft" class="form-control icp icp-2" value="fa-angle-double-down" type="text" />
+                                    <span class="input-group-addon"></span>
+                                </div>
+                            </div>
+                            <pre class="well">$('.icp-1, .icp-2').picker();</pre>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label>With custom options</label>
-                                <input class="form-control icp icp-2" value="fa-github" type="text" />
+                                <input class="form-control icp icp-3" value="fa-github" type="text" />
                             </div>
                             <pre class="well">
-$('.icp-2').picker({
+$('.icp-3').picker({
     title: 'With custom options',
     selectableItems: ['github', 'heart', 'html5', 'css3'],
     selectedCustomClass: 'label label-success',
     displayButtons: true,
-    hideOnPick:true // note that this is ignored cause we have an accept button
+    placement:'topRight',
+    // note that this is ignored cause we have an accept button:
+    hideOnPick:true,
+    //... (see the source code of this page)
 });</pre>
                         </div>
                     </div>
@@ -83,6 +98,7 @@ $('.icp-2').picker({
                 <div class="panel-footer">
                     <button class="btn btn-danger action-destroy">Destroy instances</button>
                     <button class="btn btn-default action-create">Create instances</button>
+                    
                 </div>
             </div>
         </div>
@@ -94,23 +110,46 @@ $('.icp-2').picker({
         <script src="dist/js/bootstrap-picker.js"></script>
         <script>
             $(function() {
-                // Event sample:
-                $('.icp').on('pickerSetSourceValue', function(e) {
-                    $('.lead .fa').get(0).className = 'fa fa-3x fa-' + e.pickerValue;
-                });
                 $('.action-destroy').on('click', function() {
                     $('.icp.picker-element').picker(true, 'destroy');
                 });
+                // live binding:
+                $(document).on('click', '.action-placement', function() {
+                    $('.icp-3').picker(true, 'setCustomPlacement', $(this).text());
+                });
                 $('.action-create').on('click', function() {
-                    $('.icp-1:not(.picker-element)').picker();
+                    $('.icp-1:not(.picker-element)').picker({
+                        //placement:'bottom'
+                    });
                     $('.icp-2:not(.picker-element)').picker({
+                        //placement:'bottomLeft'
+                    });
+                    $('.icp-3:not(.picker-element)').picker({
                         title: 'With custom options',
                         selectableItems: ['github', 'heart', 'html5', 'css3'],
                         selectedCustomClass: 'label label-success',
                         displayButtons: true,
-                        hideOnPick:true // note that this is ignored cause we have an accept button
-                    });
+                        placement:'topRight',
+                        // note that this is ignored cause we have an accept button:
+                        hideOnPick:true,
+                        templates:{
+                        buttons: '<div class="picker-buttons">'+
+                                'Placement: <button class="btn btn-default btn-xs action-placement">topLeft</button>\n\
+                    <button class="btn btn-default btn-xs action-placement">topRight</button>\n\
+                    <button class="btn btn-default btn-xs action-placement">bottomLeft</button>\n\
+                    <button class="btn btn-default btn-xs action-placement">bottomRight</button><hr>'+
+                            '<button class="picker-button picker-button-cancel btn btn-default btn-sm">Cancel</button>' +
+                            '<button class="picker-button picker-button-accept btn btn-primary btn-sm">Accept</button></div>'}
+                    }).picker('show');
                 }).trigger('click');
+                
+                
+                // Events sample:
+                // This event is only triggered when the actual input value is changed
+                // by user interaction
+                $('.icp').on('pickerSelectAccepted', function(e) {
+                    $('.lead .fa').get(0).className = 'fa fa-3x fa-' + e.pickerValue;
+                });
             });
         </script>
     </body>

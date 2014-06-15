@@ -1,8 +1,8 @@
 @item_size:28px;
 @hover_bg:#eee;
 @num_cols: 4;
-@base_spacing: 20px;
-@picker_width: (@item_size * @num_cols) + (@num_cols * @base_spacing * 3);
+@base_spacing: 26px;
+@picker_width: (@item_size * @num_cols) + (@num_cols * @base_spacing * (@num_cols - 1)) + @base_spacing;
 @border_color: #ddd;
 
 // Clearfix

@@ -13,7 +13,7 @@ You can call the plugin in several ways:
 ```javascript
 // Create instance if not exists (returns a jQuery object)
 $('.my').picker();
-$('.my').picker({ /*options*/ });
+$('.my').picker({ /*options*/ }); // you can also specify options via data-* attributes
 
 // For the first matched element, return a plugin property value
 $('.my').picker('pickerProperty');
@@ -32,11 +32,16 @@ All of them exposes the plugin instance through event.picker
 In order of call:
 
 * pickerCreate
+* pickerShow
+* pickerShown
 * pickerSelect (also exposes event.pickerItem and event.pickerValue)
-* pickerUpdating
+* pickerSelectAccepted (also exposes event.pickerItem and event.pickerValue)
+* pickerUpdate
+* pickerInvalid (also exposes event.pickerValue)
 * pickerSetValue (also exposes event.pickerValue)
 * pickerSetSourceValue (also exposes event.pickerValue)
 * pickerUpdated
+* pickerHide
 * pickerDestroy
 
 ## Popover placement extensions (WIP)
@@ -49,7 +54,11 @@ so all the possibilities are:
 * rightTop, rightBottom, leftBottom, leftTop
 
 ## To-Do
-- [ ] Implement popover extra placements
+- [ ] Fix extra placements: rightTop, rightBottom, leftBottom and leftTop
 - [ ] Implement inline mode
 - [x] Implement optional accept/cancel buttons
 - [ ] Hide on blur input, but not if the blur is caused because we clicked the popover
+- [ ] Fix css: soft lines showing under popover arrows
+- [ ] Auto placement when popover offsets the window (also due to scroll)
+- [ ] Container: Fix placements when container is different from the element parent
+- [ ] Implement component mode (if present, the trigger must be the component and not the input)

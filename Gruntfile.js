@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(grunt) {
     grunt.initConfig({
-        recess: {
+        less: {
             dist: {
                 options: {
                     compile: true,
@@ -57,7 +57,7 @@ module.exports = function(grunt) {
                 files: [
                     'src/less/*.less'
                 ],
-                tasks: ['recess']
+                tasks: ['less']
             },
             js: {
                 files: [
@@ -78,13 +78,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-recess');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-jsbeautifier');
 
     // Register tasks
     grunt.registerTask('default', [
         'clean',
-        'recess',
+        'less',
         'jsbeautifier',
         'uglify'
     ]);

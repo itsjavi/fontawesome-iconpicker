@@ -1,0 +1,35 @@
+{
+    "name": "bootstrap-popover-picker",
+    "version": "1.0.0",
+    "description": "Bootstrap Popover Picker plugin template for Twitter Bootstrap",
+    "homepage": "http://mjolnic.github.io/bootstrap-popover-picker/",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:mjolnic/bootstrap-popover-picker.git"
+    },
+    "bugs": {
+        "url": "https://github.com/mjolnic/bootstrap-popover-picker/issues"
+    },
+    "keywords": [
+        "bootstrap",
+        "fontawesome",
+        "iconpicker",
+        "popover",
+        "picker"
+    ],
+    "author": "Javier Aguilar @mjolnic",
+    "licenses": [{
+            "type": "MIT",
+            "url": "https://github.com/mjolnic/bootstrap-popover-picker/blob/master/LICENSE"
+        }],
+    "devDependencies": {
+        "grunt": "~0.4.2",
+        "grunt-contrib-clean": "~0.5.0",
+        "grunt-contrib-jshint": "~0.7.2",
+        "grunt-recess": "~0.5.0",
+        "grunt-contrib-uglify": "~0.2.7",
+        "grunt-contrib-concat": "~0.3.0",
+        "grunt-jsbeautifier": "~0.2.3",
+        "grunt-contrib-watch": "~0.5.3"
+    }
+}

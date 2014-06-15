@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Bootstrap Popover Picker for Twitter Bootstrap 3</title>
+        
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="dist/css/bootstrap-picker.min.css" rel="stylesheet">
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <style>
+            footer{
+                font-style: italic;
+                background:#f7f7f7;
+                padding:60px;
+                text-align: center;
+                margin-top: 60px;
+            }
+            pre{
+                text-align: left;
+            }
+            .form-control, .form-group{
+                position: relative;
+            }
+            p.lead{
+                max-width: 600px;
+                margin:0 auto 20px auto;
+            }
+            div.lead{
+                margin:30px 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container" style="text-align: center">
+            <h1 class="page-header">Bootstrap Popover Picker</h1>
+            <p class="lead">
+                Generic jQuery plugin template for building pickers using Bootstrap popovers,
+fully customizable with a powerful base API.
+            </p>
+            <div class="lead">
+                <iframe class="inl-bl" src="http://ghbtns.com/github-btn.html?user=mjolnic&amp;repo=bootstrap-popover-picker&amp;type=watch&amp;count=true&amp;size=large"
+                        allowtransparency="true" frameborder="0" scrolling="0" width="125" height="30"></iframe>
+                <iframe class="inl-bl" src="http://ghbtns.com/github-btn.html?user=mjolnic&amp;repo=bootstrap-popover-picker&amp;type=fork&amp;count=true&amp;size=large"
+                        allowtransparency="true" frameborder="0" scrolling="0" width="125" height="30"></iframe>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Demo featuring a Font Awesome icon picker (bundled with the library)</h2>
+                </div>
+                <div class="panel-body">
+                    <p class="lead">
+                        <i class="fa fa-github fa-3x"></i>
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Standard</label>
+                                <input class="form-control icp icp-1" value="fa-angle-double-down" type="text" />
+                            </div>
+                            <pre class="well">$('.icp-1').picker();</pre>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>With custom options</label>
+                                <input class="form-control icp icp-2" value="fa-github" type="text" />
+                            </div>
+                            <pre class="well">
+$('.icp-2').picker({
+    title: 'With custom options',
+    selectableItems: ['github', 'heart', 'html5', 'css3'],
+    selectedCustomClass: 'label label-success',
+    displayButtons: true,
+    hideOnPick:true
+});</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <button class="btn btn-danger action-destroy">Destroy instances</button>
+                    <button class="btn btn-default action-create">Create instances</button>
+                </div>
+            </div>
+        </div>
+        <footer>
+            created by Javier Aguilar <a href="http://mjolnic.com" target="_blank">@mjolnic</a>
+        </footer>
+        <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="dist/js/bootstrap-picker.js"></script>
+        <script>
+            $(function() {
+                // Event sample:
+                $('.icp').on('pickerPick', function(e) {
+                    $('.lead .fa').get(0).className = 'fa fa-3x fa-' + e.pickerValue;
+                });
+                $('.action-destroy').on('click', function() {
+                    $('.icp.picker-element').picker(true, 'destroy');
+                });
+                $('.action-create').on('click', function() {
+                    $('.icp-1:not(.picker-element)').picker();
+                    $('.icp-2:not(.picker-element)').picker({
+                        title: 'With custom options',
+                        selectableItems: ['github', 'heart', 'html5', 'css3'],
+                        selectedCustomClass: 'label label-success',
+                        displayButtons: true,
+                        hideOnPick:true
+                    });
+                }).trigger('click');
+            });
+        </script>
+    </body>
+
+</html>

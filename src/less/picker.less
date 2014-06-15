@@ -1,0 +1,98 @@
+/*!
+ * Bootstrap Popover Picker
+ * http://mjolnic.github.io/bootstrap-popover-picker/
+ *
+ * Originally written by (c) 2012 Stefan Petre
+ * Licensed under the Apache License v2.0
+ * https://github.com/mjolnic/bootstrap-popover-picker/blob/master/LICENSE
+ *
+ */
+@import 'vars.less';
+
+
+.picker-popover{
+    position: absolute;
+    max-width: none;
+    width: (@picker_width) + (@base_spacing*2);
+    //overflow: hidden;  // fix margin-right on the last column
+    right:0 !important;
+    top:100% !important;
+    bottom:auto !important;
+    left:auto !important;
+    .clearfix();
+    .popover-content{
+        padding:@base_spacing;
+        text-align: center;
+        overflow: hidden;
+    }
+    .popover-title{
+        padding:@base_spacing (@base_spacing * 2);
+        margin-bottom: 2px;
+        font-size:@item_size/1.5;
+    }
+    .arrow{
+        float:right !important;
+        .clearfix();
+        left:auto !important;
+        right:@base_spacing*2 !important;
+    }
+}
+
+.picker{
+    *{
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+        position: relative;
+    }
+    position: relative;
+    .clearfix();
+    text-align:left;
+    text-shadow:none;
+    line-height:0;
+    display:block;
+    margin:0 0 -@base_spacing (@base_spacing / 3); // remove bottom item margins
+    width:@picker_width; // fix margin-right on the last column
+    display:block;
+    min-height: @item_size + @base_spacing;
+    
+    .picker-items{
+        position: relative;
+        .clearfix();
+        //margin-bottom:-@base_spacing; // remove bottom item margins
+        clear:both;
+        float:none;
+    }
+    .picker-item{
+        float:left;
+        width:@item_size;
+        height:@item_size;
+        padding: @base_spacing;
+        margin:0 @base_spacing @base_spacing 0;
+        text-align:center;
+        cursor:pointer;
+        border-radius:3px;
+        font-size:@item_size;
+        .outer-border();
+        &:hover:not(.picker-selected){
+            background-color:@hover_bg;
+        }
+        &.picker-selected{
+            box-shadow: none;
+        }
+    }
+    
+    .picker-buttons{
+        .clearfix();
+        float:none;
+        clear:both;
+        padding:@base_spacing @base_spacing*2;
+        text-align:right;
+        margin:(@base_spacing / 2) (-@base_spacing) -1px -(@base_spacing*2);
+        border-top:1px solid #ebebeb;
+        button{
+            margin-left: 10px;
+        }
+        background:#f7f7f7;
+    }
+}

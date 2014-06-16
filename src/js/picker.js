@@ -24,35 +24,32 @@
         'angle-down', 'angle-left', 'angle-right', 'angle-up'
     ];
     var defaults = {
-        // popover options:
-        placement: 'bottomRight', // WIP (has some issues with auto and CSS). auto, top, bottom, left, right
         title: false, // Popover title (optional) only if specified in the template
-        animation: true,
-        // plugin options:
         selected: false, // use this value as the current item and ignore the original
         defaultValue: false, // use this value as the current item if input or element item is empty
-        onlyValid: true, // Restrict setSourceValue to the selectableItems values. If it is not valid, the value won't change
-        input: 'input', // children input selector
+        placement: 'bottom', // WIP (has some issues with auto and CSS). auto, top, bottom, left, right
+        collision: 'none', // If true, the popover will be repositioned to another position when collapses with the window borders
+        animation: true,
+        //hide picker automatically when a value is picked. it is ignored if mustAccept is not false and the accept button is visible
         hideOnPick: false,
-        displayButtons: false,
+        showFooter: false,
+        mustAccept: false, // only applicable when there's an picker-btn-accept button in the popover footer
         selectedCustomClass: 'bg-primary', // Appends this class when to the selected item
         selectableItems: false, // false or array. If is not false or empty array, it will be used instead of defaultSelectableItems
-
-        // Not implemented yet or incomplete:
-        inline: false, // WIP. displays the picker as an inline element
-        component: '.input-group-addon', // children component jQuery selector or object, relative to the parent element
-        container: false, // WIP.  Appends the popover to a specific element. If true, appends to the jQuery element.
-        autoPlacement: true, // WIP (bugy). If true, the popover will be repositioned to another position when collapses with the window borders
         //
+        inline: false, // WIP. displays the picker as an inline element
+        inputSelector: 'input', // children input selector
+        componentSelector: '.input-group-addon', // children component jQuery selector or object, relative to the parent element
+        containerSelector: false, // WIP.  Appends the popover to a specific element. If true, appends to the jQuery element.
         // Plugin templates:
         templates: {
+            popover: '<div class="picker-popover popover"><div class="arrow"></div>' +
+                    '<div class="popover-title"></div><div class="popover-content"></div></div>',
+            popoverFooter: '<div class="popover-footer">' +
+                    '<button class="picker-btn picker-btn-cancel btn btn-default btn-sm">Cancel</button>' +
+                    '<button class="picker-btn picker-btn-accept btn btn-primary btn-sm">Accept</button></div>',
             picker: '<div class="picker"><div class="picker-items"></div></div>',
-            item: '<div class="picker-item"><i class="fa"></i></div>',
-            buttons: '<div class="picker-buttons">' +
-                    '<button class="picker-button picker-button-cancel btn btn-default btn-sm">Cancel</button>' +
-                    '<button class="picker-button picker-button-accept btn btn-primary btn-sm">Accept</button></div>',
-            popover: '<div class="popover picker-popover"><div class="arrow"></div>' +
-                    '<div class="popover-title"></div><div class="popover-content"></div></div>'
+            pickerItem: '<div class="picker-item"><i class="fa"></i></div>',
         }
     };
 
@@ -61,60 +58,57 @@
     var Picker = function(element, options) {
         this._id = _idCounter++;
         this.element = $(element).addClass('picker-element');
+        this._trigger('pickerCreate');
         this.options = $.extend(true, {}, defaults, this.element.data(), options);
-        this.selectableItems = this.options.selectableItems;
+        this.options.originalPlacement = this.options.placement;
 
-        if ((!$.isArray(this.selectableItems)) || (this.selectableItems.length === 0)) {
-            this.selectableItems = defaultSelectableItems;
+        if ((!$.isArray(this.options.selectableItems)) || (this.options.selectableItems.length === 0)) {
+            this.options.selectableItems = defaultSelectableItems;
         }
 
-        // Plugin as component
-        this.component = this.options.component;
-        this.component = ((this.component !== false) ? this.element.parent().find(this.component) : false);
+        // Picker container element
+        this.container = this._sanitizeJqueryObject((!!this.options.containerSelector) ? $(this.options.containerSelector) : (
+                this.element.is('input') ? this.element.parent() : this.element
+                ), 'picker-container');
 
-        if (((this.component !== false) && (this.component.length === 0)) || (!this.component)) {
-            this.component = false;
-        }else{
-            this.component.addClass('picker-component');
-        }
-
-        // Plugin container
-        this.container = (this.options.container === true) ? this.element : this.options.container;
-        this.container = (this.container !== false) ? $(this.container) : false;
-
-        if (((this.container !== false) && (this.container.length === 0)) || (!this.container)) {
-            this.container = false;
-        }else{
-            this.container.addClass('picker-container');
-        }
+        // Plugin as component ?
+        this.component = this._sanitizeJqueryObject((!!this.options.componentSelector) ?
+                this.container.find(this.options.componentSelector) : false, 'picker-component');
 
         // Is the element an input? Should we search inside for any input?
-        this.input = this.element.is('input') ? this.element : (this.options.input ?
-                this.element.find(this.options.input) : false);
+        this.input = this._sanitizeJqueryObject(this.element.is('input') ? this.element : (this.options.inputSelector ?
+                this.element.find(this.options.inputSelector) : false), 'picker-input');
 
-        if (((this.input !== false) && (this.input.length === 0)) || (!this.input)) {
-            this.input = false;
-        }else{
-            this.input.addClass('picker-input');
+        // Create popover and picker HTML
+        this._createPicker(this._createPopover());
+
+        if (this.getAcceptButton().length === 0) {
+            //console.warn('no buttons!!!');
+            this.options.mustAccept = false; // disable this because we don't have accept buttons
         }
-        
-        this.originalPlacement = this.options.placement;
 
-        // Create picker HTML and sliders info
-        this._createPicker();
-
-        // Create popover HTML and events
-        this._createPopover();
+        //console.log(this.component);
+        this.container.append(this.popover);
 
         // Bind mouse events
-        this._bindEvents();
-
-        this._trigger('pickerCreate');
+        this._bindElementEvents();
+        this._bindWindowEvents();
 
         // Refresh everything
-        $($.proxy(function() {
-            this.update(this.options.selected);
-        }, this));
+        this.update(this.options.selected);
+
+        this._trigger('pickerCreated');
+    };
+
+    Picker.pos = $.pos;
+    Picker.batch = function(selector, method) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        return $(selector).each(function() {
+            var $inst = $(this).data('picker');
+            if (!!$inst) {
+                $inst[method].apply($inst, args);
+            }
+        });
     };
 
     Picker.prototype = {
@@ -126,189 +120,173 @@
             opts = opts || {};
             this.element.trigger($.extend({
                 type: name,
-                picker: this
+                pickerInstance: this
             }, opts));
             //console.log(name + ' triggered for instance #' + this._id);
         },
         _error: function(text) {
             throw "Bootstrap Popover Picker Exception: " + text;
         },
+        _sanitizeJqueryObject: function(obj, classOnValid) {
+            if (((obj !== false) && (obj.length === 0)) || (!obj)) {
+                obj = false;
+            } else if (classOnValid) {
+                obj.addClass(classOnValid);
+            }
+            return obj;
+        },
         _createPopover: function() {
-            var _self = this;
-            var _isCustom = this._hasCustomPlacement();
-            this.popover = this.element.popover({
-                'title': this.options.title,
-                'placement': (!_isCustom ? this.options.placement : 'picker-placement'),
-                'container': this.element.parent(),
-                'animation': (!_isCustom ? this.options.animation : false),
-                'template': this.options.templates.popover,
-                'content': this.picker.element,
-                'html': true,
-                'trigger': 'manual'
-            }).on('focus.picker', function() {
-                $(this).popover('show');
-            }).on('show.bs.popover.picker', function(e) {
-                if (_isCustom && _self.popover.$tip) {
-                    // hide original popover placement cause
-                    // we want to use our custom placement method
-                    _self.popover.$tip.css('opacity', 0);
-                } else {
-                    _self._trigger('pickerShow');
-                }
-                _self.update();
-            }).on('shown.bs.popover.picker', function(e) {
-                if (_isCustom && _self.popover.$tip) {
-                    // custom placement method
-                    _self._showCustomPopover();
-                } else {
-                    _self._trigger('pickerShown');
-                }
-            }).data('bs.popover');
+            this.popover = $(this.options.templates.popover);
+
+            // set popover content
+            if (!!this.options.title) {
+                this.popover.find('.popover-title').html(this.options.title);
+            } else {
+                this.popover.find('.popover-title').remove();
+            }
+
+            if (!!this.options.templates.popoverFooter && this.options.showFooter) {
+                this.popover.append($(this.options.templates.popoverFooter));
+            } else if (this.options.showFooter !== true) {
+                this.popover.find('.popover-footer').remove();
+            }
+
+            if (this.options.animation === true) {
+                this.popover.addClass('fade');
+            }
 
             return this.popover;
         },
-        _createPicker: function(customProps) {
-            customProps = customProps ||  {};
-
-            var _self = this,
-                    _picker = $(this.options.templates.picker);
-
-            this.picker = {
-                element: _picker
-                        // other properties, jQuery objects, ...
-            };
+        _createPicker: function(popover) {
+            var _self = this;
+            this.picker = $(this.options.templates.picker);
 
             var itemClickFn = function(e) {
                 var $this = $(this);
                 if ($this.is('.fa')) {
                     $this = $this.parent();
                 }
-                _self.update($this.data('pickerValue'));
+
                 _self._trigger('pickerSelect', {
-                    pickerItem: this,
+                    pickerItem: $this,
                     pickerValue: _self.pickerValue
                 });
-                if (!_self.options.displayButtons) {
-                    _self._trigger('pickerSelectAccepted', {
-                        pickerItem: _self.picker.element.find('.picker-selected').get(0),
+                
+                if (_self.options.mustAccept === false) {
+                    _self.update($this.data('pickerValue'));
+                    _self._trigger('pickerSelected', {
+                        pickerItem: this,
                         pickerValue: _self.pickerValue
                     });
+                }else{
+                    _self.update($this.data('pickerValue'), true);
                 }
-                if (_self.options.hideOnPick && (_self.getAcceptButton().length === 0)) {
+                
+                if (_self.options.hideOnPick && (_self.options.mustAccept === false)) {
                     // only hide when the accept button is not present
                     _self.hide();
                 }
             };
 
-            for (var i in this.selectableItems) {
-                var itemElement = $(this.options.templates.item);
-                itemElement.find('.fa').addClass('fa-' + this.selectableItems[i]);
-                itemElement.data('pickerValue', this.selectableItems[i])
+            for (var i in this.options.selectableItems) {
+                var itemElement = $(this.options.templates.pickerItem);
+                itemElement.find('.fa').addClass('fa-' + this.options.selectableItems[i]);
+                itemElement.data('pickerValue', this.options.selectableItems[i])
                         .on('click.picker', itemClickFn);
-                this.picker.element.find('.picker-items').append(itemElement
-                        .attr('title', '.' + this.getValue(this.selectableItems[i])));
+                this.picker.find('.picker-items').append(itemElement
+                        .attr('title', '.' + this.getValue(this.options.selectableItems[i])));
             }
 
-            if (this.options.displayButtons) {
-                this.picker.element.append($(this.options.templates.buttons));
-                this.getAcceptButton().on('click', function() {
-                    _self.update(_self.pickerValue, true);
+            if (_self.options.mustAccept === true) {
+                this.getAcceptButton().on('click.picker', function() {
+                    var _picked = _self.picker.find('.picker-selected').get(0);
 
-                    _self._trigger('pickerSelectAccepted', {
-                        pickerItem: _self.picker.element.find('.picker-selected').get(0),
+                    _self.update(_self.pickerValue);
+
+                    _self._trigger('pickerSelected', {
+                        pickerItem: _picked,
                         pickerValue: _self.pickerValue
                     });
 
                     _self.hide();
                 });
-                this.getCancelButton().on('click', function() {
+                this.getCancelButton().on('click.picker', function() {
                     _self.hide();
                 });
             }
+            
+            if(_self.hasComponent()){
+                this.component.on('click.picker', function(){
+                    _self.toggle();
+                });
+            }
 
-            this.picker = $.extend(true, this.picker, customProps);
+            popover.find('.popover-content').append(this.picker);
+
+            return this.picker;
         },
-        _bindEvents: function() {
-            // Hide only when clicking outside
-            if (this.options.inline === false) {
-                var _self = this;
-                var wasDragging = false;
-                var isDragging = false;
-                var wasClickingInput = false;
+        _bindElementEvents: function() {
+            var _self = this;
 
-                var isInsideFn = $.proxy(function(e) {
-                    var _t = $(e.target);
-                    if ((!_t.hasClass('picker-element')  ||
-                            (_t.hasClass('picker-element') && !_t.is(this.element))) &&
-                            (_t.parents('.picker-popover').length === 0)) {
-                        return false;
+            this.element.on('focus.picker', function(e) {
+                _self.show();
+                e.stopPropagation();
+            });
+
+            if (this.hasInput()) {
+                // Bind input keyup event
+                this.input.on('keyup.picker', function(e) {
+                    _self._updateFormGroupStatus(_self.getValid(this.value) !== false);
+                    if ($.inArray(e.keyCode, [38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86]) === -1) {
+                        _self.update();
                     }
-                    return true;
-                }, this);
+                    //_self.hide();
+                });
 
-                var hideFn = $.proxy(function(e) {
-                    if (!isInsideFn(e)) {
-                        this.hide();
+                // On lose focus with tab, hide picker, but only if
+                // the click is was in the own popover
+                //this.input.on('blur.picker');
+            }
+            
+        },
+        _eventIsInPicker: function(e){
+            var _t = $(e.target);
+            if ((!_t.hasClass('picker-element')  ||
+                    (_t.hasClass('picker-element') && !_t.is(this.element))) &&
+                    (_t.parents('.picker-popover').length === 0)) {
+                return false;
+            }
+            return true;
+        },
+        _bindWindowEvents: function() {
+            var $doc = $(window.document);
+            var _self = this;
+
+            // Add a namespace to the document events so they can be identified
+            // later for every instance separately
+            var _eventNs = '.picker.inst' + this._id;
+
+            $(window).on('resize.picker' + _eventNs + ' orientationchange.picker' + _eventNs, function(e) {
+                // reposition popover
+                if(_self.popover.hasClass('in')){
+                    _self.updatePlacement();
+                }
+            });
+            
+            if (this.options.inline === false) {
+                $doc.on('mouseup' + _eventNs, function(e) {
+                    if (!_self._eventIsInPicker(e)) {
+                        _self.hide();
                     }
                     e.stopPropagation();
                     e.preventDefault();
                     return false;
-                }, this);
-
-                var $doc = $(window.document);
-
-                // Add a namespace to the document events so they can be identified
-                // later for every instance separately
-                var _eventNs = '.picker.inst' + this._id;
-
-                // This events makes the picker to hide only if a click has been
-                // triggered outside the popover or the element,
-                // but it cancels if the user was dragging
-
-                $doc.on('mousedown' + _eventNs, function(e) {
-                    $doc.on('mousemove' + _eventNs, function(e) {
-                        isDragging = true;
-                        $doc.unbind('mousemove' + _eventNs);
-                    });
                 });
-                $doc.on('mouseup' + _eventNs, function(e) {
-                    wasDragging = (isDragging === true);
-                    isDragging = false;
-                    $doc.unbind('mousemove' + _eventNs);
-                    if (!wasDragging) {
-                        hideFn(e);
-                    }
-                });
-                $doc.on('click.picker' + _eventNs, function(e) {
-                    isDragging = false;
-                    $doc.unbind('mousemove' + _eventNs);
-                    if (!wasDragging) {
-                        hideFn(e);
-                    }
-                });
-
-                $(window).on('resize.picker' + _eventNs + ' orientationchange.picker' + _eventNs, function(e) {
-                    // reposition popover
-                    _self.setCustomPlacement();
-                });
-
-                if (this.hasInput()) {
-                    // Bind input keyup event
-                    this.input.on('keyup.picker', function(e) {
-                        _self._updateFormGroupStatus(_self.getValid(this.value) !== false);
-                        if ($.inArray(e.keyCode, [38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86]) === -1) {
-                            _self.update();
-                        }
-                        _self.hide();
-                    });
-
-                    // On lose focus with tab, hide picker, but only if
-                    // the click is was in the own popover
-                    this.input.on('click.picker');
-                }
             }
+
+            return false;
         },
-        _unbindEvents: function(){
+        _unbindEvents: function() {
             this.element.off('.picker');
             this.element.off('.picker');
 
@@ -328,196 +306,194 @@
             $(window).off('.picker.inst' + this._id);
             $(window.document).off('.picker.inst' + this._id);
         },
-        _hasCustomPlacement: function() {
-            return ($.inArray(this.options.placement, ['top', 'right', 'bottom', 'left', 'auto']) === -1);
-        },
-        _showCustomPopover: function() {
-            //this.popover.$tip.css({top: 0, left: 0});
-            this._trigger('pickerShow');
-            this.popover.$tip.removeClass('in');
-            this.setCustomPlacement();
-            this._trigger('pickerShown');
-            this.popover.$tip.addClass((this.options.animation ? 'fade ' : '') + 'in')
-                    .css({
-                        opacity: ''
-                    }); // remove opacity hack
-        },
-        setCustomPlacement: function(placement, detectCollisions) {
+        updatePlacement: function(placement, collision) {
+            if (this.options.inline === true) {
+                return this.popover.show();
+            }
+            if (typeof placement === 'object') {
+                // custom position ?
+                return this.popover.pos(placement);
+            }
             placement = placement || this.options.placement;
-            detectCollisions = (detectCollisions===false ? false : true);
-            var pos, relPos, relOffset, actualWidth, actualHeight, tp = false;
-            // reset placement classes
-            this.popover.$tip.removeClass('bottom top left right picker-placement-topLeft ' +
-                    'picker-placement-topRight picker-placement-rightTop picker-placement-rightBottom ' +
-                    'picker-placement-bottomRight picker-placement-bottomLeft picker-placement-leftBottom ' +
-                    'picker-placement-leftTop');
+            this.options.placement = placement;
+            collision = collision || this.options.collision;
+            collision = (collision === true ? 'flip' : collision);
+            //console.log(collision);
+            // remove previous classes
+            this.popover.removeClass('topLeftCorner topLeft top topRight topRightCorner '+
+                    'rightTop right rightBottom bottomRight bottomRightCorner '+
+                    'bottom bottomLeft bottomLeftCorner leftBottom left leftTop');
 
-            relPos = this.popover.$element.position();
-            relOffset = this.popover.$element.offset();
-
-            this.popover.$tip.css('maxWidth', $(window).width() - relOffset.left - 5);
-
-            pos = this.popover.getPosition(/in/.test(placement));
-            actualWidth = this.popover.$tip[0].offsetWidth;
-            actualHeight = this.popover.$tip[0].offsetHeight;
-
-            //console.log(relPos);
-            //console.log(relOffset);
-
+            var _pos = {
+                // at: Defines which position (or side) on container element to align the
+                // popover element against: "horizontal vertical" alignment.
+                at: "right bottom",
+                // my: Defines which position (or side) on the popover being positioned to align
+                // with the container element: "horizontal vertical" alignment
+                my: "right top",
+                // of: Which element to position against.
+                of: this.hasInput() ? this.input : this.container,
+                // collision: When the positioned element overflows the window (or within element) 
+                // in some direction, move it to an alternative position.
+                collision: (collision === true ? 'flip' : collision),
+                // within: Element to position within, affecting collision detection.
+                within: window
+            };
+            /*
+             1.      topLeftCorner
+             2.      topLeft
+             3.      top (center)
+             4.      topRight
+             5.      topRightCorner
+             6.      rightTop
+             7.      right (center)
+             8.      rightBottom
+             9.      bottomRightCorner
+             A.      bottomRight
+             B.      bottom (center)
+             C.      bottomLeft
+             D.      bottomLeftCorner
+             E.      leftBottom
+             F.      left (center)
+             G.      leftTop
+             */
             switch (placement) {
-                /*
-                 * Understanding the positions relative to rhe element:
-                 *
-                 *      - 1 -- 2 -
-                 *      8        3
-                 *      |        |
-                 *      7        4
-                 *      - 6 -- 5 -
-                 *
-                 *      1 - topLeft
-                 *      2 - topRight
-                 *      3 - rightTop
-                 *      4 - rightBottom
-                 *      5 - bottomRight
-                 *      6 - bottomLeft
-                 *      7 - leftBottom
-                 *      8 - leftTop
-                 */
-                case 'topLeft':
-                    tp = {
-                        top: ((actualHeight - pos.height) + relPos.top - 5) * -1,
-                        right: 'auto',
-                        bottom: 'auto',
-                        left: relPos.left
-                    };
+                case 'topLeftCorner':
+                    {
+                        _pos.my = 'right bottom';
+                        _pos.at = 'left top';
+                    }
                     break;
+
+                case 'topLeft':
+                    {
+                        _pos.my = 'left bottom';
+                        _pos.at = 'left top';
+                    }
+                    break;
+
+                case 'top':
+                    {
+                        _pos.my = 'center bottom';
+                        _pos.at = 'center top';
+                    }
+                    break;
+
                 case 'topRight':
-                    tp = {
-                        top: ((actualHeight - pos.height) + relPos.top - 5) * -1,
-                        right: -relPos.left,
-                        bottom: 'auto',
-                        left: 'auto'
-                    };
+                    {
+                        _pos.my = 'right bottom';
+                        _pos.at = 'right top';
+                    }
+                    break;
+
+                case 'topRightCorner':
+                    {
+                        _pos.my = 'left bottom';
+                        _pos.at = 'right top';
+                    }
                     break;
 
                 case 'rightTop':
-                    tp = {
-                        top: pos.top - (actualHeight * .25),
-                        right: 'auto',
-                        bottom: 'auto',
-                        left: pos.width
-                    };
+                    {
+                        _pos.my = 'left top';
+                        _pos.at = 'right top';
+                    }
                     break;
+
+                case 'right':
+                    {
+                        _pos.my = 'left center';
+                        _pos.at = 'right center';
+                    }
+                    break;
+
                 case 'rightBottom':
-                    tp = {
-                        top: pos.height - (actualHeight * .25),
-                        right: 'auto',
-                        bottom: 'auto',
-                        left: pos.left
-                    };
+                    {
+                        _pos.my = 'left top';
+                        _pos.at = 'right bottom';
+                    }
+                    break;
+
+                case 'bottomRightCorner':
+                    {
+                        _pos.my = 'left top';
+                        _pos.at = 'right bottom';
+                    }
                     break;
 
                 case 'bottomRight':
-                    tp = {
-                        top: pos.height + relPos.top,
-                        right: -relPos.left,
-                        bottom: 'auto',
-                        left: 'auto'
-                    };
+                    {
+                        _pos.my = 'right top';
+                        _pos.at = 'right bottom';
+                    }
+                    break;
+                case 'bottom':
+                    {
+                        _pos.my = 'center top';
+                        _pos.at = 'center bottom';
+                    }
                     break;
 
                 case 'bottomLeft':
-                    tp = {
-                        top: pos.height + relPos.top,
-                        right: 'auto',
-                        bottom: 'auto',
-                        left: relPos.left
-                    };
+                    {
+                        _pos.my = 'left top';
+                        _pos.at = 'left bottom';
+                    }
+                    break;
+
+                case 'bottomLeftCorner':
+                    {
+                        _pos.my = 'right top';
+                        _pos.at = 'left bottom';
+                    }
                     break;
 
                 case 'leftBottom':
-                    tp = {
-                        top: pos.height - (actualHeight * .25),
-                        right: pos.left,
-                        bottom: 'auto',
-                        left: 'auto'
-                    };
+                    {
+                        _pos.my = 'right top';
+                        _pos.at = 'left center';
+                    }
+                    break;
+
+                case 'left':
+                    {
+                        _pos.my = 'right center';
+                        _pos.at = 'left center';
+                    }
                     break;
 
                 case 'leftTop':
-                    tp = {
-                        top: pos.top - (actualHeight * .25),
-                        right: 'auto',
-                        bottom: 'auto',
-                        left: pos.left
-                    };
+                    {
+                        _pos.my = 'right bottom';
+                        _pos.at = 'left center';
+                    }
+                    break;
+
+                default:
+                    {
+                        return false;
+                    }
                     break;
 
             }
-            if (tp !== false) {
-                this.options.placement = placement;
-                this.popover.$tip.css(tp).addClass('picker-placement-' + placement);
-                /*if (this.options.autoPlacement && detectCollisions) {
-                    setTimeout($.proxy(function(){
-                        this.detectCollisions(placement);
-                    }, this), 200);
-                }*/ // WIP, still buggy
-                return true;
-            } else {
-                this.popover.$tip.addClass('picker-placement-' + this.options.placement);
-            }
-            return false;
-        },
-        detectCollisions: function(currentPlacement) { // WIP, still buggy
-            var verticalSwitchers = {
-                'topLeft': 'bottomLeft',
-                'topRight': 'bottomRight',
-                'rightTop': 'rightBottom',
-                'rightBottom': 'rightTop',
-                'bottomRight': 'topRight',
-                'bottomLeft': 'topLeft',
-                'leftBottom': 'leftTop',
-                'leftTop': 'leftBottom'
-            },
-            horizontalSwitchers = {
-                'topLeft': 'topRight',
-                'topRight': 'topLeft',
-                'rightTop': 'leftTop',
-                'rightBottom': 'leftBottom',
-                'bottomRight': 'bottomLeft',
-                'bottomLeft': 'bottomRight',
-                'leftBottom': 'rightBottom',
-                'leftTop': 'rightTop'
-            },
-            ww = $(window).width(),
-                    wh = $(window).height(),
-                    o =  this.popover.$tip.offset(),
-                    pw = this.popover.$tip[0].offsetWidth,
-                    ph = this.popover.$tip[0].offsetHeight;
-            //console.log(o);
-            console.log(o.top - ph, +' '+wh);
-            if ((o.top - ph) < 0) { // exceeds top
-                console.log('set esceed');
-                return this.setCustomPlacement(verticalSwitchers[currentPlacement], false);
-            }
+            //console.log(_pos);
+            this.popover.css({'display': 'block'}).pos(_pos).addClass(this.options.placement);
             
-            if((this.originalPlacement!=null) && (this.originalPlacement != this.options.placement)){
-                console.log('set prev');
-                return this.setCustomPlacement(this.originalPlacement, false);
-            }
+            this.popover.css('maxWidth', $(window).width() - this.container.offset().left - 5);
+            return true;
         },
         _updateComponents: function() {
             // Update selected item
-            this.picker.element.find('.picker-item.picker-selected')
+            this.picker.find('.picker-item.picker-selected')
                     .removeClass('picker-selected ' + this.options.selectedCustomClass);
-            this.picker.element.find('.fa.fa-' + this.pickerValue).parent()
+            this.picker.find('.fa.fa-' + this.pickerValue).parent()
                     .addClass('picker-selected ' + this.options.selectedCustomClass);
 
             // Update component item
             if (this.hasComponent()) {
                 var icn = this.component.find('i');
                 if (icn.length > 0) {
-                    icn.attr('class','fa fa-fw '+this.getValue());
+                    icn.attr('class', 'fa ' + this.getValue());
                 } else {
                     this.component.html(this.getValueHtml());
                 }
@@ -551,7 +527,7 @@
             // here we must validate the value (you may change this validation
             // to suit your needs
             val = this._sanitizeValue(val);
-            if (($.inArray(val, this.selectableItems) !== -1) || (!this.options.onlyValid)) {
+            if ($.inArray(val, this.options.selectableItems) !== -1) {
                 return val;
             }
             return false;
@@ -565,14 +541,11 @@
             var _val = this.getValid(val);
             if (_val !== false) {
                 this.pickerValue = _val;
-                this._updateComponents();
-                this._updateFormGroupStatus(true);
                 this._trigger('pickerSetValue', {
                     pickerValue: _val
                 });
                 return this.pickerValue;
             } else {
-                this._updateFormGroupStatus(false);
                 this._trigger('pickerInvalid', {
                     pickerValue: val
                 });
@@ -638,50 +611,72 @@
             return (this.container !== false);
         },
         getAcceptButton: function() {
-            return this.picker.element.find('.picker-button-accept');
+            return this.popover.find('.picker-btn-accept');
         },
         getCancelButton: function() {
-            return this.picker.element.find('.picker-button-cancel');
-        },
-        isDisabled: function() {
-            if (this.hasInput()) {
-                return (this.input.prop('disabled') === true);
-            }
-            return false;
+            return this.popover.find('.picker-btn-cancel');
         },
         show: function() {
-            $($.proxy(function() {
-                this.element.popover('show');
-            }, this));
+            if(this.popover.hasClass('in')){
+                //return false;
+            }
+            $('.picker-popover.in').not(this.popover).hide();
+            this._trigger('pickerShow');
+            this.updatePlacement();
+            this.popover.addClass('in');
+                this._trigger('pickerShown');
         },
         hide: function() {
+            if(!this.popover.hasClass('in')){
+                //return false;
+            }
             this._trigger('pickerHide');
-            this.element.popover('hide');
+            this.popover.removeClass('in');
+                this.popover.css('display', 'none');
+                this._trigger('pickerHidden');
         },
-        update: function(val, isAccepted) {
+        toggle:function(){
+            if(this.popover.hasClass('in')){
+                this.hide();
+            }else{
+                this.show();
+            }
+        },
+        update: function(val, updateOnlyInternal) {
             val = (val ? val :  this.getSourceValue(this.pickerValue));
+            //console.log(val);
             // reads the input or element value again and tries to update the plugin
             // fallback to the current selected item value
             this._trigger('pickerUpdate');
 
-            if ((this.getAcceptButton().length === 0) || (isAccepted === true)) {
-                this.setSourceValue(val);
+            if (updateOnlyInternal) {
+                val = this.setValue(val);
             } else {
-                this.setValue(val);
+                val = this.setSourceValue(val);
+            }
+            
+            if (val === false) {
+                this._updateFormGroupStatus(false);
+            } else {
+                this._updateComponents();
+                this._updateFormGroupStatus(true);
             }
 
             this._trigger('pickerUpdated');
             return val;
         },
         destroy: function() {
+            this._trigger('pickerDestroy');
+
             // unbinds events and resets everything to the initial state,
             // including component mode
             this.element.removeData('picker').removeData('pickerValue').removeClass('picker-element');
-            this.element.popover('destroy');
+
+            delete this.popover;
 
             this._unbindEvents();
 
-            this._trigger('pickerDestroy');
+            this._trigger('pickerDestroyed');
         },
         disable: function() {
             if (this.hasInput()) {
@@ -696,55 +691,25 @@
                 return true;
             }
             return false;
+        },
+        isDisabled: function() {
+            if (this.hasInput()) {
+                return (this.input.prop('disabled') === true);
+            }
+            return false;
         }
     };
 
     $.picker = Picker;
 
     // jQuery plugin
-    $.fn.picker = function(option) {
-        var apiArgs = arguments;
-        var apiOption = option;
-
-        if (option === true) {
-            apiArgs = Array.prototype.slice.call(apiArgs, 1);
-            apiOption = (apiArgs.length > 0 ? apiArgs[0] : false);
-        }
-
-        if ((option !== true) && (typeof option !== 'string')) { // new instances of not exist
-            return this.each(function() {
-                var $this = $(this);
-                if ((!$this.data('picker')) && (typeof option !== 'string')) {
-                    // create plugin and expose entire picker API
-                    $this.data('picker', new Picker(this, ((typeof option === 'object') ? option : {})));
-                }
-            });
-        } else if ((typeof apiOption === 'string') || (option === true)) { // api method or property
-            var apiArgs = Array.prototype.slice.call(apiArgs, 1);
-
-            if (!(typeof apiOption === 'string') || (apiOption === '')) {
-                return (option === true ? this : false);
+    $.fn.picker = function(options) {
+        return this.each(function() {
+            var $this = $(this);
+            if (!$this.data('picker')) {
+                // create plugin and expose entire picker API
+                $this.data('picker', new Picker(this, ((typeof options === 'object') ? options : {})));
             }
-
-            if (option === true) {
-                // apply method to each element
-                return this.each(function() {
-                    var pInst = $(this).data('picker');
-                    if (pInst) {
-                        pInst[apiOption].apply(pInst, apiArgs);
-                    }
-                });
-            }
-            // apply method or return property value for the first element
-            var pInst = this.data('picker');
-            if (pInst) {
-                var opt = pInst[apiOption];
-                if (!!(opt && opt.constructor && opt.call && opt.apply)) {
-                    return opt.apply(pInst, apiArgs);
-                } else {
-                    return opt;
-                }
-            }
-        }
+        });
     };
 }));

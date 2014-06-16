@@ -36,6 +36,10 @@
             div.lead{
                 margin:30px 0;
             }
+            .action-placement{
+                margin:0 4px 4px 4px;
+                display:inline-block;
+            }
         </style>
     </head>
 
@@ -86,7 +90,7 @@ $('.icp-3').picker({
     title: 'With custom options',
     selectableItems: ['github', 'heart', 'html5', 'css3'],
     selectedCustomClass: 'label label-success',
-    displayButtons: true,
+    mustAccept true,
     placement:'topRight',
     // note that this is ignored cause we have an accept button:
     hideOnPick:true,
@@ -111,43 +115,54 @@ $('.icp-3').picker({
         <script>
             $(function() {
                 $('.action-destroy').on('click', function() {
-                    $('.icp.picker-element').picker(true, 'destroy');
+                    $.picker.batch('.icp.picker-element', 'destroy');
                 });
-                // live binding:
+                // Live binding of buttons
                 $(document).on('click', '.action-placement', function() {
-                    $('.icp-3').picker(true, 'setCustomPlacement', $(this).text());
+                    $('.icp-3').data('picker').updatePlacement($(this).text());
                 });
                 $('.action-create').on('click', function() {
-                    $('.icp-1:not(.picker-element)').picker({
-                        //placement:'bottom'
-                    });
-                    $('.icp-2:not(.picker-element)').picker({
-                        //placement:'bottomLeft'
-                    });
+                    $('.icp-1:not(.picker-element)').picker();
+                    $('.icp-2:not(.picker-element)').picker();
                     $('.icp-3:not(.picker-element)').picker({
                         title: 'With custom options',
                         selectableItems: ['github', 'heart', 'html5', 'css3'],
                         selectedCustomClass: 'label label-success',
-                        displayButtons: true,
-                        placement:'topRight',
+                        mustAccept:true,
+                        placement:'bottomRight',
                         // note that this is ignored cause we have an accept button:
                         hideOnPick:true,
+                        showFooter:true,
                         templates:{
-                        buttons: '<div class="picker-buttons">'+
-                                'Placement: <button class="btn btn-default btn-xs action-placement">topLeft</button>\n\
-                    <button class="btn btn-default btn-xs action-placement">topRight</button>\n\
-                    <button class="btn btn-default btn-xs action-placement">bottomLeft</button>\n\
-                    <button class="btn btn-default btn-xs action-placement">bottomRight</button><hr>'+
-                            '<button class="picker-button picker-button-cancel btn btn-default btn-sm">Cancel</button>' +
-                            '<button class="picker-button picker-button-accept btn btn-primary btn-sm">Accept</button></div>'}
-                    }).picker('show');
+                        popoverFooter: '<div class="popover-footer">'+
+                                '<div style="text-align:left; font-size:12px;">Placements: \n\
+                    <a href="#" class=" action-placement">topLeftCorner</a>\n\
+                    <a href="#" class=" action-placement">topLeft</a>\n\
+                    <a href="#" class=" action-placement">top</a>\n\
+                    <a href="#" class=" action-placement">topRight</a>\n\
+                    <a href="#" class=" action-placement">topRightCorner</a>\n\
+                    <a href="#" class=" action-placement">rightTop</a>\n\
+                    <a href="#" class=" action-placement">right</a>\n\
+                    <a href="#" class=" action-placement">rightBottom</a>\n\
+                    <a href="#" class=" action-placement">bottomRightCorner</a>\n\
+                    <a href="#" class=" action-placement">bottomRight</a>\n\
+                    <a href="#" class=" action-placement">bottom</a>\n\
+                    <a href="#" class=" action-placement">bottomLeft</a>\n\
+                    <a href="#" class=" action-placement">bottomLeftCorner</a>\n\
+                    <a href="#" class=" action-placement">leftBottom</a>\n\
+                    <a href="#" class=" action-placement">left</a>\n\
+                    <a href="#" class=" action-placement">leftTop</a>\n\
+                    </div><hr>'+
+                            '<button class="picker-btn picker-btn-cancel btn btn-default btn-sm">Cancel</button>' +
+                            '<button class="picker-btn picker-btn-accept btn btn-primary btn-sm">Accept</button></div>'}
+                    }).data('picker').show();
                 }).trigger('click');
                 
                 
                 // Events sample:
                 // This event is only triggered when the actual input value is changed
                 // by user interaction
-                $('.icp').on('pickerSelectAccepted', function(e) {
+                $('.icp').on('pickerSelected', function(e) {
                     $('.lead .fa').get(0).className = 'fa fa-3x fa-' + e.pickerValue;
                 });
             });

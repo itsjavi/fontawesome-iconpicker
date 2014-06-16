@@ -36,6 +36,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/js/bootstrap-picker.min.js': [
+                        'src/js/jquery.ui.pos.js',
                         'src/js/picker.js'
                     ]
                 }
@@ -47,6 +48,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/js/bootstrap-picker.js': [
+                        'src/js/jquery.ui.pos.js',
                         'src/js/picker.js'
                     ]
                 }

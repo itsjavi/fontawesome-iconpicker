@@ -3,7 +3,7 @@
 // --------------------------------------------------
 
 
-.picker-popover.popover {
+.iconpicker-popover.popover {
     position: absolute;
     top: 0;
     left: 0;
@@ -39,16 +39,16 @@
     }
 }
 
-.dropdown-menu .picker-popover.inline{
+.dropdown-menu .iconpicker-popover.inline{
     margin:0;
     border:none;
 }
 
-.dropdown-menu.picker-container{
+.dropdown-menu.iconpicker-container{
     padding:0;
 }
 
-.picker-popover.popover .popover-title {
+.iconpicker-popover.popover .popover-title {
     //padding: 8px 14px;
     //border-radius: 5px 5px 0 0;    
     padding:@base_spacing;
@@ -57,22 +57,22 @@
     border-bottom:1px solid darken(@popover-title-bg, 5%);
     background-color: @popover-title-bg;
     
-    input[type=search].picker-search{
+    input[type=search].iconpicker-search{
         margin: 0 0 2px 0;
     }
 }
-.picker-popover.popover .popover-title-text ~ input[type=search].picker-search{
+.iconpicker-popover.popover .popover-title-text ~ input[type=search].iconpicker-search{
     margin-top: @base_spacing;
 }
 
-.picker-popover.popover .popover-content {
+.iconpicker-popover.popover .popover-content {
     //padding: 9px 14px;
     padding:0px;
     text-align: center;
     //overflow:hidden;
 }
 
-.picker-popover .popover-footer{
+.iconpicker-popover .popover-footer{
     .clearfix();
     float:none;
     clear:both;
@@ -81,10 +81,10 @@
     margin:0;
     border-top:1px solid darken(@popover-title-bg, 5%);
     background-color: @popover-title-bg;
-    .picker-btn{
+    .iconpicker-btn{
         margin-left: 10px;
     }
-    input[type=search].picker-search{
+    input[type=search].iconpicker-search{
         /*width:auto;
         float:left;*/
         margin-bottom: @base_spacing;
@@ -95,7 +95,7 @@
 //
 // .arrow is outer, .arrow:after is inner
 
-.picker-popover.popover > .arrow {
+.iconpicker-popover.popover > .arrow {
     &,
     &:after {
         position: absolute;
@@ -106,15 +106,15 @@
         border-style: solid;
     }
 }
-.picker-popover.popover > .arrow {
+.iconpicker-popover.popover > .arrow {
     border-width: @popover-arrow-outer-width;
 }
-.picker-popover.popover > .arrow:after {
+.iconpicker-popover.popover > .arrow:after {
     border-width: @popover-arrow-width;
     content: "";
 }
 
-.picker-popover.popover {
+.iconpicker-popover.popover {
     &.top, &.topLeft, &.topRight{ 
         > .arrow {
             left: 50%;

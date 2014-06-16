@@ -8,8 +8,8 @@ module.exports = function(grunt) {
                     compress: false
                 },
                 files: {
-                    'dist/css/bootstrap-picker.css': [
-                        'src/less/picker.less'
+                    'dist/css/fontawesome-iconpicker.css': [
+                        'src/less/iconpicker.less'
                     ]
                 }
             },
@@ -19,8 +19,8 @@ module.exports = function(grunt) {
                     compress: true
                 },
                 files: {
-                    'dist/css/bootstrap-picker.min.css': [
-                        'src/less/picker.less'
+                    'dist/css/fontawesome-iconpicker.min.css': [
+                        'src/less/iconpicker.less'
                     ]
                 }
             }
@@ -35,9 +35,9 @@ module.exports = function(grunt) {
                     beautify: false
                 },
                 files: {
-                    'dist/js/bootstrap-picker.min.js': [
+                    'dist/js/fontawesome-iconpicker.min.js': [
                         'src/js/jquery.ui.pos.js',
-                        'src/js/picker.js'
+                        'src/js/iconpicker.js'
                     ]
                 }
             },
@@ -47,9 +47,9 @@ module.exports = function(grunt) {
                     beautify: true
                 },
                 files: {
-                    'dist/js/bootstrap-picker.js': [
+                    'dist/js/fontawesome-iconpicker.js': [
                         'src/js/jquery.ui.pos.js',
-                        'src/js/picker.js'
+                        'src/js/iconpicker.js'
                     ]
                 }
             }

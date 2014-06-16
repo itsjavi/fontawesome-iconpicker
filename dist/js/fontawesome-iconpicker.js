@@ -350,42 +350,14 @@
     "use strict";
     if (typeof define === "function" && define.amd) {
         define([ "jquery" ], a);
-    } else if (window.jQuery && !window.jQuery.fn.picker) {
+    } else if (window.jQuery && !window.jQuery.fn.iconpicker) {
         a(window.jQuery);
     }
 })(function(a) {
     "use strict";
-    var b = [ "angle-double-down", "angle-double-left", "angle-double-right", "angle-double-up", "angle-down", "angle-left", "angle-right", "angle-up" ];
-    var c = {
-        maxRows: 6,
-        numCols: 4,
-        itemOuterHeight: 62,
-        title: false,
-        selected: false,
-        defaultValue: false,
-        placement: "bottom",
-        collision: "none",
-        animation: true,
-        hideOnSelect: false,
-        showFooter: false,
-        searchInFooter: false,
-        mustAccept: false,
-        selectedCustomClass: "bg-primary",
-        selectableItems: false,
-        input: "input",
-        component: ".input-group-addon",
-        container: false,
-        templates: {
-            popover: '<div class="picker-popover popover"><div class="arrow"></div>' + '<div class="popover-title"></div><div class="popover-content"></div></div>',
-            footer: '<div class="popover-footer"></div>',
-            buttons: '<button class="picker-btn picker-btn-cancel btn btn-default btn-sm">Cancel</button>' + ' <button class="picker-btn picker-btn-accept btn btn-primary btn-sm">Accept</button>',
-            search: '<input type="search" class="form-control picker-search" placeholder="Type to filter" />',
-            picker: '<div class="picker"><div class="picker-items"></div></div>',
-            pickerItem: '<div class="picker-item"><i class="fa"></i></div>'
-        }
-    };
-    var d = 0;
-    var e = {
+    var b = [ "adjust", "adn", "align-center", "align-justify", "align-left", "align-right", "ambulance", "anchor", "android", "angle-double-down", "angle-double-left", "angle-double-right", "angle-double-up", "angle-down", "angle-left", "angle-right", "angle-up", "apple", "archive", "arrow-circle-down", "arrow-circle-left", "arrow-circle-o-down", "arrow-circle-o-left", "arrow-circle-o-right", "arrow-circle-o-up", "arrow-circle-right", "arrow-circle-up", "arrow-down", "arrow-left", "arrow-right", "arrow-up", "arrows", "arrows-alt", "arrows-h", "arrows-v", "asterisk", "automobile", "backward", "ban", "bank", "bar-chart-o", "barcode", "bars", "beer", "behance", "behance-square", "bell", "bell-o", "bitbucket", "bitbucket-square", "bitcoin", "bold", "bolt", "bomb", "book", "bookmark", "bookmark-o", "briefcase", "btc", "bug", "building", "building-o", "bullhorn", "bullseye", "cab", "calendar", "calendar-o", "camera", "camera-retro", "car", "caret-down", "caret-left", "caret-right", "caret-square-o-down", "caret-square-o-left", "caret-square-o-right", "caret-square-o-up", "caret-up", "certificate", "chain", "chain-broken", "check", "check-circle", "check-circle-o", "check-square", "check-square-o", "chevron-circle-down", "chevron-circle-left", "chevron-circle-right", "chevron-circle-up", "chevron-down", "chevron-left", "chevron-right", "chevron-up", "child", "circle", "circle-o", "circle-o-notch", "circle-thin", "clipboard", "clock-o", "cloud", "cloud-download", "cloud-upload", "cny", "code", "code-fork", "codepen", "coffee", "cog", "cogs", "columns", "comment", "comment-o", "comments", "comments-o", "compass", "compress", "copy", "credit-card", "crop", "crosshairs", "css3", "cube", "cubes", "cut", "cutlery", "dashboard", "database", "dedent", "delicious", "desktop", "deviantart", "digg", "dollar", "dot-circle-o", "download", "dribbble", "dropbox", "drupal", "edit", "eject", "ellipsis-h", "ellipsis-v", "empire", "envelope", "envelope-o", "envelope-square", "eraser", "eur", "euro", "exchange", "exclamation", "exclamation-circle", "exclamation-triangle", "expand", "external-link", "external-link-square", "eye", "eye-slash", "facebook", "facebook-square", "fast-backward", "fast-forward", "fax", "female", "fighter-jet", "file", "file-archive-o", "file-audio-o", "file-code-o", "file-excel-o", "file-image-o", "file-movie-o", "file-o", "file-pdf-o", "file-photo-o", "file-picture-o", "file-powerpoint-o", "file-sound-o", "file-text", "file-text-o", "file-video-o", "file-word-o", "file-zip-o", "files-o", "film", "filter", "fire", "fire-extinguisher", "flag", "flag-checkered", "flag-o", "flash", "flask", "flickr", "floppy-o", "folder", "folder-o", "folder-open", "folder-open-o", "font", "forward", "foursquare", "frown-o", "gamepad", "gavel", "gbp", "ge", "gear", "gears", "gift", "git", "git-square", "github", "github-alt", "github-square", "gittip", "glass", "globe", "google", "google-plus", "google-plus-square", "graduation-cap", "group", "h-square", "hacker-news", "hand-o-down", "hand-o-left", "hand-o-right", "hand-o-up", "hdd-o", "header", "headphones", "heart", "heart-o", "history", "home", "hospital-o", "html5", "image", "inbox", "indent", "info", "info-circle", "inr", "instagram", "institution", "italic", "joomla", "jpy", "jsfiddle", "key", "keyboard-o", "krw", "language", "laptop", "leaf", "legal", "lemon-o", "level-down", "level-up", "life-bouy", "life-ring", "life-saver", "lightbulb-o", "link", "linkedin", "linkedin-square", "linux", "list", "list-alt", "list-ol", "list-ul", "location-arrow", "lock", "long-arrow-down", "long-arrow-left", "long-arrow-right", "long-arrow-up", "magic", "magnet", "mail-forward", "mail-reply", "mail-reply-all", "male", "map-marker", "maxcdn", "medkit", "meh-o", "microphone", "microphone-slash", "minus", "minus-circle", "minus-square", "minus-square-o", "mobile", "mobile-phone", "money", "moon-o", "mortar-board", "music", "navicon", "openid", "outdent", "pagelines", "paper-plane", "paper-plane-o", "paperclip", "paragraph", "paste", "pause", "paw", "pencil", "pencil-square", "pencil-square-o", "phone", "phone-square", "photo", "picture-o", "pied-piper", "pied-piper-alt", "pied-piper-square", "pinterest", "pinterest-square", "plane", "play", "play-circle", "play-circle-o", "plus", "plus-circle", "plus-square", "plus-square-o", "power-off", "print", "puzzle-piece", "qq", "qrcode", "question", "question-circle", "quote-left", "quote-right", "ra", "random", "rebel", "recycle", "reddit", "reddit-square", "refresh", "renren", "reorder", "repeat", "reply", "reply-all", "retweet", "rmb", "road", "rocket", "rotate-left", "rotate-right", "rouble", "rss", "rss-square", "rub", "ruble", "rupee", "save", "scissors", "search", "search-minus", "search-plus", "send", "send-o", "share", "share-alt", "share-alt-square", "share-square", "share-square-o", "shield", "shopping-cart", "sign-in", "sign-out", "signal", "sitemap", "skype", "slack", "sliders", "smile-o", "sort", "sort-alpha-asc", "sort-alpha-desc", "sort-amount-asc", "sort-amount-desc", "sort-asc", "sort-desc", "sort-down", "sort-numeric-asc", "sort-numeric-desc", "sort-up", "soundcloud", "space-shuttle", "spinner", "spoon", "spotify", "square", "square-o", "stack-exchange", "stack-overflow", "star", "star-half", "star-half-empty", "star-half-full", "star-half-o", "star-o", "steam", "steam-square", "step-backward", "step-forward", "stethoscope", "stop", "strikethrough", "stumbleupon", "stumbleupon-circle", "subscript", "suitcase", "sun-o", "superscript", "support", "table", "tablet", "tachometer", "tag", "tags", "tasks", "taxi", "tencent-weibo", "terminal", "text-height", "text-width", "th", "th-large", "th-list", "thumb-tack", "thumbs-down", "thumbs-o-down", "thumbs-o-up", "thumbs-up", "ticket", "times", "times-circle", "times-circle-o", "tint", "toggle-down", "toggle-left", "toggle-right", "toggle-up", "trash-o", "tree", "trello", "trophy", "truck", "try", "tumblr", "tumblr-square", "turkish-lira", "twitter", "twitter-square", "umbrella", "underline", "undo", "university", "unlink", "unlock", "unlock-alt", "unsorted", "upload", "usd", "user", "user-md", "users", "video-camera", "vimeo-square", "vine", "vk", "volume-down", "volume-off", "volume-up", "warning", "wechat", "weibo", "weixin", "wheelchair", "windows", "won", "wordpress", "wrench", "xing", "xing-square", "yahoo", "yen", "youtube", "youtube-play", "youtube-square" ];
+    var c = 0;
+    var d = {
         isEmpty: function(a) {
             return a === false || a === "" || a === null || a === undefined;
         },
@@ -405,35 +377,35 @@
             return a.inArray(b, c) !== -1;
         },
         throwError: function(a) {
-            throw "Bootstrap Popover Picker Exception: " + a;
+            throw "Font Awesome Icon Picker Exception: " + a;
         }
     };
-    var f = function(f, g) {
-        this._id = d++;
-        this.element = a(f).addClass("picker-element");
-        this._trigger("pickerCreate");
-        this.options = a.extend(true, {}, c, this.element.data(), g);
+    var e = function(f, g) {
+        this._id = c++;
+        this.element = a(f).addClass("iconpicker-element");
+        this._trigger("iconpickerCreate");
+        this.options = a.extend(true, {}, e.defaults, this.element.data(), g);
         this.options.originalPlacement = this.options.placement;
         if (!a.isArray(this.options.selectableItems) || this.options.selectableItems.length === 0) {
             this.options.selectableItems = b;
         }
-        this.container = e.isElement(this.options.container) ? a(this.options.container) : false;
+        this.container = d.isElement(this.options.container) ? a(this.options.container) : false;
         if (this.container === false) {
             this.container = this.element.is("input") ? this.element.parent() : this.element;
         }
-        if (this.container.addClass("picker-container").is(".dropdown-menu")) {
+        if (this.container.addClass("iconpicker-container").is(".dropdown-menu")) {
             this.options.placement = "inline";
         }
-        this.input = this.element.is("input") ? this.element.addClass("picker-input") : false;
+        this.input = this.element.is("input") ? this.element.addClass("iconpicker-input") : false;
         if (this.input === false) {
             this.input = this.container.find(this.options.input);
         }
-        this.component = this.container.find(this.options.component).addClass("picker-component");
+        this.component = this.container.find(this.options.component).addClass("iconpicker-component");
         if (this.component.length === 0) {
             this.component = false;
         }
         this._createPopover();
-        this._createPicker();
+        this._createIconpicker();
         if (this.getAcceptButton().length === 0) {
             this.options.mustAccept = false;
         }
@@ -449,20 +421,48 @@
         if (this.isInline()) {
             this.show();
         }
-        this._trigger("pickerCreated");
+        this._trigger("iconpickerCreated");
     };
-    f.pos = a.pos;
-    f.batch = function(b, c) {
+    e.defaults = {
+        maxRows: 5,
+        numCols: 4,
+        itemOuterHeight: 62,
+        title: false,
+        selected: false,
+        defaultValue: false,
+        placement: "bottom",
+        collision: "none",
+        animation: true,
+        hideOnSelect: false,
+        showFooter: false,
+        searchInFooter: false,
+        mustAccept: false,
+        selectedCustomClass: "bg-primary",
+        selectableItems: false,
+        input: "input",
+        component: ".input-group-addon",
+        container: false,
+        templates: {
+            popover: '<div class="iconpicker-popover popover"><div class="arrow"></div>' + '<div class="popover-title"></div><div class="popover-content"></div></div>',
+            footer: '<div class="popover-footer"></div>',
+            buttons: '<button class="iconpicker-btn iconpicker-btn-cancel btn btn-default btn-sm">Cancel</button>' + ' <button class="iconpicker-btn iconpicker-btn-accept btn btn-primary btn-sm">Accept</button>',
+            search: '<input type="search" class="form-control iconpicker-search" placeholder="Type to filter" />',
+            iconpicker: '<div class="iconpicker"><div class="iconpicker-items"></div></div>',
+            iconpickerItem: '<div class="iconpicker-item"><i class="fa"></i></div>'
+        }
+    };
+    e.pos = a.pos;
+    e.batch = function(b, c) {
         var d = Array.prototype.slice.call(arguments, 2);
         return a(b).each(function() {
-            var b = a(this).data("picker");
+            var b = a(this).data("iconpicker");
             if (!!b) {
                 b[c].apply(b, d);
             }
         });
     };
-    f.prototype = {
-        constructor: f,
+    e.prototype = {
+        constructor: e,
         options: {},
         _id: 0,
         _trigger: function(b, c) {
@@ -478,17 +478,17 @@
             if (!!this.options.title) {
                 b.append(a('<div class="popover-title-text">' + this.options.title + "</div>"));
             }
-            if (!this.options.searchInFooter && !e.isEmpty(this.options.templates.buttons)) {
+            if (!this.options.searchInFooter && !d.isEmpty(this.options.templates.buttons)) {
                 b.append(this.options.templates.search);
             } else if (!this.options.title) {
                 b.remove();
             }
-            if (this.options.showFooter && !e.isEmpty(this.options.templates.footer)) {
+            if (this.options.showFooter && !d.isEmpty(this.options.templates.footer)) {
                 var c = a(this.options.templates.footer);
-                if (!e.isEmpty(this.options.templates.search) && this.options.searchInFooter) {
+                if (!d.isEmpty(this.options.templates.search) && this.options.searchInFooter) {
                     c.append(a(this.options.templates.search));
                 }
-                if (!e.isEmpty(this.options.templates.buttons)) {
+                if (!d.isEmpty(this.options.templates.buttons)) {
                     c.append(a(this.options.templates.buttons));
                 }
                 this.popover.append(c);
@@ -502,51 +502,53 @@
             if (this.options.maxRows > 0) {
                 var a = this.options.selectableItems.length;
                 if (a / this.options.numCols > this.options.maxRows) {
-                    this.popover.addClass("picker-has-overflow");
-                    this.picker.find(".picker-items").css({
+                    this.popover.addClass("iconpicker-has-overflow");
+                    this.iconpicker.find(".iconpicker-items").css({
                         "overflow-y": "auto",
                         maxHeight: this.options.maxRows * this.options.itemOuterHeight + "px"
                     });
+                } else {
+                    this.popover.removeClass("iconpicker-has-overflow");
                 }
             }
         },
-        _createPicker: function(b) {
-            var c = this;
-            this.picker = a(this.options.templates.picker);
-            var d = function(b) {
+        _createIconpicker: function() {
+            var b = this;
+            this.iconpicker = a(this.options.templates.iconpicker);
+            var c = function(c) {
                 var d = a(this);
                 if (d.is(".fa")) {
                     d = d.parent();
                 }
-                c._trigger("pickerSelect", {
-                    pickerItem: d,
-                    pickerValue: c.pickerValue
+                b._trigger("iconpickerSelect", {
+                    iconpickerItem: d,
+                    iconpickerValue: b.iconpickerValue
                 });
-                if (c.options.mustAccept === false) {
-                    c.update(d.data("pickerValue"));
-                    c._trigger("pickerSelected", {
-                        pickerItem: this,
-                        pickerValue: c.pickerValue
+                if (b.options.mustAccept === false) {
+                    b.update(d.data("iconpickerValue"));
+                    b._trigger("iconpickerSelected", {
+                        iconpickerItem: this,
+                        iconpickerValue: b.iconpickerValue
                     });
                 } else {
-                    c.update(d.data("pickerValue"), true);
+                    b.update(d.data("iconpickerValue"), true);
                 }
-                if (c.options.hideOnSelect && c.options.mustAccept === false) {
-                    c.hide();
+                if (b.options.hideOnSelect && b.options.mustAccept === false) {
+                    b.hide();
                 }
             };
-            for (var e in this.options.selectableItems) {
-                var f = a(this.options.templates.pickerItem);
-                f.find(".fa").addClass("fa-" + this.options.selectableItems[e]);
-                f.data("pickerValue", this.options.selectableItems[e]).on("click.picker", d);
-                this.picker.find(".picker-items").append(f.attr("title", "." + this.getValue(this.options.selectableItems[e])));
+            for (var d in this.options.selectableItems) {
+                var e = a(this.options.templates.iconpickerItem);
+                e.find(".fa").addClass("fa-" + this.options.selectableItems[d]);
+                e.data("iconpickerValue", this.options.selectableItems[d]).on("click.iconpicker", c);
+                this.iconpicker.find(".iconpicker-items").append(e.attr("title", "." + this.getValue(this.options.selectableItems[d])));
             }
-            this.popover.find(".popover-content").append(this.picker);
-            return this.picker;
+            this.popover.find(".popover-content").append(this.iconpicker);
+            return this.iconpicker;
         },
-        _isEventInsidePicker: function(b) {
+        _isEventInsideIconpicker: function(b) {
             var c = a(b.target);
-            if ((!c.hasClass("picker-element") || c.hasClass("picker-element") && !c.is(this.element)) && c.parents(".picker-popover").length === 0) {
+            if ((!c.hasClass("iconpicker-element") || c.hasClass("iconpicker-element") && !c.is(this.element)) && c.parents(".iconpicker-popover").length === 0) {
                 return false;
             }
             return true;
@@ -556,34 +558,34 @@
             this.getSearchInput().on("keyup", function() {
                 b.filter(a(this).val().toLowerCase());
             });
-            this.getAcceptButton().on("click.picker", function() {
-                var a = b.picker.find(".picker-selected").get(0);
-                b.update(b.pickerValue);
-                b._trigger("pickerSelected", {
-                    pickerItem: a,
-                    pickerValue: b.pickerValue
+            this.getAcceptButton().on("click.iconpicker", function() {
+                var a = b.iconpicker.find(".iconpicker-selected").get(0);
+                b.update(b.iconpickerValue);
+                b._trigger("iconpickerSelected", {
+                    iconpickerItem: a,
+                    iconpickerValue: b.iconpickerValue
                 });
                 if (!b.isInline()) {
                     b.hide();
                 }
             });
-            this.getCancelButton().on("click.picker", function() {
+            this.getCancelButton().on("click.iconpicker", function() {
                 if (!b.isInline()) {
                     b.hide();
                 }
             });
-            this.element.on("focus.picker", function(a) {
+            this.element.on("focus.iconpicker", function(a) {
                 b.show();
                 a.stopPropagation();
             });
             if (this.hasComponent()) {
-                this.component.on("click.picker", function() {
+                this.component.on("click.iconpicker", function() {
                     b.toggle();
                 });
             }
             if (this.hasInput()) {
-                this.input.on("keyup.picker", function(a) {
-                    if (!e.inArray(a.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
+                this.input.on("keyup.iconpicker", function(a) {
+                    if (!d.inArray(a.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
                         b.update();
                     } else {
                         b._updateFormGroupStatus(b.getValid(this.value) !== false);
@@ -594,15 +596,15 @@
         _bindWindowEvents: function() {
             var b = a(window.document);
             var c = this;
-            var d = ".picker.inst" + this._id;
-            a(window).on("resize.picker" + d + " orientationchange.picker" + d, function(a) {
+            var d = ".iconpicker.inst" + this._id;
+            a(window).on("resize.iconpicker" + d + " orientationchange.iconpicker" + d, function(a) {
                 if (c.popover.hasClass("in")) {
                     c.updatePlacement();
                 }
             });
             if (!c.isInline()) {
                 b.on("mouseup" + d, function(a) {
-                    if (!c._isEventInsidePicker(a) && !c.isInline()) {
+                    if (!c._isEventInsideIconpicker(a) && !c.isInline()) {
                         c.hide();
                     }
                     a.stopPropagation();
@@ -613,21 +615,21 @@
             return false;
         },
         _unbindElementEvents: function() {
-            this.popover.off(".picker");
-            this.element.off(".picker");
+            this.popover.off(".iconpicker");
+            this.element.off(".iconpicker");
             if (this.hasInput()) {
-                this.input.off(".picker");
+                this.input.off(".iconpicker");
             }
             if (this.hasComponent()) {
-                this.component.off(".picker");
+                this.component.off(".iconpicker");
             }
             if (this.hasContainer()) {
-                this.container.off(".picker");
+                this.container.off(".iconpicker");
             }
         },
         _unbindWindowEvents: function() {
-            a(window).off(".picker.inst" + this._id);
-            a(window.document).off(".picker.inst" + this._id);
+            a(window).off(".iconpicker.inst" + this._id);
+            a(window.document).off(".iconpicker.inst" + this._id);
         },
         updatePlacement: function(b, c) {
             b = b || this.options.placement;
@@ -788,8 +790,8 @@
             return true;
         },
         _updateComponents: function() {
-            this.picker.find(".picker-item.picker-selected").removeClass("picker-selected " + this.options.selectedCustomClass);
-            this.picker.find(".fa.fa-" + this.pickerValue).parent().addClass("picker-selected " + this.options.selectedCustomClass);
+            this.iconpicker.find(".iconpicker-item.iconpicker-selected").removeClass("iconpicker-selected " + this.options.selectedCustomClass);
+            this.iconpicker.find(".fa.fa-" + this.iconpickerValue).parent().addClass("iconpicker-selected " + this.options.selectedCustomClass);
             if (this.hasComponent()) {
                 var a = this.component.find("i");
                 if (a.length > 0) {
@@ -811,11 +813,11 @@
             return false;
         },
         getValid: function(b) {
-            if (!e.isString(b)) {
+            if (!d.isString(b)) {
                 b = "";
             }
             b = a.trim(b.replace("fa-", ""));
-            if (e.inArray(b, this.options.selectableItems)) {
+            if (d.inArray(b, this.options.selectableItems)) {
                 return b;
             }
             return false;
@@ -823,20 +825,20 @@
         setValue: function(a) {
             var b = this.getValid(a);
             if (b !== false) {
-                this.pickerValue = b;
-                this._trigger("pickerSetValue", {
-                    pickerValue: b
+                this.iconpickerValue = b;
+                this._trigger("iconpickerSetValue", {
+                    iconpickerValue: b
                 });
-                return this.pickerValue;
+                return this.iconpickerValue;
             } else {
-                this._trigger("pickerInvalid", {
-                    pickerValue: a
+                this._trigger("iconpickerInvalid", {
+                    iconpickerValue: a
                 });
                 return false;
             }
         },
         getValue: function(a) {
-            return "fa-" + (a ? a : this.pickerValue);
+            return "fa-" + (a ? a : this.iconpickerValue);
         },
         getValueHtml: function() {
             return '<i class="fa fa-fw ' + this.getValue() + '"></i>';
@@ -847,10 +849,10 @@
                 if (this.hasInput()) {
                     this.input.val(this.getValue());
                 } else {
-                    this.element.data("pickerValue", this.getValue());
+                    this.element.data("iconpickerValue", this.getValue());
                 }
-                this._trigger("pickerSetSourceValue", {
-                    pickerValue: a
+                this._trigger("iconpickerSetSourceValue", {
+                    iconpickerValue: a
                 });
             }
             return a;
@@ -861,7 +863,7 @@
             if (this.hasInput()) {
                 b = this.input.val();
             } else {
-                b = this.element.data("pickerValue");
+                b = this.element.data("iconpickerValue");
             }
             if (b === undefined || b === "" || b === null || b === false) {
                 b = a;
@@ -878,21 +880,21 @@
             return this.container !== false;
         },
         getAcceptButton: function() {
-            return this.popover.find(".picker-btn-accept");
+            return this.popover.find(".iconpicker-btn-accept");
         },
         getCancelButton: function() {
-            return this.popover.find(".picker-btn-cancel");
+            return this.popover.find(".iconpicker-btn-cancel");
         },
         getSearchInput: function() {
-            return this.popover.find(".picker-search");
+            return this.popover.find(".iconpicker-search");
         },
         filter: function(b) {
-            if (e.isEmpty(b)) {
-                this.picker.find(".picker-item").show();
+            if (d.isEmpty(b)) {
+                this.iconpicker.find(".iconpicker-item").show();
                 return a(false);
             } else {
                 var c = [];
-                this.picker.find(".picker-item").each(function() {
+                this.iconpicker.find(".iconpicker-item").each(function() {
                     var d = a(this);
                     var e = d.attr("title").toLowerCase();
                     var f = false;
@@ -915,26 +917,26 @@
             if (this.popover.hasClass("in")) {
                 return false;
             }
-            a.picker.batch(a(".picker-popover.in:not(.inline)").not(this.popover), "hide");
-            this._trigger("pickerShow");
+            a.iconpicker.batch(a(".iconpicker-popover.in:not(.inline)").not(this.popover), "hide");
+            this._trigger("iconpickerShow");
             this.updatePlacement();
             this.popover.addClass("in");
             setTimeout(a.proxy(function() {
                 this.popover.css("display", this.isInline() ? "" : "block");
-                this._trigger("pickerShown");
+                this._trigger("iconpickerShown");
             }, this), this.options.animation ? 300 : 1);
         },
         hide: function() {
             if (!this.popover.hasClass("in")) {
                 return false;
             }
-            this._trigger("pickerHide");
+            this._trigger("iconpickerHide");
             this.popover.removeClass("in");
             setTimeout(a.proxy(function() {
                 this.popover.css("display", "none");
                 this.getSearchInput().val("");
                 this.filter("");
-                this._trigger("pickerHidden");
+                this._trigger("iconpickerHidden");
             }, this), this.options.animation ? 300 : 1);
         },
         toggle: function() {
@@ -945,8 +947,8 @@
             }
         },
         update: function(a, b) {
-            a = a ? a : this.getSourceValue(this.pickerValue);
-            this._trigger("pickerUpdate");
+            a = a ? a : this.getSourceValue(this.iconpickerValue);
+            this._trigger("iconpickerUpdate");
             if (b === true) {
                 a = this.setValue(a);
             } else {
@@ -956,16 +958,16 @@
             if (a !== false) {
                 this._updateComponents();
             }
-            this._trigger("pickerUpdated");
+            this._trigger("iconpickerUpdated");
             return a;
         },
         destroy: function() {
-            this._trigger("pickerDestroy");
-            this.element.removeData("picker").removeData("pickerValue").removeClass("picker-element");
+            this._trigger("iconpickerDestroy");
+            this.element.removeData("iconpicker").removeData("iconpickerValue").removeClass("iconpicker-element");
             this._unbindElementEvents();
             this._unbindWindowEvents();
             a(this.popover).remove();
-            this._trigger("pickerDestroyed");
+            this._trigger("iconpickerDestroyed");
         },
         disable: function() {
             if (this.hasInput()) {
@@ -991,12 +993,12 @@
             return this.options.placement === "inline" || this.popover.hasClass("inline");
         }
     };
-    a.picker = f;
-    a.fn.picker = function(b) {
+    a.iconpicker = e;
+    a.fn.iconpicker = function(b) {
         return this.each(function() {
             var c = a(this);
-            if (!c.data("picker")) {
-                c.data("picker", new f(this, typeof b === "object" ? b : {}));
+            if (!c.data("iconpicker")) {
+                c.data("iconpicker", new e(this, typeof b === "object" ? b : {}));
             }
         });
     };

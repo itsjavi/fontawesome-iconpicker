@@ -1,16 +1,16 @@
 /*!
- * Bootstrap Popover Picker
- * http://mjolnic.github.io/bootstrap-popover-picker/
+ * Font Awesome Icon Picker
+ * http://mjolnic.github.io/fontawesome-iconpicker/
  *
  * Originally written by (c) 2012 Stefan Petre
  * Licensed under the Apache License v2.0
- * https://github.com/mjolnic/bootstrap-popover-picker/blob/master/LICENSE
+ * https://github.com/mjolnic/fontawesome-iconpicker/blob/master/LICENSE
  *
  */
 @import 'variables.less';
 @import 'popovers.less';
 
-.picker{
+.iconpicker{
     *{
         -webkit-box-sizing: content-box;
         -moz-box-sizing: content-box;
@@ -26,7 +26,7 @@
     margin:0;
     overflow:hidden;
 
-    .picker-items{
+    .iconpicker-items{
         position: relative;
         .clearfix();
         clear:both;
@@ -40,7 +40,7 @@
         min-height: @item_size + (@base_spacing * 3) - 3;
     }
 
-    .picker-item{
+    .iconpicker-item{
         float:left;
         width:@item_size;
         height:@item_size;
@@ -51,10 +51,10 @@
         border-radius:3px;
         font-size:@item_size;
         .outer-border();
-        &:hover:not(.picker-selected){
+        &:hover:not(.iconpicker-selected){
             background-color:@hover_bg;
         }
-        &.picker-selected{
+        &.iconpicker-selected{
             box-shadow: none;
         }
         /*&:nth-child(4n+4) {
@@ -67,6 +67,6 @@
     }
 }
 
-.picker-component{
+.iconpicker-component{
     cursor:pointer;
 }

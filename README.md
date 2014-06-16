@@ -1,10 +1,10 @@
-bootstrap-popover-picker
+fontawesome-iconpicker
 ========================
 
-Generic jQuery plugin template for building pickers using Bootstrap popovers,
-fully customizable with a powerful base API, including jQuery.UI position plugin.
+Font Awesome Icon Picker is a fully customizable plugin for Twitter Bootstrap,
+with a powerful base API, based on [bootstrap-popover-picker](http://mjolnic.github.io/bootstrap-popover-picker/)
 
-[View demos](http://mjolnic.github.io/bootstrap-popover-picker/)
+[View demos](http://mjolnic.github.io/fontawesome-iconpicker/)
 
 ## Instantiation
 
@@ -12,40 +12,40 @@ You can call the plugin in several ways:
 
 ```javascript
 // Create instance if not exists (returns a jQuery object)
-$('.my').picker();
-$('.my').picker({ /*options*/ }); // you can also specify options via data-* attributes
+$('.my').iconpicker();
+$('.my').iconpicker({ /*options*/ }); // you can also specify options via data-* attributes
 
 // For the first matched element, access to a plugin property value
-$('.my').data('picker').pickerProperty;
+$('.my').data('iconpicker').iconpickerProperty;
 
 // For the first matched element, call a plugin instance method with the given args
-$('.my').data('picker').pickerMethod('methodArg1', 'methodArg2' /* , other args */);
+$('.my').data('iconpicker').iconpickerMethod('methodArg1', 'methodArg2' /* , other args */);
 
 // Call and apply a plugin method to EACH matched element.
-$.picker.batch('.my', 'pickerMethod', 'methodArg1', 'methodArg2' /* , other args */); ->
+$.iconpicker.batch('.my', 'iconpickerMethod', 'methodArg1', 'methodArg2' /* , other args */); ->
 ```
 
 ## Triggered Events
 
-All of them exposes the plugin instance through event.pickerInstance
+All of them exposes the plugin instance through event.iconpickerInstance
 
 In order of call:
 
-* pickerCreate
-* pickerCreated
-* pickerShow
-* pickerShown
-* pickerSelect (also exposes event.pickerItem and event.pickerValue)
-* pickerUpdate
-* pickerInvalid (also exposes event.pickerValue)
-* pickerSetValue (also exposes event.pickerValue)
-* pickerSetSourceValue (also exposes event.pickerValue)
-* pickerUpdated
-* pickerSelected (also exposes event.pickerItem and event.pickerValue)
-* pickerHide
-* pickerHidden
-* pickerDestroy
-* pickerDestroyed
+* iconpickerCreate
+* iconpickerCreated
+* iconpickerShow
+* iconpickerShown
+* iconpickerSelect (also exposes event.iconpickerItem and event.iconpickerValue)
+* iconpickerUpdate
+* iconpickerInvalid (also exposes event.iconpickerValue)
+* iconpickerSetValue (also exposes event.iconpickerValue)
+* iconpickerSetSourceValue (also exposes event.iconpickerValue)
+* iconpickerUpdated
+* iconpickerSelected (also exposes event.iconpickerItem and event.iconpickerValue)
+* iconpickerHide
+* iconpickerHidden
+* iconpickerDestroy
+* iconpickerDestroyed
 
 ## Popover placement extensions
 
@@ -75,22 +75,3 @@ Here are all the possibilities in detail:
     E.      leftBottom
     F.      left (center)
     G.      leftTop
-
-
-Note: The position plugin is embedded with the picker plugin, but uses a different
-namespace: `$.fn.pos`, for avoiding other plugin issues.
-
-## To-Do
-- [x] Fix extra placements: rightTop, rightBottom, leftBottom and leftTop
-- [x] Implement inline mode
-- [x] Implement optional accept/cancel buttons
-- [x] Hide on blur input, but not if the blur is caused because we clicked the popover
-- [x] Fix css: soft lines showing under popover arrows
-- [x] Auto placement when popover offsets the window (also due to scroll)
-- [x] Container: Fix placements when container is different from the element parent
-- [x] Implement component mode (if present, the trigger must be the component and not the input)
-- [x] Fix arrow positions for all new placements
-- [x] Detach popover HTML from DOM when destroy is called
-- [x] Fix: has-error is not set in component mode
-- [x] Max rows (limit popover height)
-- [x] Filtered search (input accepts regular expressions)

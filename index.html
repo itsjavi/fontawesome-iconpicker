@@ -2,15 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Bootstrap Popover Picker for Twitter Bootstrap 3</title>
-        <!--        <style>
-                    body * {
-                        position: relative;
-                    }
-                </style>-->
+        <title>Font Awesome Icon Picker plugin for Bootstrap</title>
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-        <link href="dist/css/bootstrap-picker.min.css" rel="stylesheet">
+        <link href="dist/css/fontawesome-iconpicker.min.css" rel="stylesheet">
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -53,46 +48,53 @@
                 display:block;
                 margin-bottom: 15px;
             }
+            .lead iframe{
+                display:inline-block;
+                vertical-align: middle;
+            }
         </style>
     </head>
 
     <body>
         <div class="container" style="text-align: center">
-            <h1 class="page-header">Bootstrap Popover Picker</h1>
+            <h1 class="page-header">Font Awesome Icon Picker</h1>
             <p class="lead">
-                Generic jQuery plugin template for building pickers using Bootstrap popovers,
-                fully customizable with a powerful base API.
+                Font Awesome Icon Picker is a fully customizable plugin for Twitter Bootstrap,
+                with a powerful base API,<br> based on 
+                <a href="http://mjolnic.github.io/bootstrap-popover-picker" target="_blank">Bootstrap Popover Picker</a>
             </p>
             <div class="lead">
-                <iframe class="inl-bl" src="http://ghbtns.com/github-btn.html?user=mjolnic&amp;repo=bootstrap-popover-picker&amp;type=watch&amp;count=true&amp;size=large"
+                <iframe class="inl-bl" src="http://ghbtns.com/github-btn.html?user=mjolnic&amp;repo=fontawesome-iconpicker&amp;type=watch&amp;count=true&amp;size=large"
                         allowtransparency="true" frameborder="0" scrolling="0" width="125" height="30"></iframe>
-                <iframe class="inl-bl" src="http://ghbtns.com/github-btn.html?user=mjolnic&amp;repo=bootstrap-popover-picker&amp;type=fork&amp;count=true&amp;size=large"
+                <iframe class="inl-bl" src="http://ghbtns.com/github-btn.html?user=mjolnic&amp;repo=fontawesome-iconpicker&amp;type=fork&amp;count=true&amp;size=large"
                         allowtransparency="true" frameborder="0" scrolling="0" width="125" height="30"></iframe>
+                
+                <a class="btn btn-primary" href="#"><i class="fa-download fa"></i> Download</a>
             </div>
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h2 class="panel-title">Demo featuring a Font Awesome icon picker (bundled with the library)</h2>
+                    <h2 class="panel-title">Demos</h2>
                 </div>
                 <div class="panel-body">
                     <p class="lead">
-                        <i class="fa fa-github fa-3x"></i>
+                        <i class="fa fa-github fa-3x picker-target"></i>
                     </p>
                     <div class="row">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label>Default</label>
-                                <input data-hide-on-select="true" class="form-control pck pck-auto" value="fa-angle-double-down" type="text" />
+                                <input data-hide-on-select="true" class="form-control icp icp-auto" value="fa-angle-double-down" type="text" />
                             </div>
                             <div class="form-group">
                                 <label>As a component</label>
 
                                 <div class="input-group">
-                                    <input data-hide-on-select="true" class="form-control pck pck-auto" value="fa-angle-double-down" type="text" />
+                                    <input data-hide-on-select="true" class="form-control icp icp-auto" value="fa-angle-double-down" type="text" />
                                     <span class="input-group-addon"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label data-title="Inline picker" data-placement="inline" class="pck pck-auto" data-selected="fa-angle-left">
+                                <label data-title="Inline picker" data-placement="inline" class="icp icp-auto" data-selected="fa-angle-left">
                                     Inline mode, without input: 
                                 </label> 
                             </div>
@@ -100,10 +102,10 @@
                         <div class="col-md-7">
                             <div class="form-group">
                                 <label>With custom options</label>
-                                <input class="form-control pck pck-opts" value="fa-github" type="text" />
+                                <input class="form-control icp icp-opts" value="fa-github" type="text" />
                             </div>
                             <pre class="well">
-$('.pck-opts').picker({
+$('.icp-opts').iconpicker({
     title: 'With custom options',
     selectableItems: ['github', 'heart', 'html5', 'css3'],
     selectedCustomClass: 'label label-success',
@@ -115,7 +117,7 @@ $('.pck-opts').picker({
                             <div class="form-group">
                                 <label>Inside dropdowns</label>
                                 <div class="btn-group">
-                                    <button type="button" class="pck pck-dd btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <button type="button" class="icp icp-dd btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         Dropdown
                                         <span class="caret"></span>
                                     </button>
@@ -123,7 +125,7 @@ $('.pck-opts').picker({
                                 </div>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary">Action</button>
-                                    <button type="button" class="pck pck-dd btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
@@ -147,30 +149,30 @@ $('.pck-opts').picker({
         </footer>
         <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-        <script src="dist/js/bootstrap-picker.js"></script>
+        <script src="dist/js/fontawesome-iconpicker.js"></script>
         <script>
             $(function() {
                 $('.action-destroy').on('click', function() {
-                    $.picker.batch('.pck.picker-element', 'destroy');
+                    $.iconpicker.batch('.icp.iconpicker-element', 'destroy');
                 });
                 // Live binding of buttons
                 $(document).on('click', '.action-placement', function(e) {
                     $('.action-placement').removeClass('active');
                     $(this).addClass('active');
-                    $('.pck-opts').data('picker').updatePlacement($(this).text());
+                    $('.icp-opts').data('iconpicker').updatePlacement($(this).text());
                     e.preventDefault();
                     return false;
                 });
                 $('.action-create').on('click', function() {
-                    $('.pck-auto').picker();
-                    $('.pck-dd').each(function(){
+                    $('.icp-auto').iconpicker();
+                    $('.icp-dd').each(function() {
                         var $this = $(this);
-                        $this.picker({
+                        $this.iconpicker({
                             title: 'Dropdown with picker',
                             container: $(' ~ .dropdown-menu:first', $this)
                         });
                     });
-                    $('.pck-opts').picker({
+                    $('.icp-opts').iconpicker({
                         title: 'With custom options',
                         selectableItems: ['github', 'heart', 'html5', 'css3'],
                         selectedCustomClass: 'label label-success',
@@ -200,15 +202,15 @@ $('.pck-opts').picker({
                     <a href="#" class=" action-placement">left</a>\n\
                     <a href="#" class=" action-placement">leftTop</a>\n\
                     </div><hr></div>'}
-                    }).data('picker').show();
+                    }).data('iconpicker').show();
                 }).trigger('click');
 
 
                 // Events sample:
                 // This event is only triggered when the actual input value is changed
                 // by user interaction
-                $('.pck').on('pickerSelected', function(e) {
-                    $('.lead .fa').get(0).className = 'fa fa-3x fa-' + e.pickerValue;
+                $('.icp').on('iconpickerSelected', function(e) {
+                    $('.lead .fa.picker-target').get(0).className = 'picker-target fa fa-3x fa-' + e.iconpickerValue;
                 });
             });
         </script>

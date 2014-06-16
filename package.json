@@ -1,14 +1,14 @@
 {
-    "name": "bootstrap-popover-picker",
+    "name": "fontawesome-iconpicker",
     "version": "1.0.0",
-    "description": "Bootstrap Popover Picker plugin template for Twitter Bootstrap",
-    "homepage": "http://mjolnic.github.io/bootstrap-popover-picker/",
+    "description": "Font Awesome Icon Picker plugin template for Twitter Bootstrap",
+    "homepage": "http://mjolnic.github.io/fontawesome-iconpicker/",
     "repository": {
         "type": "git",
-        "url": "git@github.com:mjolnic/bootstrap-popover-picker.git"
+        "url": "git@github.com:mjolnic/fontawesome-iconpicker.git"
     },
     "bugs": {
-        "url": "https://github.com/mjolnic/bootstrap-popover-picker/issues"
+        "url": "https://github.com/mjolnic/fontawesome-iconpicker/issues"
     },
     "keywords": [
         "bootstrap",
@@ -20,7 +20,7 @@
     "author": "Javier Aguilar @mjolnic",
     "licenses": [{
             "type": "MIT",
-            "url": "https://github.com/mjolnic/bootstrap-popover-picker/blob/master/LICENSE"
+            "url": "https://github.com/mjolnic/fontawesome-iconpicker/blob/master/LICENSE"
         }],
     "devDependencies": {
         "grunt": "~0.4.5",

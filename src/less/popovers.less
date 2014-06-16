@@ -1,3 +1,13 @@
+/*
+ * Font Awesome Icon Picker
+ * http://mjolnic.github.io/fontawesome-iconpicker/
+ *
+ * Originally written by (c) 2014 Javier Aguilar @mjolnic
+ * Licensed under the MIT License
+ * https://github.com/mjolnic/fontawesome-iconpicker/blob/master/LICENSE
+ *
+ */
+
 //
 // Popovers
 // --------------------------------------------------
@@ -24,7 +34,7 @@
         > .arrow{
             display:none;
         }
-        margin:@base_spacing 0;
+        margin: 0 0 @base_spacing 0;
         position: relative;
         display:inline-block;
         opacity:1;
@@ -35,7 +45,7 @@
         max-width: 100%;
         box-shadow: none;
         z-index:auto;
-        vertical-align: middle;
+        vertical-align: top;
     }
 }
 
@@ -52,8 +62,8 @@
     //padding: 8px 14px;
     //border-radius: 5px 5px 0 0;    
     padding:@base_spacing;
-    font-size:@item_size / 1.1;
-    line-height: @item_size;
+    font-size:@title_size;
+    line-height:@title_size + 2px;
     border-bottom:1px solid darken(@popover-title-bg, 5%);
     background-color: @popover-title-bg;
     

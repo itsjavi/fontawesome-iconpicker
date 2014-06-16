@@ -68,9 +68,12 @@
                         allowtransparency="true" frameborder="0" scrolling="0" width="125" height="30"></iframe>
                 <iframe class="inl-bl" src="http://ghbtns.com/github-btn.html?user=mjolnic&amp;repo=fontawesome-iconpicker&amp;type=fork&amp;count=true&amp;size=large"
                         allowtransparency="true" frameborder="0" scrolling="0" width="125" height="30"></iframe>
-                
+
                 <a class="btn btn-primary" href="#"><i class="fa-download fa"></i> Download</a>
             </div>
+            <p class="lead">
+You can use Font Awesome or another font icon set of your choice (icon options and items are customizable).
+            </p>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">Demos</h2>
@@ -83,18 +86,18 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label>Default</label>
-                                <input data-hide-on-select="true" class="form-control icp icp-auto" value="fa-angle-double-down" type="text" />
+                                <input class="form-control icp icp-auto" value="fa-anchor" type="text" />
                             </div>
                             <div class="form-group">
                                 <label>As a component</label>
 
                                 <div class="input-group">
-                                    <input data-hide-on-select="true" class="form-control icp icp-auto" value="fa-angle-double-down" type="text" />
+                                    <input data-placement="bottomRight" class="form-control icp icp-auto" value="fa-archive" type="text" />
                                     <span class="input-group-addon"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label data-title="Inline picker" data-placement="inline" class="icp icp-auto" data-selected="fa-angle-left">
+                                <label data-title="Inline picker" data-placement="inline" class="icp icp-auto" data-selected="fa-align-justify">
                                     Inline mode, without input: 
                                 </label> 
                             </div>
@@ -103,17 +106,18 @@
                             <div class="form-group">
                                 <label>With custom options</label>
                                 <input class="form-control icp icp-opts" value="fa-github" type="text" />
-                            </div>
-                            <pre class="well">
-$('.icp-opts').iconpicker({
+                                <pre class="well">
+{
+    //...
     title: 'With custom options',
-    selectableItems: ['github', 'heart', 'html5', 'css3'],
+    icons: ['github', 'heart', 'html5', 'css3'],
     selectedCustomClass: 'label label-success',
     mustAccept:true,
     placement:'bottomRight',
     showFooter:true,
     //... (see the source code of this page)
-});</pre>
+}</pre>
+                            </div>
                             <div class="form-group">
                                 <label>Inside dropdowns</label>
                                 <div class="btn-group">
@@ -134,6 +138,20 @@ $('.icp-opts').iconpicker({
                                 <p class="help-block"><br>
                                     Note: In dropdowns the placement is controlled by the Bootstrap dropdown plugin
                                 </p>
+                            </div>
+                            <div class="form-group">
+                                <label>Using a custom icon font (default Bootstrap glyphicons)</label>
+                                <input class="form-control icp icp-glyphs" value="" type="text" />
+                                <pre class="well">
+{
+    //...
+    icons:['home', 'repeat', 'search', 
+        'arrow-left', 'arrow-right', 'star'],
+    iconBaseClass:'glyphicon',
+    iconComponentBaseClass:'glyphicon',
+    iconClassPrefix:'glyphicon-'
+    //...              
+}</pre>
                             </div>
                         </div>
                     </div>
@@ -172,9 +190,17 @@ $('.icp-opts').iconpicker({
                             container: $(' ~ .dropdown-menu:first', $this)
                         });
                     });
+                    $('.icp-glyphs').iconpicker({
+                        title: 'Using glypghicons',
+                        icons: ['home', 'repeat', 'search',
+                            'arrow-left', 'arrow-right', 'star'],
+                        iconBaseClass: 'glyphicon',
+                        iconComponentBaseClass: 'glyphicon',
+                        iconClassPrefix: 'glyphicon-'
+                    });
                     $('.icp-opts').iconpicker({
                         title: 'With custom options',
-                        selectableItems: ['github', 'heart', 'html5', 'css3'],
+                        icons: ['github', 'heart', 'html5', 'css3'],
                         selectedCustomClass: 'label label-success',
                         mustAccept: true,
                         placement: 'bottomRight',
@@ -210,7 +236,9 @@ $('.icp-opts').iconpicker({
                 // This event is only triggered when the actual input value is changed
                 // by user interaction
                 $('.icp').on('iconpickerSelected', function(e) {
-                    $('.lead .fa.picker-target').get(0).className = 'picker-target fa fa-3x fa-' + e.iconpickerValue;
+                    $('.lead .picker-target').get(0).className = 'picker-target fa-3x ' +
+                            e.iconpickerInstance.options.iconBaseClass + ' ' +
+                            e.iconpickerInstance.getValue(e.iconpickerValue);
                 });
             });
         </script>

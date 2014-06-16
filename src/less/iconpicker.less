@@ -2,8 +2,8 @@
  * Font Awesome Icon Picker
  * http://mjolnic.github.io/fontawesome-iconpicker/
  *
- * Originally written by (c) 2012 Stefan Petre
- * Licensed under the Apache License v2.0
+ * Originally written by (c) 2014 Javier Aguilar @mjolnic
+ * Licensed under the MIT License
  * https://github.com/mjolnic/fontawesome-iconpicker/blob/master/LICENSE
  *
  */
@@ -34,10 +34,13 @@
         padding:@base_spacing 0 0 @base_spacing;
         background:#fff;
         //margin:0 -@base_spacing -@base_spacing 0;
-        margin:0;
         //width:@picker_width - (@base_spacing*2);
+        margin:0;
         overflow:hidden;
-        min-height: @item_size + (@base_spacing * 3) - 3;
+        overflow-y: auto;
+        min-height: @row_outer_height;
+        max-height: @row_outer_height * @num_rows;
+
     }
 
     .iconpicker-item{

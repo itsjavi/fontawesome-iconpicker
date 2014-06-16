@@ -2,8 +2,26 @@
  * Font Awesome Icon Picker
  * http://mjolnic.github.io/fontawesome-iconpicker/
  *
- * Originally written by (c) 2012 Stefan Petre
- * Licensed under the Apache License v2.0
+ * Originally written by (c) 2014 Javier Aguilar @mjolnic
+ * Licensed under the MIT License
+ * https://github.com/mjolnic/fontawesome-iconpicker/blob/master/LICENSE
+ *
+ */
+/*
+ * Font Awesome Icon Picker
+ * http://mjolnic.github.io/fontawesome-iconpicker/
+ *
+ * Originally written by (c) 2014 Javier Aguilar @mjolnic
+ * Licensed under the MIT License
+ * https://github.com/mjolnic/fontawesome-iconpicker/blob/master/LICENSE
+ *
+ */
+/*
+ * Font Awesome Icon Picker
+ * http://mjolnic.github.io/fontawesome-iconpicker/
+ *
+ * Originally written by (c) 2014 Javier Aguilar @mjolnic
+ * Licensed under the MIT License
  * https://github.com/mjolnic/fontawesome-iconpicker/blob/master/LICENSE
  *
  */
@@ -15,7 +33,7 @@
   max-width: none;
   padding: 1px;
   text-align: left;
-  width: 270px;
+  width: 242px;
   background: #f7f7f7;
 }
 .iconpicker-popover.popover.top,
@@ -43,7 +61,7 @@
   margin-left: -10px;
 }
 .iconpicker-popover.popover.inline {
-  margin: 14px 0;
+  margin: 0 0 14px 0;
   position: relative;
   display: inline-block;
   opacity: 1;
@@ -54,7 +72,7 @@
   max-width: 100%;
   box-shadow: none;
   z-index: auto;
-  vertical-align: middle;
+  vertical-align: top;
 }
 .iconpicker-popover.popover.inline > .arrow {
   display: none;
@@ -68,8 +86,8 @@
 }
 .iconpicker-popover.popover .popover-title {
   padding: 14px;
-  font-size: 19.09090909px;
-  line-height: 21px;
+  font-size: 14px;
+  line-height: 16px;
   border-bottom: 1px solid #ebebeb;
   background-color: #f7f7f7;
 }
@@ -267,7 +285,9 @@
   background: #fff;
   margin: 0;
   overflow: hidden;
-  min-height: 60px;
+  overflow-y: auto;
+  min-height: 55px;
+  max-height: 275px;
 }
 .iconpicker .iconpicker-items:before,
 .iconpicker .iconpicker-items:after {
@@ -279,14 +299,14 @@
 }
 .iconpicker .iconpicker-item {
   float: left;
-  width: 21px;
-  height: 21px;
+  width: 14px;
+  height: 14px;
   padding: 14px;
   margin: 0 14px 14px 0;
   text-align: center;
   cursor: pointer;
   border-radius: 3px;
-  font-size: 21px;
+  font-size: 14px;
   box-shadow: 0 0 0 1px #dddddd;
   /*&:nth-child(4n+4) {
             margin-right: 0;

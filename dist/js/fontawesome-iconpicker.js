@@ -438,8 +438,8 @@
         iconComponentBaseClass: "fa fa-fw",
         iconClassPrefix: "fa-",
         input: "input",
-        component: ".input-group-addon",
         container: false,
+        component: ".input-group-addon",
         templates: {
             popover: '<div class="iconpicker-popover popover"><div class="arrow"></div>' + '<div class="popover-title"></div><div class="popover-content"></div></div>',
             footer: '<div class="popover-footer"></div>',

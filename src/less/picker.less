@@ -24,7 +24,6 @@
     line-height:0;
     display:block;
     margin:0;
-    min-height: @item_size + @base_spacing;
     overflow:hidden;
 
     .picker-items{
@@ -32,11 +31,13 @@
         .clearfix();
         clear:both;
         float:none;
-        padding:@base_spacing;
+        padding:@base_spacing 0 0 @base_spacing;
         background:#fff;
-        margin:0 -@base_spacing -@base_spacing 0;
+        //margin:0 -@base_spacing -@base_spacing 0;
+        margin:0;
         //width:@picker_width - (@base_spacing*2);
         overflow:hidden;
+        min-height: @item_size + (@base_spacing * 3) - 3;
     }
 
     .picker-item{
@@ -68,5 +69,4 @@
 
 .picker-component{
     cursor:pointer;
-
 }

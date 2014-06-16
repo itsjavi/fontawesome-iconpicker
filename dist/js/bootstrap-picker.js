@@ -357,6 +357,9 @@
     "use strict";
     var b = [ "angle-double-down", "angle-double-left", "angle-double-right", "angle-double-up", "angle-down", "angle-left", "angle-right", "angle-up" ];
     var c = {
+        maxRows: 4,
+        numCols: 4,
+        itemOuterHeight: 85,
         title: false,
         selected: false,
         defaultValue: false,
@@ -365,48 +368,91 @@
         animation: true,
         hideOnSelect: false,
         showFooter: false,
+        searchInFooter: false,
         mustAccept: false,
         selectedCustomClass: "bg-primary",
         selectableItems: false,
-        inline: false,
-        inputSelector: "input",
-        componentSelector: ".input-group-addon",
-        containerSelector: false,
+        input: "input",
+        component: ".input-group-addon",
+        container: false,
         templates: {
             popover: '<div class="picker-popover popover"><div class="arrow"></div>' + '<div class="popover-title"></div><div class="popover-content"></div></div>',
-            popoverFooter: '<div class="popover-footer">' + '<button class="picker-btn picker-btn-cancel btn btn-default btn-sm">Cancel</button>' + '<button class="picker-btn picker-btn-accept btn btn-primary btn-sm">Accept</button></div>',
+            footer: '<div class="popover-footer"></div>',
+            buttons: '<button class="picker-btn picker-btn-cancel btn btn-default btn-sm">Cancel</button>' + ' <button class="picker-btn picker-btn-accept btn btn-primary btn-sm">Accept</button>',
+            search: '<input type="search" class="form-control picker-search" placeholder="Type to filter" />',
             picker: '<div class="picker"><div class="picker-items"></div></div>',
             pickerItem: '<div class="picker-item"><i class="fa"></i></div>'
         }
     };
     var d = 0;
-    var e = function(e, f) {
+    var e = {
+        isEmpty: function(a) {
+            return a === false || a === "" || a === null || a === undefined;
+        },
+        isEmptyObject: function(a) {
+            return this.isEmpty(a) === true || a.length === 0;
+        },
+        isElement: function(b) {
+            return a(b).length > 0;
+        },
+        isString: function(a) {
+            return typeof a === "string" || a instanceof String;
+        },
+        isArray: function(b) {
+            return a.isArray(b);
+        },
+        inArray: function(b, c) {
+            return a.inArray(b, c) !== -1;
+        },
+        throwError: function(a) {
+            throw "Bootstrap Popover Picker Exception: " + a;
+        }
+    };
+    var f = function(f, g) {
         this._id = d++;
-        this.element = a(e).addClass("picker-element");
+        this.element = a(f).addClass("picker-element");
         this._trigger("pickerCreate");
-        this.options = a.extend(true, {}, c, this.element.data(), f);
+        this.options = a.extend(true, {}, c, this.element.data(), g);
         this.options.originalPlacement = this.options.placement;
         if (!a.isArray(this.options.selectableItems) || this.options.selectableItems.length === 0) {
             this.options.selectableItems = b;
         }
-        this.container = this._sanitizeJqueryObject(!!this.options.containerSelector ? a(this.options.containerSelector) : this.element.is("input") ? this.element.parent() : this.element, "picker-container");
-        this.component = this._sanitizeJqueryObject(!!this.options.componentSelector ? this.container.find(this.options.componentSelector) : false, "picker-component");
-        this.input = this._sanitizeJqueryObject(this.element.is("input") ? this.element : this.options.inputSelector ? this.element.find(this.options.inputSelector) : false, "picker-input");
-        this._createPicker(this._createPopover());
+        this.container = e.isElement(this.options.container) ? a(this.options.container) : false;
+        if (this.container === false) {
+            this.container = this.element.is("input") ? this.element.parent() : this.element;
+        }
+        if (this.container.addClass("picker-container").is(".dropdown-menu")) {
+            this.options.placement = "inline";
+        }
+        this.input = this.element.is("input") ? this.element.addClass("picker-input") : false;
+        if (this.input === false) {
+            this.input = this.container.find(this.options.input);
+        }
+        this.component = this.container.find(this.options.component).addClass("picker-component");
+        if (this.component.length === 0) {
+            this.component = false;
+        }
+        this._createPopover();
+        this._createPicker();
         if (this.getAcceptButton().length === 0) {
             this.options.mustAccept = false;
         }
-        if (this.options.inline === true) {
-            this.popover.addClass("popover-inline");
+        if (this.container.is(".input-group")) {
+            this.container.parent().append(this.popover);
+        } else {
+            this.container.append(this.popover);
         }
-        this.container.append(this.popover);
+        this._calcOverflow();
         this._bindElementEvents();
         this._bindWindowEvents();
         this.update(this.options.selected);
+        if (this.isInline()) {
+            this.show();
+        }
         this._trigger("pickerCreated");
     };
-    e.pos = a.pos;
-    e.batch = function(b, c) {
+    f.pos = a.pos;
+    f.batch = function(b, c) {
         var d = Array.prototype.slice.call(arguments, 2);
         return a(b).each(function() {
             var b = a(this).data("picker");
@@ -415,8 +461,8 @@
             }
         });
     };
-    e.prototype = {
-        constructor: e,
+    f.prototype = {
+        constructor: f,
         options: {},
         _id: 0,
         _trigger: function(b, c) {
@@ -426,33 +472,43 @@
                 pickerInstance: this
             }, c));
         },
-        _error: function(a) {
-            throw "Bootstrap Popover Picker Exception: " + a;
-        },
-        _sanitizeJqueryObject: function(a, b) {
-            if (a !== false && a.length === 0 || !a) {
-                a = false;
-            } else if (b) {
-                a.addClass(b);
-            }
-            return a;
-        },
         _createPopover: function() {
             this.popover = a(this.options.templates.popover);
+            var b = this.popover.find(".popover-title");
             if (!!this.options.title) {
-                this.popover.find(".popover-title").html(this.options.title);
-            } else {
-                this.popover.find(".popover-title").remove();
+                b.append(a('<div class="popover-title-text">' + this.options.title + "</div>"));
             }
-            if (!!this.options.templates.popoverFooter && this.options.showFooter) {
-                this.popover.append(a(this.options.templates.popoverFooter));
-            } else if (this.options.showFooter !== true) {
-                this.popover.find(".popover-footer").remove();
+            if (!this.options.searchInFooter && !e.isEmpty(this.options.templates.buttons)) {
+                b.append(this.options.templates.search);
+            } else if (!this.options.title) {
+                b.remove();
+            }
+            if (this.options.showFooter && !e.isEmpty(this.options.templates.footer)) {
+                var c = a(this.options.templates.footer);
+                if (!e.isEmpty(this.options.templates.search) && this.options.searchInFooter) {
+                    c.append(a(this.options.templates.search));
+                }
+                if (!e.isEmpty(this.options.templates.buttons)) {
+                    c.append(a(this.options.templates.buttons));
+                }
+                this.popover.append(c);
             }
             if (this.options.animation === true) {
                 this.popover.addClass("fade");
             }
             return this.popover;
+        },
+        _calcOverflow: function() {
+            if (this.options.maxRows > 0) {
+                var a = this.options.selectableItems.length;
+                if (a / this.options.numCols > this.options.maxRows) {
+                    this.popover.addClass("picker-has-overflow");
+                    this.picker.find(".picker-items").css({
+                        "overflow-y": "auto",
+                        height: this.options.maxRows * this.options.itemOuterHeight + "px"
+                    });
+                }
+            }
         },
         _createPicker: function(b) {
             var c = this;
@@ -485,53 +541,55 @@
                 f.data("pickerValue", this.options.selectableItems[e]).on("click.picker", d);
                 this.picker.find(".picker-items").append(f.attr("title", "." + this.getValue(this.options.selectableItems[e])));
             }
-            if (c.options.mustAccept === true) {
-                this.getAcceptButton().on("click.picker", function() {
-                    var a = c.picker.find(".picker-selected").get(0);
-                    c.update(c.pickerValue);
-                    c._trigger("pickerSelected", {
-                        pickerItem: a,
-                        pickerValue: c.pickerValue
-                    });
-                    if (c.options.inline !== true) {
-                        c.hide();
-                    }
-                });
-                this.getCancelButton().on("click.picker", function() {
-                    if (c.options.inline !== true) {
-                        c.hide();
-                    }
-                });
-            }
-            if (c.hasComponent()) {
-                this.component.on("click.picker", function() {
-                    c.toggle();
-                });
-            }
-            b.find(".popover-content").append(this.picker);
+            this.popover.find(".popover-content").append(this.picker);
             return this.picker;
         },
-        _bindElementEvents: function() {
-            var b = this;
-            this.element.on("focus.picker", function(a) {
-                b.show();
-                a.stopPropagation();
-            });
-            if (this.hasInput()) {
-                this.input.on("keyup.picker", function(c) {
-                    b._updateFormGroupStatus(b.getValid(this.value) !== false);
-                    if (a.inArray(c.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ]) === -1) {
-                        b.update();
-                    }
-                });
-            }
-        },
-        _eventIsInPicker: function(b) {
+        _isEventInsidePicker: function(b) {
             var c = a(b.target);
             if ((!c.hasClass("picker-element") || c.hasClass("picker-element") && !c.is(this.element)) && c.parents(".picker-popover").length === 0) {
                 return false;
             }
             return true;
+        },
+        _bindElementEvents: function() {
+            var b = this;
+            this.getSearchInput().on("keyup", function() {
+                b.filter(a(this).val().toLowerCase());
+            });
+            this.getAcceptButton().on("click.picker", function() {
+                var a = b.picker.find(".picker-selected").get(0);
+                b.update(b.pickerValue);
+                b._trigger("pickerSelected", {
+                    pickerItem: a,
+                    pickerValue: b.pickerValue
+                });
+                if (!b.isInline()) {
+                    b.hide();
+                }
+            });
+            this.getCancelButton().on("click.picker", function() {
+                if (!b.isInline()) {
+                    b.hide();
+                }
+            });
+            this.element.on("focus.picker", function(a) {
+                b.show();
+                a.stopPropagation();
+            });
+            if (this.hasComponent()) {
+                this.component.on("click.picker", function() {
+                    b.toggle();
+                });
+            }
+            if (this.hasInput()) {
+                this.input.on("keyup.picker", function(a) {
+                    if (!e.inArray(a.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
+                        b.update();
+                    } else {
+                        b._updateFormGroupStatus(b.getValid(this.value) !== false);
+                    }
+                });
+            }
         },
         _bindWindowEvents: function() {
             var b = a(window.document);
@@ -542,9 +600,9 @@
                     c.updatePlacement();
                 }
             });
-            if (this.options.inline === false) {
+            if (!c.isInline()) {
                 b.on("mouseup" + d, function(a) {
-                    if (!c._eventIsInPicker(a)) {
+                    if (!c._isEventInsidePicker(a) && !c.isInline()) {
                         c.hide();
                     }
                     a.stopPropagation();
@@ -554,8 +612,8 @@
             }
             return false;
         },
-        _unbindEvents: function() {
-            this.element.off(".picker");
+        _unbindElementEvents: function() {
+            this.popover.off(".picker");
             this.element.off(".picker");
             if (this.hasInput()) {
                 this.input.off(".picker");
@@ -566,6 +624,8 @@
             if (this.hasContainer()) {
                 this.container.off(".picker");
             }
+        },
+        _unbindWindowEvents: function() {
             a(window).off(".picker.inst" + this._id);
             a(window.document).off(".picker.inst" + this._id);
         },
@@ -581,14 +641,17 @@
                 collision: c === true ? "flip" : c,
                 within: window
             };
-            if (this.options.inline === true) {
-                return this.popover.show();
-            }
+            this.popover.removeClass("inline topLeftCorner topLeft top topRight topRightCorner " + "rightTop right rightBottom bottomRight bottomRightCorner " + "bottom bottomLeft bottomLeftCorner leftBottom left leftTop");
             if (typeof b === "object") {
                 return this.popover.pos(a.extend({}, d, b));
             }
-            this.popover.removeClass("topLeftCorner topLeft top topRight topRightCorner " + "rightTop right rightBottom bottomRight bottomRightCorner " + "bottom bottomLeft bottomLeftCorner leftBottom left leftTop");
             switch (b) {
+              case "inline":
+                {
+                    d = false;
+                }
+                break;
+
               case "topLeftCorner":
                 {
                     d.my = "right bottom";
@@ -708,9 +771,20 @@
                 break;
             }
             this.popover.css({
-                display: "block"
-            }).pos(d).addClass(this.options.placement);
-            this.popover.css("maxWidth", a(window).width() - this.container.offset().left - 5);
+                display: this.options.placement === "inline" ? "" : "block"
+            });
+            if (d !== false) {
+                this.popover.pos(d).css("maxWidth", a(window).width() - this.container.offset().left - 5);
+            } else {
+                this.popover.css({
+                    top: "auto",
+                    right: "auto",
+                    bottom: "auto",
+                    left: "auto",
+                    maxWidth: "none"
+                });
+            }
+            this.popover.addClass(this.options.placement);
             return true;
         },
         _updateComponents: function() {
@@ -719,7 +793,7 @@
             if (this.hasComponent()) {
                 var a = this.component.find("i");
                 if (a.length > 0) {
-                    a.attr("class", "fa " + this.getValue());
+                    a.attr("class", "fa fa-fw " + this.getValue());
                 } else {
                     this.component.html(this.getValueHtml());
                 }
@@ -728,23 +802,20 @@
         _updateFormGroupStatus: function(a) {
             if (this.hasInput()) {
                 if (a !== false) {
-                    this.input.parent(".form-group").removeClass("has-error");
+                    this.input.parents(".form-group:first").removeClass("has-error");
                 } else {
-                    this.input.parent(".form-group").addClass("has-error");
+                    this.input.parents(".form-group:first").addClass("has-error");
                 }
                 return true;
             }
             return false;
         },
-        _sanitizeValue: function(b) {
-            if ((typeof b === "string" || b instanceof String) === false) {
+        getValid: function(b) {
+            if (!e.isString(b)) {
                 b = "";
             }
-            return a.trim(b.replace("fa-", ""));
-        },
-        getValid: function(b) {
-            b = this._sanitizeValue(b);
-            if (a.inArray(b, this.options.selectableItems) !== -1) {
+            b = a.trim(b.replace("fa-", ""));
+            if (e.inArray(b, this.options.selectableItems)) {
                 return b;
             }
             return false;
@@ -768,7 +839,7 @@
             return "fa-" + (a ? a : this.pickerValue);
         },
         getValueHtml: function() {
-            return '<i class="fa ' + this.getValue() + '"></i>';
+            return '<i class="fa fa-fw ' + this.getValue() + '"></i>';
         },
         setSourceValue: function(a) {
             a = this.setValue(a);
@@ -812,45 +883,78 @@
         getCancelButton: function() {
             return this.popover.find(".picker-btn-cancel");
         },
+        getSearchInput: function() {
+            return this.popover.find(".picker-search");
+        },
+        filter: function(b) {
+            if (e.isEmpty(b)) {
+                this.picker.find(".picker-item").show();
+                return a(false);
+            } else {
+                var c = [];
+                this.picker.find(".picker-item").each(function() {
+                    var d = a(this);
+                    var e = d.attr("title").toLowerCase();
+                    var f = false;
+                    try {
+                        f = new RegExp(b, "g");
+                    } catch (g) {
+                        f = false;
+                    }
+                    if (f !== false && e.match(f)) {
+                        c.push(d);
+                        d.show();
+                    } else {
+                        d.hide();
+                    }
+                });
+                return c;
+            }
+        },
         show: function() {
-            if (this.popover.hasClass("in")) {}
-            a(".picker-popover.in:not(.popover-inline)").not(this.popover).hide();
+            if (this.popover.hasClass("in")) {
+                return false;
+            }
+            a.picker.batch(a(".picker-popover.in:not(.inline)").not(this.popover), "hide");
             this._trigger("pickerShow");
             this.updatePlacement();
             this.popover.addClass("in");
             setTimeout(a.proxy(function() {
+                this.popover.css("display", this.isInline() ? "" : "block");
                 this._trigger("pickerShown");
-            }, this), this.options.animation ? 200 : 1);
+            }, this), this.options.animation ? 300 : 1);
         },
         hide: function() {
-            if (!this.popover.hasClass("in")) {}
+            if (!this.popover.hasClass("in")) {
+                return false;
+            }
             this._trigger("pickerHide");
             this.popover.removeClass("in");
             setTimeout(a.proxy(function() {
                 this.popover.css("display", "none");
+                this.getSearchInput().val("");
+                this.filter("");
                 this._trigger("pickerHidden");
-            }, this), this.options.animation ? 200 : 1);
+            }, this), this.options.animation ? 300 : 1);
         },
         toggle: function() {
-            if (this.popover.hasClass("in")) {
+            if (this.popover.is(":visible")) {
                 this.hide();
             } else {
-                this.show();
+                this.show(true);
             }
         },
         update: function(a, b) {
             a = a ? a : this.getSourceValue(this.pickerValue);
             this._trigger("pickerUpdate");
-            if (b) {
+            if (b === true) {
                 a = this.setValue(a);
             } else {
                 a = this.setSourceValue(a);
+                this._updateFormGroupStatus(a !== false);
             }
-            if (a === false) {
-                this._updateFormGroupStatus(false);
-            } else {
+            if (a !== false) {
                 this._updateComponents();
-                this._updateFormGroupStatus(true);
             }
             this._trigger("pickerUpdated");
             return a;
@@ -858,8 +962,9 @@
         destroy: function() {
             this._trigger("pickerDestroy");
             this.element.removeData("picker").removeData("pickerValue").removeClass("picker-element");
-            a(this.popover).detach();
-            this._unbindEvents();
+            this._unbindElementEvents();
+            this._unbindWindowEvents();
+            a(this.popover).remove();
             this._trigger("pickerDestroyed");
         },
         disable: function() {
@@ -881,14 +986,17 @@
                 return this.input.prop("disabled") === true;
             }
             return false;
+        },
+        isInline: function() {
+            return this.options.placement === "inline" || this.popover.hasClass("inline");
         }
     };
-    a.picker = e;
+    a.picker = f;
     a.fn.picker = function(b) {
         return this.each(function() {
             var c = a(this);
             if (!c.data("picker")) {
-                c.data("picker", new e(this, typeof b === "object" ? b : {}));
+                c.data("picker", new f(this, typeof b === "object" ? b : {}));
             }
         });
     };

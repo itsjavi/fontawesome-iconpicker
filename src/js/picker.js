@@ -24,6 +24,12 @@
         'angle-down', 'angle-left', 'angle-right', 'angle-up'
     ];
     var defaults = {
+        maxRows: 4, // if it's exceeded, there will be vertical overflow. this DOES change css.
+        // numCols: this is only orientative for calculating the maxRows overflow. changing this value does no change any CSS.
+        // if you want to have another number of cols, regenerate picker.less file changing the @num_cols variable in variables.less
+        numCols: 4,
+        itemOuterHeight: 85, // this is only for calculation maxRows overflow. this should change suiting your CSS.
+        //
         title: false, // Popover title (optional) only if specified in the template
         selected: false, // use this value as the current item and ignore the original
         defaultValue: false, // use this value as the current item if input or element item is empty
@@ -33,27 +39,51 @@
         //hide picker automatically when a value is picked. it is ignored if mustAccept is not false and the accept button is visible
         hideOnSelect: false,
         showFooter: false,
+        searchInFooter: false, // If true, the search will be added to the footer instead of the title
         mustAccept: false, // only applicable when there's an picker-btn-accept button in the popover footer
         selectedCustomClass: 'bg-primary', // Appends this class when to the selected item
         selectableItems: false, // false or array. If is not false or empty array, it will be used instead of defaultSelectableItems
-        //
-        inline: false, // WIP. displays the picker as an inline element
-        inputSelector: 'input', // children input selector
-        componentSelector: '.input-group-addon', // children component jQuery selector or object, relative to the parent element
-        containerSelector: false, // WIP.  Appends the popover to a specific element. If true, appends to the jQuery element.
+        input: 'input', // children input selector
+        component: '.input-group-addon', // children component jQuery selector or object, relative to the parent element
+        container: false, // WIP.  Appends the popover to a specific element. If true, appends to the jQuery element.
         // Plugin templates:
         templates: {
             popover: '<div class="picker-popover popover"><div class="arrow"></div>' +
                     '<div class="popover-title"></div><div class="popover-content"></div></div>',
-            popoverFooter: '<div class="popover-footer">' +
-                    '<button class="picker-btn picker-btn-cancel btn btn-default btn-sm">Cancel</button>' +
-                    '<button class="picker-btn picker-btn-accept btn btn-primary btn-sm">Accept</button></div>',
+            footer: '<div class="popover-footer"></div>',
+            buttons: '<button class="picker-btn picker-btn-cancel btn btn-default btn-sm">Cancel</button>' +
+                    ' <button class="picker-btn picker-btn-accept btn btn-primary btn-sm">Accept</button>',
+            search: '<input type="search" class="form-control picker-search" placeholder="Type to filter" />',
             picker: '<div class="picker"><div class="picker-items"></div></div>',
             pickerItem: '<div class="picker-item"><i class="fa"></i></div>',
         }
     };
 
     var _idCounter = 0;
+
+    var _helpers = {
+        isEmpty: function(val) {
+            return ((val === false) || (val === '') || (val === null) || (val === undefined));
+        },
+        isEmptyObject: function(val) {
+            return (this.isEmpty(val) === true) || (val.length === 0);
+        },
+        isElement: function(selector) {
+            return ($(selector).length > 0);
+        },
+        isString: function(val) {
+            return ((typeof val === 'string') || (val instanceof String));
+        },
+        isArray: function(val) {
+            return $.isArray(val);
+        },
+        inArray: function(val, arr) {
+            return ($.inArray(val, arr) !== -1);
+        },
+        throwError: function(text) {
+            throw "Bootstrap Popover Picker Exception: " + text;
+        }
+    };
 
     var Picker = function(element, options) {
         this._id = _idCounter++;
@@ -67,39 +97,54 @@
         }
 
         // Picker container element
-        this.container = this._sanitizeJqueryObject((!!this.options.containerSelector) ? $(this.options.containerSelector) : (
-                this.element.is('input') ? this.element.parent() : this.element
-                ), 'picker-container');
+        this.container = (_helpers.isElement(this.options.container) ? $(this.options.container) : false);
+        if (this.container === false) {
+            this.container = (this.element.is('input') ? this.element.parent() : this.element);
+        }
+        if (this.container.addClass('picker-container').is('.dropdown-menu')) {
+            this.options.placement = 'inline';
+        }
+
+        // Is the element an input? Should we search inside for any input?     
+        this.input = (this.element.is('input') ? this.element.addClass('picker-input') : false);
+        if (this.input === false) {
+            this.input = (this.container.find(this.options.input));
+        }
 
         // Plugin as component ?
-        this.component = this._sanitizeJqueryObject((!!this.options.componentSelector) ?
-                this.container.find(this.options.componentSelector) : false, 'picker-component');
-
-        // Is the element an input? Should we search inside for any input?
-        this.input = this._sanitizeJqueryObject(this.element.is('input') ? this.element : (this.options.inputSelector ?
-                this.element.find(this.options.inputSelector) : false), 'picker-input');
+        this.component = this.container.find(this.options.component).addClass('picker-component');
+        if (this.component.length === 0) {
+            this.component = false;
+        }
 
         // Create popover and picker HTML
-        this._createPicker(this._createPopover());
+        this._createPopover();
+        this._createPicker();
 
         if (this.getAcceptButton().length === 0) {
-            //console.warn('no buttons!!!');
-            this.options.mustAccept = false; // disable this because we don't have accept buttons
+            // disable this because we don't have accept buttons
+            this.options.mustAccept = false;
         }
 
-        if (this.options.inline === true) {
-            this.popover.addClass('popover-inline');
+        // Avoid CSS issues with input-group-addon(s)
+        if (this.container.is('.input-group')) {
+            this.container.parent().append(this.popover);
+        } else {
+            this.container.append(this.popover);
         }
 
-        //console.log(this.component);
-        this.container.append(this.popover);
+        this._calcOverflow();
 
-        // Bind mouse events
+        // Bind events
         this._bindElementEvents();
         this._bindWindowEvents();
 
         // Refresh everything
         this.update(this.options.selected);
+
+        if (this.isInline()) {
+            this.show();
+        }
 
         this._trigger('pickerCreated');
     };
@@ -128,31 +173,30 @@
             }, opts));
             //console.log(name + ' triggered for instance #' + this._id);
         },
-        _error: function(text) {
-            throw "Bootstrap Popover Picker Exception: " + text;
-        },
-        _sanitizeJqueryObject: function(obj, classOnValid) {
-            if (((obj !== false) && (obj.length === 0)) || (!obj)) {
-                obj = false;
-            } else if (classOnValid) {
-                obj.addClass(classOnValid);
-            }
-            return obj;
-        },
         _createPopover: function() {
             this.popover = $(this.options.templates.popover);
 
-            // set popover content
+            // title (header)
+            var _title = this.popover.find('.popover-title');
             if (!!this.options.title) {
-                this.popover.find('.popover-title').html(this.options.title);
-            } else {
-                this.popover.find('.popover-title').remove();
+                _title.append($('<div class="popover-title-text">'+this.options.title+'</div>'));
+            }
+            if (!this.options.searchInFooter && !_helpers.isEmpty(this.options.templates.buttons)) {
+                _title.append(this.options.templates.search);
+            } else if (!this.options.title) {
+                _title.remove();
             }
 
-            if (!!this.options.templates.popoverFooter && this.options.showFooter) {
-                this.popover.append($(this.options.templates.popoverFooter));
-            } else if (this.options.showFooter !== true) {
-                this.popover.find('.popover-footer').remove();
+            // footer
+            if (this.options.showFooter && !_helpers.isEmpty(this.options.templates.footer)) {
+                var _footer = $(this.options.templates.footer);
+                if (!_helpers.isEmpty(this.options.templates.search) && this.options.searchInFooter) {
+                    _footer.append($(this.options.templates.search));
+                }
+                if (!_helpers.isEmpty(this.options.templates.buttons)) {
+                    _footer.append($(this.options.templates.buttons));
+                }
+                this.popover.append(_footer);
             }
 
             if (this.options.animation === true) {
@@ -160,6 +204,18 @@
             }
 
             return this.popover;
+        },
+        _calcOverflow: function() {
+            if (this.options.maxRows > 0) {
+                var ln = this.options.selectableItems.length;
+                if ((ln / this.options.numCols) > this.options.maxRows) {
+                    this.popover.addClass('picker-has-overflow');
+                    this.picker.find('.picker-items').css({
+                        'overflow-y': 'auto',
+                        'height': (this.options.maxRows * this.options.itemOuterHeight) + 'px'
+                    });
+                }
+            }
         },
         _createPicker: function(popover) {
             var _self = this;
@@ -201,58 +257,11 @@
                         .attr('title', '.' + this.getValue(this.options.selectableItems[i])));
             }
 
-            if (_self.options.mustAccept === true) {
-                this.getAcceptButton().on('click.picker', function() {
-                    var _picked = _self.picker.find('.picker-selected').get(0);
-
-                    _self.update(_self.pickerValue);
-
-                    _self._trigger('pickerSelected', {
-                        pickerItem: _picked,
-                        pickerValue: _self.pickerValue
-                    });
-                    if (_self.options.inline !== true) {
-                        _self.hide();
-                    }
-                });
-                this.getCancelButton().on('click.picker', function() {
-                    if (_self.options.inline !== true) {
-                        _self.hide();
-                    }
-                });
-            }
-
-            if (_self.hasComponent()) {
-                this.component.on('click.picker', function() {
-                    _self.toggle();
-                });
-            }
-
-            popover.find('.popover-content').append(this.picker);
+            this.popover.find('.popover-content').append(this.picker);
 
             return this.picker;
         },
-        _bindElementEvents: function() {
-            var _self = this;
-
-            this.element.on('focus.picker', function(e) {
-                _self.show();
-                e.stopPropagation();
-            });
-
-            if (this.hasInput()) {
-                // Bind input keyup event
-                this.input.on('keyup.picker', function(e) {
-                    _self._updateFormGroupStatus(_self.getValid(this.value) !== false);
-                    if ($.inArray(e.keyCode, [38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86]) === -1) {
-                        _self.update();
-                    }
-                    //_self.hide();
-                });
-            }
-
-        },
-        _eventIsInPicker: function(e) {
+        _isEventInsidePicker: function(e) {
             var _t = $(e.target);
             if ((!_t.hasClass('picker-element')  ||
                     (_t.hasClass('picker-element') && !_t.is(this.element))) &&
@@ -260,6 +269,56 @@
                 return false;
             }
             return true;
+        },
+        _bindElementEvents: function() {
+            var _self = this;
+
+            this.getSearchInput().on('keyup', function() {
+                _self.filter($(this).val().toLowerCase());
+            });
+
+            this.getAcceptButton().on('click.picker', function() {
+                var _picked = _self.picker.find('.picker-selected').get(0);
+
+                _self.update(_self.pickerValue);
+
+                _self._trigger('pickerSelected', {
+                    pickerItem: _picked,
+                    pickerValue: _self.pickerValue
+                });
+                if (!_self.isInline()) {
+                    _self.hide();
+                }
+            });
+            this.getCancelButton().on('click.picker', function() {
+                if (!_self.isInline()) {
+                    _self.hide();
+                }
+            });
+
+            this.element.on('focus.picker', function(e) {
+                _self.show();
+                e.stopPropagation();
+            });
+
+            if (this.hasComponent()) {
+                this.component.on('click.picker', function() {
+                    _self.toggle();
+                });
+            }
+
+            if (this.hasInput()) {
+                // Bind input keyup event
+                this.input.on('keyup.picker', function(e) {
+                    if (!_helpers.inArray(e.keyCode, [38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86])) {
+                        _self.update();
+                    } else {
+                        _self._updateFormGroupStatus(_self.getValid(this.value) !== false);
+                    }
+                    //_self.hide();
+                });
+            }
+
         },
         _bindWindowEvents: function() {
             var $doc = $(window.document);
@@ -276,9 +335,9 @@
                 }
             });
 
-            if (this.options.inline === false) {
+            if (!_self.isInline()) {
                 $doc.on('mouseup' + _eventNs, function(e) {
-                    if (!_self._eventIsInPicker(e)) {
+                    if (!_self._isEventInsidePicker(e) && !_self.isInline()) {
                         _self.hide();
                     }
                     e.stopPropagation();
@@ -289,8 +348,8 @@
 
             return false;
         },
-        _unbindEvents: function() {
-            this.element.off('.picker');
+        _unbindElementEvents: function() {
+            this.popover.off('.picker');
             this.element.off('.picker');
 
             if (this.hasInput()) {
@@ -304,14 +363,15 @@
             if (this.hasContainer()) {
                 this.container.off('.picker');
             }
-
+        },
+        _unbindWindowEvents: function() {
             // destroy window and window.document bound events
             $(window).off('.picker.inst' + this._id);
             $(window.document).off('.picker.inst' + this._id);
         },
         updatePlacement: function(placement, collision) {
             placement = placement || this.options.placement;
-            this.options.placement = placement;
+            this.options.placement = placement; // set new placement
             collision = collision || this.options.collision;
             collision = (collision === true ? 'flip' : collision);
 
@@ -331,38 +391,22 @@
                 within: window
             };
 
-            if (this.options.inline === true) {
-                return this.popover.show();
-            }
+            // remove previous classes
+            this.popover.removeClass('inline topLeftCorner topLeft top topRight topRightCorner ' +
+                    'rightTop right rightBottom bottomRight bottomRightCorner ' +
+                    'bottom bottomLeft bottomLeftCorner leftBottom left leftTop');
+
             if (typeof placement === 'object') {
                 // custom position ?
                 return this.popover.pos($.extend({}, _pos, placement));
             }
 
-            // remove previous classes
-            this.popover.removeClass('topLeftCorner topLeft top topRight topRightCorner ' +
-                    'rightTop right rightBottom bottomRight bottomRightCorner ' +
-                    'bottom bottomLeft bottomLeftCorner leftBottom left leftTop');
-
-            /*
-             1.      topLeftCorner
-             2.      topLeft
-             3.      top (center)
-             4.      topRight
-             5.      topRightCorner
-             6.      rightTop
-             7.      right (center)
-             8.      rightBottom
-             9.      bottomRightCorner
-             A.      bottomRight
-             B.      bottom (center)
-             C.      bottomLeft
-             D.      bottomLeftCorner
-             E.      leftBottom
-             F.      left (center)
-             G.      leftTop
-             */
             switch (placement) {
+                case 'inline':
+                    {
+                        _pos = false;
+                    }
+                    break;
                 case 'topLeftCorner':
                     {
                         _pos.my = 'right bottom';
@@ -481,10 +525,17 @@
                     break;
 
             }
-            //console.log(_pos);
-            this.popover.css({'display': 'block'}).pos(_pos).addClass(this.options.placement);
 
-            this.popover.css('maxWidth', $(window).width() - this.container.offset().left - 5);
+            this.popover.css({'display': (this.options.placement === 'inline') ? '' : 'block'});
+
+            if (_pos !== false) {
+                this.popover.pos(_pos).css('maxWidth', $(window).width() - this.container.offset().left - 5);
+            } else {
+                //reset position
+                this.popover.css({'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'maxWidth': 'none'});
+            }
+            this.popover.addClass(this.options.placement);
+
             return true;
         },
         _updateComponents: function() {
@@ -498,7 +549,7 @@
             if (this.hasComponent()) {
                 var icn = this.component.find('i');
                 if (icn.length > 0) {
-                    icn.attr('class', 'fa ' + this.getValue());
+                    icn.attr('class', 'fa fa-fw ' + this.getValue());
                 } else {
                     this.component.html(this.getValueHtml());
                 }
@@ -509,30 +560,25 @@
             if (this.hasInput()) {
                 if (isValid !== false) {
                     // Remove form-group error class if any
-                    this.input.parent('.form-group').removeClass('has-error');
+                    this.input.parents('.form-group:first').removeClass('has-error');
                 } else {
-                    this.input.parent('.form-group').addClass('has-error');
+                    this.input.parents('.form-group:first').addClass('has-error');
                 }
                 return true;
             }
             return false;
         },
-        /**
-         * Returns a trimmed and sanitized string without the 'fa-' prefix
-         * @param String|mixed val
-         * @returns String
-         */
-        _sanitizeValue: function(val) {
-            if (((typeof val === 'string') || (val instanceof String)) === false) {
-                val = '';
-            }
-            return $.trim(val.replace('fa-', ''));
-        },
         getValid: function(val) {
             // here we must validate the value (you may change this validation
             // to suit your needs
-            val = this._sanitizeValue(val);
-            if ($.inArray(val, this.options.selectableItems) !== -1) {
+
+            if (!_helpers.isString(val)) {
+                val = '';
+            }
+            // trimmed and sanitized string without the 'fa-' prefix
+            val = $.trim(val.replace('fa-', ''));
+
+            if (_helpers.inArray(val, this.options.selectableItems)) {
                 return val;
             }
             return false;
@@ -565,7 +611,7 @@
             return 'fa-' + (val ? val : this.pickerValue);
         },
         getValueHtml: function() {
-            return '<i class="fa ' + this.getValue() + '"></i>';
+            return '<i class="fa fa-fw ' + this.getValue() + '"></i>';
         },
         /**
          * Calls setValue and if it's a valid item value, sets the input or element value
@@ -621,56 +667,84 @@
         getCancelButton: function() {
             return this.popover.find('.picker-btn-cancel');
         },
+        getSearchInput: function() {
+            return this.popover.find('.picker-search');
+        },
+        filter: function(filterText) {
+            if (_helpers.isEmpty(filterText)) {
+                this.picker.find('.picker-item').show();
+                return $(false);
+            } else {
+                var found = [];
+                this.picker.find('.picker-item').each(function() {
+                    var $this = $(this);
+                    var text = $this.attr('title').toLowerCase();
+                    var regex = false;
+                    try {
+                        regex = new RegExp(filterText, 'g');
+                    }catch(e){
+                        regex = false;
+                    }
+                    if ((regex !== false) && text.match(regex)) {
+                        found.push($this);
+                        $this.show();
+                    } else {
+                        $this.hide();
+                    }
+                });
+                return found;
+            }
+        },
         show: function() {
             if (this.popover.hasClass('in')) {
-                //return false;
+                return false;
             }
             // hide other non-inline pickers
-            $('.picker-popover.in:not(.popover-inline)').not(this.popover).hide();
+            $.picker.batch($('.picker-popover.in:not(.inline)').not(this.popover), 'hide');
 
             this._trigger('pickerShow');
             this.updatePlacement();
             this.popover.addClass('in');
             setTimeout($.proxy(function() {
+                this.popover.css('display', this.isInline() ? '' : 'block');
                 this._trigger('pickerShown');
-            }, this), this.options.animation ? 200 : 1); // animation duration
+            }, this), this.options.animation ? 300 : 1); // animation duration
         },
         hide: function() {
             if (!this.popover.hasClass('in')) {
-                //return false;
+                return false;
             }
             this._trigger('pickerHide');
             this.popover.removeClass('in');
             setTimeout($.proxy(function() {
                 this.popover.css('display', 'none');
+                this.getSearchInput().val('');
+                this.filter(''); // clear filter
                 this._trigger('pickerHidden');
-            }, this), this.options.animation ? 200 : 1);
+            }, this), this.options.animation ? 300 : 1);
         },
         toggle: function() {
-            if (this.popover.hasClass('in')) {
+            if (this.popover.is(":visible")) {
                 this.hide();
             } else {
-                this.show();
+                this.show(true);
             }
         },
         update: function(val, updateOnlyInternal) {
             val = (val ? val :  this.getSourceValue(this.pickerValue));
-            //console.log(val);
             // reads the input or element value again and tries to update the plugin
             // fallback to the current selected item value
             this._trigger('pickerUpdate');
 
-            if (updateOnlyInternal) {
+            if (updateOnlyInternal === true) {
                 val = this.setValue(val);
             } else {
                 val = this.setSourceValue(val);
+                this._updateFormGroupStatus(val !== false);
             }
 
-            if (val === false) {
-                this._updateFormGroupStatus(false);
-            } else {
+            if (val !== false) {
                 this._updateComponents();
-                this._updateFormGroupStatus(true);
             }
 
             this._trigger('pickerUpdated');
@@ -683,9 +757,10 @@
             // including component mode
             this.element.removeData('picker').removeData('pickerValue').removeClass('picker-element');
 
-            $(this.popover).detach();
+            this._unbindElementEvents();
+            this._unbindWindowEvents();
 
-            this._unbindEvents();
+            $(this.popover).remove();
 
             this._trigger('pickerDestroyed');
         },
@@ -708,6 +783,9 @@
                 return (this.input.prop('disabled') === true);
             }
             return false;
+        },
+        isInline: function() {
+            return (this.options.placement === 'inline') || (this.popover.hasClass('inline'));
         }
     };
 
@@ -718,7 +796,7 @@
         return this.each(function() {
             var $this = $(this);
             if (!$this.data('picker')) {
-                // create plugin and expose entire picker API
+                // create plugin instance (only if not exists) and expose the entire instance API
                 $this.data('picker', new Picker(this, ((typeof options === 'object') ? options : {})));
             }
         });

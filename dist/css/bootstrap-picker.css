@@ -15,7 +15,7 @@
   max-width: none;
   padding: 1px;
   text-align: left;
-  width: 376px;
+  width: 270px;
   background: #f7f7f7;
 }
 .picker-popover.popover.top,
@@ -42,8 +42,8 @@
 .picker-popover.popover.leftTop {
   margin-left: -10px;
 }
-.picker-popover.popover.popover-inline {
-  margin: 20px 0;
+.picker-popover.popover.inline {
+  margin: 14px 0;
   position: relative;
   display: inline-block;
   opacity: 1;
@@ -54,16 +54,30 @@
   max-width: 100%;
   box-shadow: none;
   z-index: auto;
+  vertical-align: middle;
 }
-.picker-popover.popover.popover-inline > .arrow {
+.picker-popover.popover.inline > .arrow {
   display: none;
 }
+.dropdown-menu .picker-popover.inline {
+  margin: 0;
+  border: none;
+}
+.dropdown-menu.picker-container {
+  padding: 0;
+}
 .picker-popover.popover .popover-title {
-  padding: 20px;
-  font-size: 18.66666667px;
-  line-height: 23.33333333px;
+  padding: 14px;
+  font-size: 19.09090909px;
+  line-height: 21px;
   border-bottom: 1px solid #ebebeb;
   background-color: #f7f7f7;
+}
+.picker-popover.popover .popover-title input[type=search].picker-search {
+  margin: 0 0 2px 0;
+}
+.picker-popover.popover .popover-title-text ~ input[type=search].picker-search {
+  margin-top: 14px;
 }
 .picker-popover.popover .popover-content {
   padding: 0px;
@@ -72,7 +86,7 @@
 .picker-popover .popover-footer {
   float: none;
   clear: both;
-  padding: 20px;
+  padding: 14px;
   text-align: right;
   margin: 0;
   border-top: 1px solid #ebebeb;
@@ -88,6 +102,11 @@
 }
 .picker-popover .popover-footer .picker-btn {
   margin-left: 10px;
+}
+.picker-popover .popover-footer input[type=search].picker-search {
+  /*width:auto;
+        float:left;*/
+  margin-bottom: 14px;
 }
 .picker-popover.popover > .arrow,
 .picker-popover.popover > .arrow:after {
@@ -125,12 +144,12 @@
   border-top-color: #ffffff;
 }
 .picker-popover.popover.topLeft > .arrow {
-  left: 20px;
+  left: 14px;
   margin-left: 0;
 }
 .picker-popover.popover.topRight > .arrow {
   left: auto;
-  right: 20px;
+  right: 14px;
   margin-left: 0;
 }
 .picker-popover.popover.right > .arrow,
@@ -154,11 +173,11 @@
 }
 .picker-popover.popover.rightTop > .arrow {
   top: auto;
-  bottom: 20px;
+  bottom: 14px;
   margin-top: 0;
 }
 .picker-popover.popover.rightBottom > .arrow {
-  top: 20px;
+  top: 14px;
   margin-top: 0;
 }
 .picker-popover.popover.bottom > .arrow,
@@ -181,12 +200,12 @@
   border-bottom-color: #ffffff;
 }
 .picker-popover.popover.bottomLeft > .arrow {
-  left: 20px;
+  left: 14px;
   margin-left: 0;
 }
 .picker-popover.popover.bottomRight > .arrow {
   left: auto;
-  right: 20px;
+  right: 14px;
   margin-left: 0;
 }
 .picker-popover.popover.left > .arrow,
@@ -209,12 +228,12 @@
   bottom: -10px;
 }
 .picker-popover.popover.leftBottom > .arrow {
-  top: 20px;
+  top: 14px;
   margin-top: 0;
 }
 .picker-popover.popover.leftTop > .arrow {
   top: auto;
-  bottom: 20px;
+  bottom: 14px;
   margin-top: 0;
 }
 .picker {
@@ -224,7 +243,6 @@
   line-height: 0;
   display: block;
   margin: 0;
-  min-height: 48px;
   overflow: hidden;
 }
 .picker * {
@@ -245,10 +263,11 @@
   position: relative;
   clear: both;
   float: none;
-  padding: 20px;
+  padding: 14px 0 0 14px;
   background: #fff;
-  margin: 0 -20px -20px 0;
+  margin: 0;
   overflow: hidden;
+  min-height: 60px;
 }
 .picker .picker-items:before,
 .picker .picker-items:after {
@@ -260,14 +279,14 @@
 }
 .picker .picker-item {
   float: left;
-  width: 28px;
-  height: 28px;
-  padding: 20px;
-  margin: 0 20px 20px 0;
+  width: 21px;
+  height: 21px;
+  padding: 14px;
+  margin: 0 14px 14px 0;
   text-align: center;
   cursor: pointer;
   border-radius: 3px;
-  font-size: 28px;
+  font-size: 21px;
   box-shadow: 0 0 0 1px #dddddd;
   /*&:nth-child(4n+4) {
             margin-right: 0;

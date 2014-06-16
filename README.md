@@ -58,6 +58,7 @@ Here are all the possibilities in detail:
             E       8
             D C B A 9
             
+    0.      inline (no placement, display as inline-block)
     1.      topLeftCorner
     2.      topLeft
     3.      top (center)
@@ -90,4 +91,6 @@ namespace: `$.fn.pos`, for avoiding other plugin issues.
 - [x] Implement component mode (if present, the trigger must be the component and not the input)
 - [x] Fix arrow positions for all new placements
 - [x] Detach popover HTML from DOM when destroy is called
-- [ ] Fix: has-error is not set in component mode
+- [x] Fix: has-error is not set in component mode
+- [x] Max rows (limit popover height)
+- [x] Filtered search (input accepts regular expressions)

@@ -3,11 +3,11 @@
     <head>
         <meta charset="utf-8">
         <title>Bootstrap Popover Picker for Twitter Bootstrap 3</title>
-<!--        <style>
-            body * {
-                position: relative;
-            }
-        </style>-->
+        <!--        <style>
+                    body * {
+                        position: relative;
+                    }
+                </style>-->
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="dist/css/bootstrap-picker.min.css" rel="stylesheet">
@@ -47,7 +47,11 @@
             }
             .form-group{
                 text-align: left;
-                margin-bottom: 40px;
+                margin-bottom: 30px;
+            }
+            .form-group label{
+                display:block;
+                margin-bottom: 15px;
             }
         </style>
     </head>
@@ -57,7 +61,7 @@
             <h1 class="page-header">Bootstrap Popover Picker</h1>
             <p class="lead">
                 Generic jQuery plugin template for building pickers using Bootstrap popovers,
-fully customizable with a powerful base API.
+                fully customizable with a powerful base API.
             </p>
             <div class="lead">
                 <iframe class="inl-bl" src="http://ghbtns.com/github-btn.html?user=mjolnic&amp;repo=bootstrap-popover-picker&amp;type=watch&amp;count=true&amp;size=large"
@@ -81,14 +85,16 @@ fully customizable with a powerful base API.
                             </div>
                             <div class="form-group">
                                 <label>As a component</label>
-                                
+
                                 <div class="input-group">
-                                    <input data-hide-on-select="true" data-placement="bottomLeft" class="form-control pck pck-auto" value="fa-angle-double-down" type="text" />
+                                    <input data-hide-on-select="true" class="form-control pck pck-auto" value="fa-angle-double-down" type="text" />
                                     <span class="input-group-addon"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label data-title="Inline picker" data-inline="true" class="pck pck-auto" data-selected="fa-angle-left">Inline mode, without input</label>
+                                <label data-title="Inline picker" data-placement="inline" class="pck pck-auto" data-selected="fa-angle-left">
+                                    Inline mode, without input: 
+                                </label> 
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -106,13 +112,33 @@ $('.pck-opts').picker({
     showFooter:true,
     //... (see the source code of this page)
 });</pre>
+                            <div class="form-group">
+                                <label>Inside dropdowns</label>
+                                <div class="btn-group">
+                                    <button type="button" class="pck pck-dd btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        Dropdown
+                                        <span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu"></div>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary">Action</button>
+                                    <button type="button" class="pck pck-dd btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu"></div>
+                                </div>
+                                <p class="help-block"><br>
+                                    Note: In dropdowns the placement is controlled by the Bootstrap dropdown plugin
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="panel-footer">
                     <button class="btn btn-danger action-destroy">Destroy instances</button>
                     <button class="btn btn-default action-create">Create instances</button>
-                    
                 </div>
             </div>
         </div>
@@ -136,19 +162,27 @@ $('.pck-opts').picker({
                     return false;
                 });
                 $('.action-create').on('click', function() {
-                    $('.pck-auto:not(.picker-element)').picker();
-                    $('.pck-opts:not(.picker-element)').picker({
+                    $('.pck-auto').picker();
+                    $('.pck-dd').each(function(){
+                        var $this = $(this);
+                        $this.picker({
+                            title: 'Dropdown with picker',
+                            container: $(' ~ .dropdown-menu:first', $this)
+                        });
+                    });
+                    $('.pck-opts').picker({
                         title: 'With custom options',
                         selectableItems: ['github', 'heart', 'html5', 'css3'],
                         selectedCustomClass: 'label label-success',
-                        mustAccept:true,
-                        placement:'bottomRight',
-                        showFooter:true,
+                        mustAccept: true,
+                        placement: 'bottomRight',
+                        showFooter: true,
                         // note that this is ignored cause we have an accept button:
-                        hideOnSelect:true,
-                        templates:{
-                        popoverFooter: '<div class="popover-footer">'+
-                                '<div style="text-align:left; font-size:12px;">Placements: \n\
+                        hideOnSelect: true,
+                        templates: {
+                            footer: '<div class="popover-footer">' +
+                                    '<div style="text-align:left; font-size:12px;">Placements: \n\
+                    <a href="#" class=" action-placement">inline</a>\n\
                     <a href="#" class=" action-placement">topLeftCorner</a>\n\
                     <a href="#" class=" action-placement">topLeft</a>\n\
                     <a href="#" class=" action-placement">top</a>\n\
@@ -165,13 +199,11 @@ $('.pck-opts').picker({
                     <a href="#" class=" action-placement">leftBottom</a>\n\
                     <a href="#" class=" action-placement">left</a>\n\
                     <a href="#" class=" action-placement">leftTop</a>\n\
-                    </div><hr>'+
-                            '<button class="picker-btn picker-btn-cancel btn btn-default btn-sm">Cancel</button>' +
-                            '<button class="picker-btn picker-btn-accept btn btn-primary btn-sm">Accept</button></div>'}
+                    </div><hr></div>'}
                     }).data('picker').show();
                 }).trigger('click');
-                
-                
+
+
                 // Events sample:
                 // This event is only triggered when the actual input value is changed
                 // by user interaction

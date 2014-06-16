@@ -312,13 +312,13 @@
     };
 
     $.ui.pos = {
-        _trigger:function(position, data, name, triggered){
-            if(data.elem){
+        _trigger: function(position, data, name, triggered) {
+            if (data.elem) {
                 data.elem.trigger({
                     'type': name,
                     'position': position,
                     'positionData': data,
-                    'triggered':triggered
+                    'triggered': triggered
                 });
             }
         },

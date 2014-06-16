@@ -829,7 +829,7 @@
         },
         setSourceValue: function(a) {
             a = this.setValue(a);
-            if (a !== false) {
+            if (a !== false && a !== "") {
                 if (this.hasInput()) {
                     this.input.val(this.getValue());
                 } else {

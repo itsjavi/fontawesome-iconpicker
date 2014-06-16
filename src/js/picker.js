@@ -24,11 +24,11 @@
         'angle-down', 'angle-left', 'angle-right', 'angle-up'
     ];
     var defaults = {
-        maxRows: 4, // if it's exceeded, there will be vertical overflow. this DOES change css.
+        maxRows: 6, // if it's exceeded, there will be vertical overflow. this DOES change css.
         // numCols: this is only orientative for calculating the maxRows overflow. changing this value does no change any CSS.
         // if you want to have another number of cols, regenerate picker.less file changing the @num_cols variable in variables.less
         numCols: 4,
-        itemOuterHeight: 85, // this is only for calculation maxRows overflow. this should change suiting your CSS.
+        itemOuterHeight: 62, // this is only for calculation maxRows overflow. this should change suiting your CSS.
         //
         title: false, // Popover title (optional) only if specified in the template
         selected: false, // use this value as the current item and ignore the original
@@ -179,7 +179,7 @@
             // title (header)
             var _title = this.popover.find('.popover-title');
             if (!!this.options.title) {
-                _title.append($('<div class="popover-title-text">'+this.options.title+'</div>'));
+                _title.append($('<div class="popover-title-text">' + this.options.title + '</div>'));
             }
             if (!this.options.searchInFooter && !_helpers.isEmpty(this.options.templates.buttons)) {
                 _title.append(this.options.templates.search);
@@ -212,7 +212,7 @@
                     this.popover.addClass('picker-has-overflow');
                     this.picker.find('.picker-items').css({
                         'overflow-y': 'auto',
-                        'height': (this.options.maxRows * this.options.itemOuterHeight) + 'px'
+                        'maxHeight': (this.options.maxRows * this.options.itemOuterHeight) + 'px'
                     });
                 }
             }
@@ -526,13 +526,21 @@
 
             }
 
-            this.popover.css({'display': (this.options.placement === 'inline') ? '' : 'block'});
+            this.popover.css({
+                'display': (this.options.placement === 'inline') ? '' : 'block'
+            });
 
             if (_pos !== false) {
                 this.popover.pos(_pos).css('maxWidth', $(window).width() - this.container.offset().left - 5);
             } else {
                 //reset position
-                this.popover.css({'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'maxWidth': 'none'});
+                this.popover.css({
+                    'top': 'auto',
+                    'right': 'auto',
+                    'bottom': 'auto',
+                    'left': 'auto',
+                    'maxWidth': 'none'
+                });
             }
             this.popover.addClass(this.options.placement);
 
@@ -682,7 +690,7 @@
                     var regex = false;
                     try {
                         regex = new RegExp(filterText, 'g');
-                    }catch(e){
+                    } catch (e) {
                         regex = false;
                     }
                     if ((regex !== false) && text.match(regex)) {

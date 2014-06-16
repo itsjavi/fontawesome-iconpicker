@@ -357,9 +357,9 @@
     "use strict";
     var b = [ "angle-double-down", "angle-double-left", "angle-double-right", "angle-double-up", "angle-down", "angle-left", "angle-right", "angle-up" ];
     var c = {
-        maxRows: 4,
+        maxRows: 6,
         numCols: 4,
-        itemOuterHeight: 85,
+        itemOuterHeight: 62,
         title: false,
         selected: false,
         defaultValue: false,
@@ -505,7 +505,7 @@
                     this.popover.addClass("picker-has-overflow");
                     this.picker.find(".picker-items").css({
                         "overflow-y": "auto",
-                        height: this.options.maxRows * this.options.itemOuterHeight + "px"
+                        maxHeight: this.options.maxRows * this.options.itemOuterHeight + "px"
                     });
                 }
             }

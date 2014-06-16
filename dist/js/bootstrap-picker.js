@@ -363,7 +363,7 @@
         placement: "bottom",
         collision: "none",
         animation: true,
-        hideOnPick: false,
+        hideOnSelect: false,
         showFooter: false,
         mustAccept: false,
         selectedCustomClass: "bg-primary",
@@ -395,6 +395,9 @@
         this._createPicker(this._createPopover());
         if (this.getAcceptButton().length === 0) {
             this.options.mustAccept = false;
+        }
+        if (this.options.inline === true) {
+            this.popover.addClass("popover-inline");
         }
         this.container.append(this.popover);
         this._bindElementEvents();
@@ -472,7 +475,7 @@
                 } else {
                     c.update(d.data("pickerValue"), true);
                 }
-                if (c.options.hideOnPick && c.options.mustAccept === false) {
+                if (c.options.hideOnSelect && c.options.mustAccept === false) {
                     c.hide();
                 }
             };
@@ -490,10 +493,14 @@
                         pickerItem: a,
                         pickerValue: c.pickerValue
                     });
-                    c.hide();
+                    if (c.options.inline !== true) {
+                        c.hide();
+                    }
                 });
                 this.getCancelButton().on("click.picker", function() {
-                    c.hide();
+                    if (c.options.inline !== true) {
+                        c.hide();
+                    }
                 });
             }
             if (c.hasComponent()) {
@@ -563,17 +570,10 @@
             a(window.document).off(".picker.inst" + this._id);
         },
         updatePlacement: function(b, c) {
-            if (this.options.inline === true) {
-                return this.popover.show();
-            }
-            if (typeof b === "object") {
-                return this.popover.pos(b);
-            }
             b = b || this.options.placement;
             this.options.placement = b;
             c = c || this.options.collision;
             c = c === true ? "flip" : c;
-            this.popover.removeClass("topLeftCorner topLeft top topRight topRightCorner " + "rightTop right rightBottom bottomRight bottomRightCorner " + "bottom bottomLeft bottomLeftCorner leftBottom left leftTop");
             var d = {
                 at: "right bottom",
                 my: "right top",
@@ -581,6 +581,13 @@
                 collision: c === true ? "flip" : c,
                 within: window
             };
+            if (this.options.inline === true) {
+                return this.popover.show();
+            }
+            if (typeof b === "object") {
+                return this.popover.pos(a.extend({}, d, b));
+            }
+            this.popover.removeClass("topLeftCorner topLeft top topRight topRightCorner " + "rightTop right rightBottom bottomRight bottomRightCorner " + "bottom bottomLeft bottomLeftCorner leftBottom left leftTop");
             switch (b) {
               case "topLeftCorner":
                 {
@@ -619,8 +626,8 @@
 
               case "rightTop":
                 {
-                    d.my = "left top";
-                    d.at = "right top";
+                    d.my = "left bottom";
+                    d.at = "right center";
                 }
                 break;
 
@@ -634,7 +641,7 @@
               case "rightBottom":
                 {
                     d.my = "left top";
-                    d.at = "right bottom";
+                    d.at = "right center";
                 }
                 break;
 
@@ -807,18 +814,22 @@
         },
         show: function() {
             if (this.popover.hasClass("in")) {}
-            a(".picker-popover.in").not(this.popover).hide();
+            a(".picker-popover.in:not(.popover-inline)").not(this.popover).hide();
             this._trigger("pickerShow");
             this.updatePlacement();
             this.popover.addClass("in");
-            this._trigger("pickerShown");
+            setTimeout(a.proxy(function() {
+                this._trigger("pickerShown");
+            }, this), this.options.animation ? 200 : 1);
         },
         hide: function() {
             if (!this.popover.hasClass("in")) {}
             this._trigger("pickerHide");
             this.popover.removeClass("in");
-            this.popover.css("display", "none");
-            this._trigger("pickerHidden");
+            setTimeout(a.proxy(function() {
+                this.popover.css("display", "none");
+                this._trigger("pickerHidden");
+            }, this), this.options.animation ? 200 : 1);
         },
         toggle: function() {
             if (this.popover.hasClass("in")) {
@@ -847,7 +858,7 @@
         destroy: function() {
             this._trigger("pickerDestroy");
             this.element.removeData("picker").removeData("pickerValue").removeClass("picker-element");
-            delete this.popover;
+            a(this.popover).detach();
             this._unbindEvents();
             this._trigger("pickerDestroyed");
         },

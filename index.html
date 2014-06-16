@@ -36,9 +36,18 @@
             div.lead{
                 margin:30px 0;
             }
-            .action-placement{
+            a.action-placement{
                 margin:0 4px 4px 4px;
                 display:inline-block;
+                /*border-bottom: 1px dotted #428BCA;*/
+                text-decoration: none;
+            }
+            a.action-placement.active{
+                color:#5CB85C;
+            }
+            .form-group{
+                text-align: left;
+                margin-bottom: 40px;
             }
         </style>
     </head>
@@ -65,35 +74,36 @@ fully customizable with a powerful base API.
                         <i class="fa fa-github fa-3x"></i>
                     </p>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <label>Default</label>
-                                <input class="form-control icp icp-1" value="fa-angle-double-down" type="text" />
+                                <input data-hide-on-select="true" class="form-control pck pck-auto" value="fa-angle-double-down" type="text" />
                             </div>
                             <div class="form-group">
-                                <label>With data-placement=bottomLeft attribute and a component</label>
+                                <label>As a component</label>
                                 
                                 <div class="input-group">
-                                    <input data-placement="bottomLeft" class="form-control icp icp-2" value="fa-angle-double-down" type="text" />
+                                    <input data-hide-on-select="true" data-placement="bottomLeft" class="form-control pck pck-auto" value="fa-angle-double-down" type="text" />
                                     <span class="input-group-addon"></span>
                                 </div>
                             </div>
-                            <pre class="well">$('.icp-1, .icp-2').picker();</pre>
+                            <div class="form-group">
+                                <label data-title="Inline picker" data-inline="true" class="pck pck-auto" data-selected="fa-angle-left">Inline mode, without input</label>
+                            </div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-7">
                             <div class="form-group">
                                 <label>With custom options</label>
-                                <input class="form-control icp icp-3" value="fa-github" type="text" />
+                                <input class="form-control pck pck-opts" value="fa-github" type="text" />
                             </div>
                             <pre class="well">
-$('.icp-3').picker({
+$('.pck-opts').picker({
     title: 'With custom options',
     selectableItems: ['github', 'heart', 'html5', 'css3'],
     selectedCustomClass: 'label label-success',
-    mustAccept true,
-    placement:'topRight',
-    // note that this is ignored cause we have an accept button:
-    hideOnPick:true,
+    mustAccept:true,
+    placement:'bottomRight',
+    showFooter:true,
     //... (see the source code of this page)
 });</pre>
                         </div>
@@ -115,24 +125,27 @@ $('.icp-3').picker({
         <script>
             $(function() {
                 $('.action-destroy').on('click', function() {
-                    $.picker.batch('.icp.picker-element', 'destroy');
+                    $.picker.batch('.pck.picker-element', 'destroy');
                 });
                 // Live binding of buttons
-                $(document).on('click', '.action-placement', function() {
-                    $('.icp-3').data('picker').updatePlacement($(this).text());
+                $(document).on('click', '.action-placement', function(e) {
+                    $('.action-placement').removeClass('active');
+                    $(this).addClass('active');
+                    $('.pck-opts').data('picker').updatePlacement($(this).text());
+                    e.preventDefault();
+                    return false;
                 });
                 $('.action-create').on('click', function() {
-                    $('.icp-1:not(.picker-element)').picker();
-                    $('.icp-2:not(.picker-element)').picker();
-                    $('.icp-3:not(.picker-element)').picker({
+                    $('.pck-auto:not(.picker-element)').picker();
+                    $('.pck-opts:not(.picker-element)').picker({
                         title: 'With custom options',
                         selectableItems: ['github', 'heart', 'html5', 'css3'],
                         selectedCustomClass: 'label label-success',
                         mustAccept:true,
                         placement:'bottomRight',
-                        // note that this is ignored cause we have an accept button:
-                        hideOnPick:true,
                         showFooter:true,
+                        // note that this is ignored cause we have an accept button:
+                        hideOnSelect:true,
                         templates:{
                         popoverFooter: '<div class="popover-footer">'+
                                 '<div style="text-align:left; font-size:12px;">Placements: \n\
@@ -145,7 +158,7 @@ $('.icp-3').picker({
                     <a href="#" class=" action-placement">right</a>\n\
                     <a href="#" class=" action-placement">rightBottom</a>\n\
                     <a href="#" class=" action-placement">bottomRightCorner</a>\n\
-                    <a href="#" class=" action-placement">bottomRight</a>\n\
+                    <a href="#" class=" active action-placement">bottomRight</a>\n\
                     <a href="#" class=" action-placement">bottom</a>\n\
                     <a href="#" class=" action-placement">bottomLeft</a>\n\
                     <a href="#" class=" action-placement">bottomLeftCorner</a>\n\
@@ -162,7 +175,7 @@ $('.icp-3').picker({
                 // Events sample:
                 // This event is only triggered when the actual input value is changed
                 // by user interaction
-                $('.icp').on('pickerSelected', function(e) {
+                $('.pck').on('pickerSelected', function(e) {
                     $('.lead .fa').get(0).className = 'fa fa-3x fa-' + e.pickerValue;
                 });
             });

@@ -31,7 +31,7 @@
         collision: 'none', // If true, the popover will be repositioned to another position when collapses with the window borders
         animation: true,
         //hide picker automatically when a value is picked. it is ignored if mustAccept is not false and the accept button is visible
-        hideOnPick: false,
+        hideOnSelect: false,
         showFooter: false,
         mustAccept: false, // only applicable when there's an picker-btn-accept button in the popover footer
         selectedCustomClass: 'bg-primary', // Appends this class when to the selected item
@@ -85,6 +85,10 @@
         if (this.getAcceptButton().length === 0) {
             //console.warn('no buttons!!!');
             this.options.mustAccept = false; // disable this because we don't have accept buttons
+        }
+
+        if (this.options.inline === true) {
+            this.popover.addClass('popover-inline');
         }
 
         //console.log(this.component);
@@ -171,18 +175,18 @@
                     pickerItem: $this,
                     pickerValue: _self.pickerValue
                 });
-                
+
                 if (_self.options.mustAccept === false) {
                     _self.update($this.data('pickerValue'));
                     _self._trigger('pickerSelected', {
                         pickerItem: this,
                         pickerValue: _self.pickerValue
                     });
-                }else{
+                } else {
                     _self.update($this.data('pickerValue'), true);
                 }
-                
-                if (_self.options.hideOnPick && (_self.options.mustAccept === false)) {
+
+                if (_self.options.hideOnSelect && (_self.options.mustAccept === false)) {
                     // only hide when the accept button is not present
                     _self.hide();
                 }
@@ -207,16 +211,19 @@
                         pickerItem: _picked,
                         pickerValue: _self.pickerValue
                     });
-
-                    _self.hide();
+                    if (_self.options.inline !== true) {
+                        _self.hide();
+                    }
                 });
                 this.getCancelButton().on('click.picker', function() {
-                    _self.hide();
+                    if (_self.options.inline !== true) {
+                        _self.hide();
+                    }
                 });
             }
-            
-            if(_self.hasComponent()){
-                this.component.on('click.picker', function(){
+
+            if (_self.hasComponent()) {
+                this.component.on('click.picker', function() {
                     _self.toggle();
                 });
             }
@@ -242,14 +249,10 @@
                     }
                     //_self.hide();
                 });
-
-                // On lose focus with tab, hide picker, but only if
-                // the click is was in the own popover
-                //this.input.on('blur.picker');
             }
-            
+
         },
-        _eventIsInPicker: function(e){
+        _eventIsInPicker: function(e) {
             var _t = $(e.target);
             if ((!_t.hasClass('picker-element')  ||
                     (_t.hasClass('picker-element') && !_t.is(this.element))) &&
@@ -268,11 +271,11 @@
 
             $(window).on('resize.picker' + _eventNs + ' orientationchange.picker' + _eventNs, function(e) {
                 // reposition popover
-                if(_self.popover.hasClass('in')){
+                if (_self.popover.hasClass('in')) {
                     _self.updatePlacement();
                 }
             });
-            
+
             if (this.options.inline === false) {
                 $doc.on('mouseup' + _eventNs, function(e) {
                     if (!_self._eventIsInPicker(e)) {
@@ -307,22 +310,10 @@
             $(window.document).off('.picker.inst' + this._id);
         },
         updatePlacement: function(placement, collision) {
-            if (this.options.inline === true) {
-                return this.popover.show();
-            }
-            if (typeof placement === 'object') {
-                // custom position ?
-                return this.popover.pos(placement);
-            }
             placement = placement || this.options.placement;
             this.options.placement = placement;
             collision = collision || this.options.collision;
             collision = (collision === true ? 'flip' : collision);
-            //console.log(collision);
-            // remove previous classes
-            this.popover.removeClass('topLeftCorner topLeft top topRight topRightCorner '+
-                    'rightTop right rightBottom bottomRight bottomRightCorner '+
-                    'bottom bottomLeft bottomLeftCorner leftBottom left leftTop');
 
             var _pos = {
                 // at: Defines which position (or side) on container element to align the
@@ -339,6 +330,20 @@
                 // within: Element to position within, affecting collision detection.
                 within: window
             };
+
+            if (this.options.inline === true) {
+                return this.popover.show();
+            }
+            if (typeof placement === 'object') {
+                // custom position ?
+                return this.popover.pos($.extend({}, _pos, placement));
+            }
+
+            // remove previous classes
+            this.popover.removeClass('topLeftCorner topLeft top topRight topRightCorner ' +
+                    'rightTop right rightBottom bottomRight bottomRightCorner ' +
+                    'bottom bottomLeft bottomLeftCorner leftBottom left leftTop');
+
             /*
              1.      topLeftCorner
              2.      topLeft
@@ -395,8 +400,8 @@
 
                 case 'rightTop':
                     {
-                        _pos.my = 'left top';
-                        _pos.at = 'right top';
+                        _pos.my = 'left bottom';
+                        _pos.at = 'right center';
                     }
                     break;
 
@@ -410,7 +415,7 @@
                 case 'rightBottom':
                     {
                         _pos.my = 'left top';
-                        _pos.at = 'right bottom';
+                        _pos.at = 'right center';
                     }
                     break;
 
@@ -478,7 +483,7 @@
             }
             //console.log(_pos);
             this.popover.css({'display': 'block'}).pos(_pos).addClass(this.options.placement);
-            
+
             this.popover.css('maxWidth', $(window).width() - this.container.offset().left - 5);
             return true;
         },
@@ -617,28 +622,34 @@
             return this.popover.find('.picker-btn-cancel');
         },
         show: function() {
-            if(this.popover.hasClass('in')){
+            if (this.popover.hasClass('in')) {
                 //return false;
             }
-            $('.picker-popover.in').not(this.popover).hide();
+            // hide other non-inline pickers
+            $('.picker-popover.in:not(.popover-inline)').not(this.popover).hide();
+
             this._trigger('pickerShow');
             this.updatePlacement();
             this.popover.addClass('in');
+            setTimeout($.proxy(function() {
                 this._trigger('pickerShown');
+            }, this), this.options.animation ? 200 : 1); // animation duration
         },
         hide: function() {
-            if(!this.popover.hasClass('in')){
+            if (!this.popover.hasClass('in')) {
                 //return false;
             }
             this._trigger('pickerHide');
             this.popover.removeClass('in');
+            setTimeout($.proxy(function() {
                 this.popover.css('display', 'none');
                 this._trigger('pickerHidden');
+            }, this), this.options.animation ? 200 : 1);
         },
-        toggle:function(){
-            if(this.popover.hasClass('in')){
+        toggle: function() {
+            if (this.popover.hasClass('in')) {
                 this.hide();
-            }else{
+            } else {
                 this.show();
             }
         },
@@ -654,7 +665,7 @@
             } else {
                 val = this.setSourceValue(val);
             }
-            
+
             if (val === false) {
                 this._updateFormGroupStatus(false);
             } else {
@@ -672,7 +683,7 @@
             // including component mode
             this.element.removeData('picker').removeData('pickerValue').removeClass('picker-element');
 
-            delete this.popover;
+            $(this.popover).detach();
 
             this._unbindEvents();
 

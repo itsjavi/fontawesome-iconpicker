@@ -81,11 +81,13 @@ namespace: `$.fn.pos`, for avoiding other plugin issues.
 
 ## To-Do
 - [x] Fix extra placements: rightTop, rightBottom, leftBottom and leftTop
-- [ ] Implement inline mode
+- [x] Implement inline mode
 - [x] Implement optional accept/cancel buttons
-- [ ] Hide on blur input, but not if the blur is caused because we clicked the popover
-- [ ] Fix css: soft lines showing under popover arrows
+- [x] Hide on blur input, but not if the blur is caused because we clicked the popover
+- [x] Fix css: soft lines showing under popover arrows
 - [x] Auto placement when popover offsets the window (also due to scroll)
 - [x] Container: Fix placements when container is different from the element parent
-- [ ] Implement component mode (if present, the trigger must be the component and not the input)
-- [ ] Fix arrow positions for all new placements
+- [x] Implement component mode (if present, the trigger must be the component and not the input)
+- [x] Fix arrow positions for all new placements
+- [x] Detach popover HTML from DOM when destroy is called
+- [ ] Fix: has-error is not set in component mode

@@ -91,3 +91,4 @@ namespace: `$.fn.pos`, for avoiding other plugin issues.
 - [x] Fix arrow positions for all new placements
 - [x] Detach popover HTML from DOM when destroy is called
 - [ ] Fix: has-error is not set in component mode
+- [ ] Implement pagination each N elements

@@ -39,7 +39,7 @@
         overflow:hidden;
         overflow-y: auto;
         min-height: @row_outer_height;
-        max-height: @row_outer_height * @num_rows;
+        max-height: (@row_outer_height * @num_rows) + 1;
 
     }
 
@@ -54,11 +54,13 @@
         border-radius:3px;
         font-size:@item_size;
         .outer-border();
+        color:inherit;
         &:hover:not(.iconpicker-selected){
             background-color:@hover_bg;
         }
         &.iconpicker-selected{
             box-shadow: none;
+            color:#fff;
         }
         /*&:nth-child(4n+4) {
             margin-right: 0;

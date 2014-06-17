@@ -33,7 +33,7 @@
   max-width: none;
   padding: 1px;
   text-align: left;
-  width: 242px;
+  width: 216px;
   background: #f7f7f7;
 }
 .iconpicker-popover.popover.top,
@@ -61,7 +61,7 @@
   margin-left: -10px;
 }
 .iconpicker-popover.popover.inline {
-  margin: 0 0 14px 0;
+  margin: 0 0 12px 0;
   position: relative;
   display: inline-block;
   opacity: 1;
@@ -85,9 +85,9 @@
   padding: 0;
 }
 .iconpicker-popover.popover .popover-title {
-  padding: 14px;
-  font-size: 14px;
-  line-height: 16px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 15px;
   border-bottom: 1px solid #ebebeb;
   background-color: #f7f7f7;
 }
@@ -95,7 +95,7 @@
   margin: 0 0 2px 0;
 }
 .iconpicker-popover.popover .popover-title-text ~ input[type=search].iconpicker-search {
-  margin-top: 14px;
+  margin-top: 12px;
 }
 .iconpicker-popover.popover .popover-content {
   padding: 0px;
@@ -104,7 +104,7 @@
 .iconpicker-popover .popover-footer {
   float: none;
   clear: both;
-  padding: 14px;
+  padding: 12px;
   text-align: right;
   margin: 0;
   border-top: 1px solid #ebebeb;
@@ -124,7 +124,7 @@
 .iconpicker-popover .popover-footer input[type=search].iconpicker-search {
   /*width:auto;
         float:left;*/
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 .iconpicker-popover.popover > .arrow,
 .iconpicker-popover.popover > .arrow:after {
@@ -162,12 +162,12 @@
   border-top-color: #ffffff;
 }
 .iconpicker-popover.popover.topLeft > .arrow {
-  left: 14px;
+  left: 8px;
   margin-left: 0;
 }
 .iconpicker-popover.popover.topRight > .arrow {
   left: auto;
-  right: 14px;
+  right: 8px;
   margin-left: 0;
 }
 .iconpicker-popover.popover.right > .arrow,
@@ -191,11 +191,11 @@
 }
 .iconpicker-popover.popover.rightTop > .arrow {
   top: auto;
-  bottom: 14px;
+  bottom: 8px;
   margin-top: 0;
 }
 .iconpicker-popover.popover.rightBottom > .arrow {
-  top: 14px;
+  top: 8px;
   margin-top: 0;
 }
 .iconpicker-popover.popover.bottom > .arrow,
@@ -218,12 +218,12 @@
   border-bottom-color: #ffffff;
 }
 .iconpicker-popover.popover.bottomLeft > .arrow {
-  left: 14px;
+  left: 8px;
   margin-left: 0;
 }
 .iconpicker-popover.popover.bottomRight > .arrow {
   left: auto;
-  right: 14px;
+  right: 8px;
   margin-left: 0;
 }
 .iconpicker-popover.popover.left > .arrow,
@@ -246,12 +246,12 @@
   bottom: -10px;
 }
 .iconpicker-popover.popover.leftBottom > .arrow {
-  top: 14px;
+  top: 8px;
   margin-top: 0;
 }
 .iconpicker-popover.popover.leftTop > .arrow {
   top: auto;
-  bottom: 14px;
+  bottom: 8px;
   margin-top: 0;
 }
 .iconpicker {
@@ -281,13 +281,13 @@
   position: relative;
   clear: both;
   float: none;
-  padding: 14px 0 0 14px;
+  padding: 12px 0 0 12px;
   background: #fff;
   margin: 0;
   overflow: hidden;
   overflow-y: auto;
-  min-height: 55px;
-  max-height: 275px;
+  min-height: 49px;
+  max-height: 246px;
 }
 .iconpicker .iconpicker-items:before,
 .iconpicker .iconpicker-items:after {
@@ -301,13 +301,14 @@
   float: left;
   width: 14px;
   height: 14px;
-  padding: 14px;
-  margin: 0 14px 14px 0;
+  padding: 12px;
+  margin: 0 12px 12px 0;
   text-align: center;
   cursor: pointer;
   border-radius: 3px;
   font-size: 14px;
   box-shadow: 0 0 0 1px #dddddd;
+  color: inherit;
   /*&:nth-child(4n+4) {
             margin-right: 0;
         }
@@ -320,6 +321,7 @@
 }
 .iconpicker .iconpicker-item.iconpicker-selected {
   box-shadow: none;
+  color: #fff;
 }
 .iconpicker-component {
   cursor: pointer;

@@ -119,6 +119,8 @@ var opts = {
 ## TO-DO
 - [x] Support other icon fonts
 - [x] Fix: input marked as error when it is empty
-- [ ] Ability to use the user input as the filter instead of the popover input
-- [ ] Fix bottomRight position when using component mode (maybe the popover needs to be
-appended in other element, or use another 'to' in position plugin?)
+- [x] Add role=button to each item, for making them tabbable
+- [x] Ability to use the user input as the filter instead of the popover input
+- [x] Fix bottomRight position when using component mode
+- [x] Better dropdown compatibility
+- [ ] Ability to select and copy the icon character

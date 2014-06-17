@@ -96,7 +96,7 @@ You can use Font Awesome or another font icon set of your choice (icon options a
                 </div>
                 <div class="panel-body">
                     <p class="lead">
-                        <i class="fa fa-github fa-3x picker-target"></i>
+                        <i class="fa fa-graduation-cap fa-3x picker-target"></i>
                     </p>
                     <div class="row">
                         <div class="col-md-5">
@@ -111,6 +111,31 @@ You can use Font Awesome or another font icon set of your choice (icon options a
                                     <input data-placement="bottomRight" class="form-control icp icp-auto" value="fa-archive" type="text" />
                                     <span class="input-group-addon"></span>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label>With the input as a search box</label>
+                                <input class="form-control icp icp-auto" data-input-search="true" value="fa-plane" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label>Inside dropdowns</label>
+                                <div class="btn-group">
+                                    <button data-selected="graduation-cap" type="button" class="icp icp-dd btn btn-default dropdown-toggle iconpicker-component" data-toggle="dropdown">
+                                        Dropdown  <i class="fa fa-fw"></i>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu"></div>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary iconpicker-component"><i class="fa fa-fw fa-heart"></i></button>
+                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle" data-selected="fa-car" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu"></div>
+                                </div>
+                                <p class="help-block"><br>
+                                    Note: In dropdowns the placement is controlled by the Bootstrap dropdown plugin
+                                </p>
                             </div>
                             <div class="form-group">
                                 <label data-title="Inline picker" data-placement="inline" class="icp icp-auto" data-selected="fa-align-justify">
@@ -135,29 +160,8 @@ You can use Font Awesome or another font icon set of your choice (icon options a
 }</pre>
                             </div>
                             <div class="form-group">
-                                <label>Inside dropdowns</label>
-                                <div class="btn-group">
-                                    <button type="button" class="icp icp-dd btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        Dropdown
-                                        <span class="caret"></span>
-                                    </button>
-                                    <div class="dropdown-menu"></div>
-                                </div>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-primary">Action</button>
-                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <div class="dropdown-menu"></div>
-                                </div>
-                                <p class="help-block"><br>
-                                    Note: In dropdowns the placement is controlled by the Bootstrap dropdown plugin
-                                </p>
-                            </div>
-                            <div class="form-group">
                                 <label>Using a custom icon font (default Bootstrap glyphicons)</label>
-                                <input class="form-control icp icp-glyphs" value="" type="text" /><br>
+                                <input class="form-control icp icp-glyphs" value="glyphicon-star" type="text" /><br>
                                 <pre class="well">
 {
     //...
@@ -199,13 +203,12 @@ You can use Font Awesome or another font icon set of your choice (icon options a
                 });
                 $('.action-create').on('click', function() {
                     $('.icp-auto').iconpicker();
-                    $('.icp-dd').each(function() {
-                        var $this = $(this);
-                        $this.iconpicker({
-                            title: 'Dropdown with picker',
-                            container: $(' ~ .dropdown-menu:first', $this)
-                        });
+                    
+                    $('.icp-dd').iconpicker({
+                        //title: 'Dropdown with picker',
+                        //component:'.btn > i'
                     });
+                    
                     $('.icp-glyphs').iconpicker({
                         title: 'Using glypghicons',
                         icons: ['home', 'repeat', 'search',

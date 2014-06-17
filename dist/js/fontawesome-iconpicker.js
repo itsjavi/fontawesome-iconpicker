@@ -387,27 +387,37 @@
         this.options.originalPlacement = this.options.placement;
         this.container = b.isElement(this.options.container) ? a(this.options.container) : false;
         if (this.container === false) {
-            this.container = this.element.is("input") ? this.element.parent() : this.element;
+            if (this.element.is(".dropdown-toggle")) {
+                this.container = a("~ .dropdown-menu:first", this.element);
+            } else {
+                this.container = this.element.is("input,textarea,button,.btn") ? this.element.parent() : this.element;
+            }
         }
-        if (this.container.addClass("iconpicker-container").is(".dropdown-menu")) {
+        this.container.addClass("iconpicker-container");
+        if (this.isDropdownMenu()) {
+            this.options.templates.search = false;
+            this.options.templates.buttons = false;
             this.options.placement = "inline";
         }
-        this.input = this.element.is("input") ? this.element.addClass("iconpicker-input") : false;
+        this.input = this.element.is("input,textarea") ? this.element.addClass("iconpicker-input") : false;
         if (this.input === false) {
             this.input = this.container.find(this.options.input);
+            if (!this.input.is("input,textarea")) {
+                this.input = false;
+            }
         }
-        this.component = this.container.find(this.options.component).addClass("iconpicker-component");
+        this.component = this.isDropdownMenu() ? this.container.parent().find(this.options.component) : this.container.find(this.options.component);
         if (this.component.length === 0) {
             this.component = false;
         } else {
-            this.component.find("i").addClass(this.options.iconComponentBaseClass);
+            this.component.find("i").addClass("iconpicker-component " + this.options.iconComponentBaseClass);
         }
         this._createPopover();
         this._createIconpicker();
         if (this.getAcceptButton().length === 0) {
             this.options.mustAccept = false;
         }
-        if (this.container.is(".input-group")) {
+        if (this.isInputGroup()) {
             this.container.parent().append(this.popover);
         } else {
             this.container.append(this.popover);
@@ -437,16 +447,17 @@
         iconBaseClass: "fa",
         iconComponentBaseClass: "fa fa-fw",
         iconClassPrefix: "fa-",
-        input: "input",
+        input: "input,.iconpicker-input",
+        inputSearch: false,
         container: false,
-        component: ".input-group-addon",
+        component: ".input-group-addon,.iconpicker-component",
         templates: {
             popover: '<div class="iconpicker-popover popover"><div class="arrow"></div>' + '<div class="popover-title"></div><div class="popover-content"></div></div>',
             footer: '<div class="popover-footer"></div>',
             buttons: '<button class="iconpicker-btn iconpicker-btn-cancel btn btn-default btn-sm">Cancel</button>' + ' <button class="iconpicker-btn iconpicker-btn-accept btn btn-primary btn-sm">Accept</button>',
             search: '<input type="search" class="form-control iconpicker-search" placeholder="Type to filter" />',
             iconpicker: '<div class="iconpicker"><div class="iconpicker-items"></div></div>',
-            iconpickerItem: '<div class="iconpicker-item"><i></i></div>'
+            iconpickerItem: '<a role="button" href="#" class="iconpicker-item"><i></i></a>'
         }
     };
     c.batch = function(b, c) {
@@ -475,14 +486,14 @@
             if (!!this.options.title) {
                 c.append(a('<div class="popover-title-text">' + this.options.title + "</div>"));
             }
-            if (!this.options.searchInFooter && !b.isEmpty(this.options.templates.buttons)) {
+            if (this.hasSeparatedSearchInput() && !this.options.searchInFooter) {
                 c.append(this.options.templates.search);
             } else if (!this.options.title) {
                 c.remove();
             }
             if (this.options.showFooter && !b.isEmpty(this.options.templates.footer)) {
                 var d = a(this.options.templates.footer);
-                if (!b.isEmpty(this.options.templates.search) && this.options.searchInFooter) {
+                if (this.hasSeparatedSearchInput() && this.options.searchInFooter) {
                     d.append(a(this.options.templates.search));
                 }
                 if (!b.isEmpty(this.options.templates.buttons)) {
@@ -519,6 +530,8 @@
                 if (b.options.hideOnSelect && b.options.mustAccept === false) {
                     b.hide();
                 }
+                c.preventDefault();
+                return false;
             };
             for (var d in this.options.icons) {
                 var e = a(this.options.templates.iconpickerItem);
@@ -538,7 +551,7 @@
         },
         _bindElementEvents: function() {
             var c = this;
-            this.getSearchInput().on("keyup", function() {
+            this.getSearchInput().on("keyup.iconpicker", function() {
                 c.filter(a(this).val().toLowerCase());
             });
             this.getAcceptButton().on("click.iconpicker", function() {
@@ -567,11 +580,14 @@
                 });
             }
             if (this.hasInput()) {
-                this.input.on("keyup.iconpicker", function(a) {
-                    if (!b.inArray(a.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
+                this.input.on("keyup.iconpicker", function(d) {
+                    if (!b.inArray(d.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
                         c.update();
                     } else {
                         c._updateFormGroupStatus(c.getValid(this.value) !== false);
+                    }
+                    if (c.options.inputSearch === true) {
+                        c.filter(a(this).val().toLowerCase());
                     }
                 });
             }
@@ -622,7 +638,7 @@
             var d = {
                 at: "right bottom",
                 my: "right top",
-                of: this.hasInput() ? this.input : this.container,
+                of: this.hasInput() && !this.isInputGroup() ? this.input : this.container,
                 collision: c === true ? "flip" : c,
                 within: window
             };
@@ -856,6 +872,18 @@
         },
         hasInput: function() {
             return this.input !== false;
+        },
+        isInputSearch: function() {
+            return this.hasInput() && this.options.inputSearch === true;
+        },
+        isInputGroup: function() {
+            return this.container.is(".input-group");
+        },
+        isDropdownMenu: function() {
+            return this.container.is(".dropdown-menu");
+        },
+        hasSeparatedSearchInput: function() {
+            return this.options.templates.search !== false && !this.isInputSearch();
         },
         hasComponent: function() {
             return this.component !== false;

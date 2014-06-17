@@ -3,7 +3,7 @@
 
   "name": "Font Awesome Icon Picker",
   "description": "Font Awesome Icon Picker extension for Google Chrome",
-  "version": "1.0",
+  "version": "1.1",
 
   "browser_action": {
     "default_icon": "icon.png",

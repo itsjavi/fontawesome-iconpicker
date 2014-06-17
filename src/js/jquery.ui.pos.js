@@ -2,7 +2,7 @@
  * .pos() plugin based on jQuery UI Position 1.10.4, renamed to avoid
  * problems with jQuery native .position(), and added some triggers when position
  * collapses
- * 
+ *
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8">
+    <title>Font Awesome Icon Picker</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/fontawesome-iconpicker.css" rel="stylesheet">
+    <style>
+        body {
+            min-width: 240px;
+            overflow-x: hidden;
+            background: #fff;
+        }
+        .popover.iconpicker-popover,
+        .popover.iconpicker-popover.inline{
+            border-radius: 0px;
+            margin:0;
+            background: #fff;
+            border:none;
+        }
+        .popover.iconpicker-popover .iconpicker-items{
+            max-height: 165px !important; // each row is 55px more
+        }
+        .popover .popover-footer{
+            text-align: center;
+            display:none;
+        }
+        .popover .popover-footer .icn{
+            margin:20px 0 30px 0;
+        }
+        .popover .popover-footer .txt{
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="iconpicker" data-title="Font Awesome Icon Picker" data-placement="inline"></div>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+    -->
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/fontawesome-iconpicker.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

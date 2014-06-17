@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+
+  "name": "Font Awesome Icon Picker",
+  "description": "Font Awesome Icon Picker extension for Google Chrome",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "https://secure.flickr.com/",
+    "https://netdna.bootstrapcdn.com/",
+    "https://maxcdn.bootstrapcdn.com/",
+    "https://code.jquery.com/"
+  ]
+}

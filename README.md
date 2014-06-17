@@ -123,4 +123,5 @@ var opts = {
 - [x] Ability to use the user input as the filter instead of the popover input
 - [x] Fix bottomRight position when using component mode
 - [x] Better dropdown compatibility
-- [ ] Ability to select and copy the icon character
+- [ ] Ability to mix various class prefixes (maybe having the full name of each icon and removing icon class options?)
+- [ ] Ability to select and copy the icon character (the would need to be hardcoded in js)

@@ -151,7 +151,7 @@ You can use Font Awesome or another font icon set of your choice (icon options a
 {
     //...
     title: 'With custom options',
-    icons: ['github', 'heart', 'html5', 'css3'],
+    icons: ['fa-github', 'fa-heart', 'fa-html5', 'fa-css3'],
     selectedCustomClass: 'label label-success',
     mustAccept:true,
     placement:'bottomRight',
@@ -160,16 +160,27 @@ You can use Font Awesome or another font icon set of your choice (icon options a
 }</pre>
                             </div>
                             <div class="form-group">
-                                <label>Using a custom icon font (default Bootstrap glyphicons)</label>
+                                <label>Mixing a custom font with the default Font Awesome icons</label>
                                 <input class="form-control icp icp-glyphs" value="glyphicon-star" type="text" /><br>
                                 <pre class="well">
 {
     //...
-    icons:['home', 'repeat', 'search', 
-        'arrow-left', 'arrow-right', 'star'],
-    iconBaseClass:'glyphicon',
-    iconComponentBaseClass:'glyphicon',
-    iconClassPrefix:'glyphicon-'
+    title: 'Prepending glypghicons',
+    icons: $.merge([
+        'glyphicon-home', 
+        'glyphicon-repeat',
+        'glyphicon-search',
+        'glyphicon-arrow-left',
+        'glyphicon-arrow-right',
+        'glyphicon-star'],
+        $.iconpicker.defaultOptions.icons),
+    fullClassFormatter: function(val){
+        if(val.match(/^fa-/)){
+            return 'fa '+val;
+        }else{
+            return 'glyphicon '+val;
+        }
+    }
     //...              
 }</pre>
                             </div>
@@ -210,16 +221,20 @@ You can use Font Awesome or another font icon set of your choice (icon options a
                     });
                     
                     $('.icp-glyphs').iconpicker({
-                        title: 'Using glypghicons',
-                        icons: ['home', 'repeat', 'search',
-                            'arrow-left', 'arrow-right', 'star'],
-                        iconBaseClass: 'glyphicon',
-                        iconComponentBaseClass: 'glyphicon',
-                        iconClassPrefix: 'glyphicon-'
+                        title: 'Prepending glypghicons',
+                        icons: $.merge(['glyphicon-home', 'glyphicon-repeat', 'glyphicon-search',
+                            'glyphicon-arrow-left', 'glyphicon-arrow-right', 'glyphicon-star'], $.iconpicker.defaultOptions.icons),
+                        fullClassFormatter: function(val){
+                            if(val.match(/^fa-/)){
+                                return 'fa '+val;
+                            }else{
+                                return 'glyphicon '+val;
+                            }
+                        }
                     });
                     $('.icp-opts').iconpicker({
                         title: 'With custom options',
-                        icons: ['github', 'heart', 'html5', 'css3'],
+                        icons: ['fa-github', 'fa-heart', 'fa-html5', 'fa-css3'],
                         selectedCustomClass: 'label label-success',
                         mustAccept: true,
                         placement: 'bottomRight',
@@ -257,7 +272,7 @@ You can use Font Awesome or another font icon set of your choice (icon options a
                 $('.icp').on('iconpickerSelected', function(e) {
                     $('.lead .picker-target').get(0).className = 'picker-target fa-3x ' +
                             e.iconpickerInstance.options.iconBaseClass + ' ' +
-                            e.iconpickerInstance.getValue(e.iconpickerValue);
+                            e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue);
                 });
             });
         </script>

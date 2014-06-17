@@ -54,9 +54,9 @@
             // Iconpicker container element
             this.container = (_helpers.isElement(this.options.container) ? $(this.options.container) : false);
             if (this.container === false) {
-                if(this.element.is('.dropdown-toggle')){
+                if (this.element.is('.dropdown-toggle')) {
                     this.container = $('~ .dropdown-menu:first', this.element);
-                }else{
+                } else {
                     this.container = (this.element.is('input,textarea,button,.btn') ? this.element.parent() : this.element);
                 }
             }
@@ -65,8 +65,8 @@
             if (this.isDropdownMenu()) {
                 // if you try to click the dropdown, it is closed, because of that
                 // we'll hide some picker controls
-                this.options.templates.search=false;
-                this.options.templates.buttons=false;
+                this.options.templates.search = false;
+                this.options.templates.buttons = false;
                 this.options.placement = 'inline';
             }
 
@@ -80,12 +80,11 @@
             }
 
             // Plugin as component ?
-            this.component = this.isDropdownMenu() ? this.container.parent().find(this.options.component)
-                : this.container.find(this.options.component);
+            this.component = this.isDropdownMenu() ? this.container.parent().find(this.options.component) : this.container.find(this.options.component);
             if (this.component.length === 0) {
                 this.component = false;
             } else {
-                this.component.find('i').addClass('iconpicker-component '+this.options.iconComponentBaseClass);
+                this.component.find('i').addClass('iconpicker-component');
             }
 
             // Create popover and iconpicker HTML
@@ -134,10 +133,10 @@
             searchInFooter: false, // If true, the search will be added to the footer instead of the title
             mustAccept: false, // only applicable when there's an iconpicker-btn-accept button in the popover footer
             selectedCustomClass: 'bg-primary', // Appends this class when to the selected item
-            icons: [], // list of icons (declared at the bottom of this script for maintainability)
-            iconBaseClass: 'fa', // you can customize class prefix and base name, so you can use other icon fonts like the default Bootstrap's
-            iconComponentBaseClass: 'fa fa-fw',
-            iconClassPrefix: 'fa-',
+            icons: [], // list of icon classes (declared at the bottom of this script for maintainability)
+            fullClassFormatter: function(val) {
+                return 'fa ' + val;
+            },
             input: 'input,.iconpicker-input', // children input selector
             inputSearch: false, // use the input as a search box too?
             container: false, //  Appends the popover to a specific element. If not set, the selected element or element parent is used
@@ -216,7 +215,7 @@
 
                 var itemClickFn = function(e) {
                     var $this = $(this);
-                    if ($this.is('.' + _self.options.iconBaseClass)) {
+                    if ($this.is('i')) {
                         $this = $this.parent();
                     }
 
@@ -246,12 +245,11 @@
                 for (var i in this.options.icons) {
                     var itemElement = $(this.options.templates.iconpickerItem);
                     itemElement.find('i')
-                        .addClass(_self.options.iconBaseClass + " " +
-                            this.options.iconClassPrefix + this.options.icons[i]);
+                        .addClass(this.options.fullClassFormatter(this.options.icons[i]));
                     itemElement.data('iconpickerValue', this.options.icons[i])
                         .on('click.iconpicker', itemClickFn);
                     this.iconpicker.find('.iconpicker-items').append(itemElement
-                        .attr('title', '.' + this.getValue(this.options.icons[i])));
+                        .attr('title', '.' + this.options.icons[i]));
                 }
 
                 this.popover.find('.popover-content').append(this.iconpicker);
@@ -551,17 +549,16 @@
                 this.iconpicker.find('.iconpicker-item.iconpicker-selected')
                     .removeClass('iconpicker-selected ' + this.options.selectedCustomClass);
 
-                this.iconpicker.find('.' + this.options.iconBaseClass + '.' +
-                    this.options.iconClassPrefix + this.iconpickerValue).parent()
+                this.iconpicker.find('.' + this.options.fullClassFormatter(this.iconpickerValue).replace(/ /g, '.')).parent()
                     .addClass('iconpicker-selected ' + this.options.selectedCustomClass);
 
                 // Update component item
                 if (this.hasComponent()) {
                     var icn = this.component.find('i');
                     if (icn.length > 0) {
-                        icn.attr('class', this.options.iconComponentBaseClass + ' ' + this.getValue());
+                        icn.attr('class', this.options.fullClassFormatter(this.iconpickerValue));
                     } else {
-                        this.component.html(this.getValueHtml());
+                        this.component.html(this.getHtml());
                     }
                 }
 
@@ -587,8 +584,8 @@
 
                 var isEmpty = (val === '');
 
-                // trimmed and sanitized string without the icon class prefix
-                val = $.trim(val.replace(this.options.iconClassPrefix, ''));
+                // trim string
+                val = $.trim(val);
 
                 if (_helpers.inArray(val, this.options.icons) || isEmpty) {
                     return val;
@@ -615,15 +612,8 @@
                     return false;
                 }
             },
-            /**
-             * Returns the formatted item value
-             * @returns string
-             */
-            getValue: function(val) {
-                return this.options.iconClassPrefix + (val ? val : this.iconpickerValue);
-            },
-            getValueHtml: function() {
-                return '<i class="' + this.options.iconBaseClass + " " + this.getValue() + '"></i>';
+            getHtml: function() {
+                return '<i class="' + this.options.fullClassFormatter(this.iconpickerValue) + '"></i>';
             },
             /**
              * Calls setValue and if it's a valid item value, sets the input or element value
@@ -632,9 +622,9 @@
                 val = this.setValue(val);
                 if ((val !== false) && (val !== '')) {
                     if (this.hasInput()) {
-                        this.input.val(this.getValue());
+                        this.input.val(this.iconpickerValue);
                     } else {
-                        this.element.data('iconpickerValue', this.getValue());
+                        this.element.data('iconpickerValue', this.iconpickerValue);
                     }
                     this._trigger('iconpickerSetSourceValue', {
                         iconpickerValue: val
@@ -828,77 +818,77 @@
 
         // List of all Font Awesome icons without class prefix
         Iconpicker.defaultOptions.icons = [
-            'adjust', 'adn', 'align-center', 'align-justify', 'align-left', 'align-right', 'ambulance',
-            'anchor', 'android', 'angle-double-down', 'angle-double-left', 'angle-double-right', 'angle-double-up',
-            'angle-down', 'angle-left', 'angle-right', 'angle-up', 'apple', 'archive', 'arrow-circle-down',
-            'arrow-circle-left', 'arrow-circle-o-down', 'arrow-circle-o-left', 'arrow-circle-o-right',
-            'arrow-circle-o-up', 'arrow-circle-right', 'arrow-circle-up', 'arrow-down', 'arrow-left',
-            'arrow-right', 'arrow-up', 'arrows', 'arrows-alt', 'arrows-h', 'arrows-v', 'asterisk',
-            'automobile', 'backward', 'ban', 'bank', 'bar-chart-o', 'barcode', 'bars', 'beer',
-            'behance', 'behance-square', 'bell', 'bell-o', 'bitbucket', 'bitbucket-square', 'bitcoin',
-            'bold', 'bolt', 'bomb', 'book', 'bookmark', 'bookmark-o', 'briefcase', 'btc',
-            'bug', 'building', 'building-o', 'bullhorn', 'bullseye', 'cab', 'calendar', 'calendar-o',
-            'camera', 'camera-retro', 'car', 'caret-down', 'caret-left', 'caret-right',
-            'caret-square-o-down', 'caret-square-o-left', 'caret-square-o-right', 'caret-square-o-up',
-            'caret-up', 'certificate', 'chain', 'chain-broken', 'check', 'check-circle', 'check-circle-o',
-            'check-square', 'check-square-o', 'chevron-circle-down', 'chevron-circle-left',
-            'chevron-circle-right', 'chevron-circle-up', 'chevron-down', 'chevron-left',
-            'chevron-right', 'chevron-up', 'child', 'circle', 'circle-o', 'circle-o-notch',
-            'circle-thin', 'clipboard', 'clock-o', 'cloud', 'cloud-download', 'cloud-upload',
-            'cny', 'code', 'code-fork', 'codepen', 'coffee', 'cog', 'cogs', 'columns',
-            'comment', 'comment-o', 'comments', 'comments-o', 'compass', 'compress', 'copy',
-            'credit-card', 'crop', 'crosshairs', 'css3', 'cube', 'cubes', 'cut', 'cutlery',
-            'dashboard', 'database', 'dedent', 'delicious', 'desktop', 'deviantart', 'digg',
-            'dollar', 'dot-circle-o', 'download', 'dribbble', 'dropbox', 'drupal', 'edit', 'eject',
-            'ellipsis-h', 'ellipsis-v', 'empire', 'envelope', 'envelope-o', 'envelope-square',
-            'eraser', 'eur', 'euro', 'exchange', 'exclamation', 'exclamation-circle',
-            'exclamation-triangle', 'expand', 'external-link', 'external-link-square', 'eye',
-            'eye-slash', 'facebook', 'facebook-square', 'fast-backward', 'fast-forward', 'fax',
-            'female', 'fighter-jet', 'file', 'file-archive-o', 'file-audio-o', 'file-code-o',
-            'file-excel-o', 'file-image-o', 'file-movie-o', 'file-o', 'file-pdf-o', 'file-photo-o',
-            'file-picture-o', 'file-powerpoint-o', 'file-sound-o', 'file-text', 'file-text-o',
-            'file-video-o', 'file-word-o', 'file-zip-o', 'files-o', 'film', 'filter', 'fire',
-            'fire-extinguisher', 'flag', 'flag-checkered', 'flag-o', 'flash', 'flask', 'flickr',
-            'floppy-o', 'folder', 'folder-o', 'folder-open', 'folder-open-o', 'font', 'forward',
-            'foursquare', 'frown-o', 'gamepad', 'gavel', 'gbp', 'ge', 'gear', 'gears', 'gift',
-            'git', 'git-square', 'github', 'github-alt', 'github-square', 'gittip', 'glass', 'globe',
-            'google', 'google-plus', 'google-plus-square', 'graduation-cap', 'group', 'h-square', 'hacker-news',
-            'hand-o-down', 'hand-o-left', 'hand-o-right', 'hand-o-up', 'hdd-o', 'header', 'headphones',
-            'heart', 'heart-o', 'history', 'home', 'hospital-o', 'html5', 'image', 'inbox', 'indent',
-            'info', 'info-circle', 'inr', 'instagram', 'institution', 'italic', 'joomla', 'jpy',
-            'jsfiddle', 'key', 'keyboard-o', 'krw', 'language', 'laptop', 'leaf', 'legal', 'lemon-o',
-            'level-down', 'level-up', 'life-bouy', 'life-ring', 'life-saver', 'lightbulb-o', 'link',
-            'linkedin', 'linkedin-square', 'linux', 'list', 'list-alt', 'list-ol', 'list-ul', 'location-arrow',
-            'lock', 'long-arrow-down', 'long-arrow-left', 'long-arrow-right', 'long-arrow-up', 'magic',
-            'magnet', 'mail-forward', 'mail-reply', 'mail-reply-all', 'male', 'map-marker', 'maxcdn',
-            'medkit', 'meh-o', 'microphone', 'microphone-slash', 'minus', 'minus-circle', 'minus-square',
-            'minus-square-o', 'mobile', 'mobile-phone', 'money', 'moon-o', 'mortar-board', 'music',
-            'navicon', 'openid', 'outdent', 'pagelines', 'paper-plane', 'paper-plane-o', 'paperclip',
-            'paragraph', 'paste', 'pause', 'paw', 'pencil', 'pencil-square', 'pencil-square-o', 'phone',
-            'phone-square', 'photo', 'picture-o', 'pied-piper', 'pied-piper-alt', 'pied-piper-square',
-            'pinterest', 'pinterest-square', 'plane', 'play', 'play-circle', 'play-circle-o', 'plus',
-            'plus-circle', 'plus-square', 'plus-square-o', 'power-off', 'print', 'puzzle-piece', 'qq',
-            'qrcode', 'question', 'question-circle', 'quote-left', 'quote-right', 'ra', 'random',
-            'rebel', 'recycle', 'reddit', 'reddit-square', 'refresh', 'renren', 'reorder', 'repeat',
-            'reply', 'reply-all', 'retweet', 'rmb', 'road', 'rocket', 'rotate-left', 'rotate-right',
-            'rouble', 'rss', 'rss-square', 'rub', 'ruble', 'rupee', 'save', 'scissors', 'search',
-            'search-minus', 'search-plus', 'send', 'send-o', 'share', 'share-alt', 'share-alt-square',
-            'share-square', 'share-square-o', 'shield', 'shopping-cart', 'sign-in', 'sign-out', 'signal',
-            'sitemap', 'skype', 'slack', 'sliders', 'smile-o', 'sort', 'sort-alpha-asc', 'sort-alpha-desc',
-            'sort-amount-asc', 'sort-amount-desc', 'sort-asc', 'sort-desc', 'sort-down', 'sort-numeric-asc',
-            'sort-numeric-desc', 'sort-up', 'soundcloud', 'space-shuttle', 'spinner', 'spoon', 'spotify',
-            'square', 'square-o', 'stack-exchange', 'stack-overflow', 'star', 'star-half', 'star-half-empty',
-            'star-half-full', 'star-half-o', 'star-o', 'steam', 'steam-square', 'step-backward', 'step-forward',
-            'stethoscope', 'stop', 'strikethrough', 'stumbleupon', 'stumbleupon-circle', 'subscript',
-            'suitcase', 'sun-o', 'superscript', 'support', 'table', 'tablet', 'tachometer', 'tag',
-            'tags', 'tasks', 'taxi', 'tencent-weibo', 'terminal', 'text-height', 'text-width', 'th',
-            'th-large', 'th-list', 'thumb-tack', 'thumbs-down', 'thumbs-o-down', 'thumbs-o-up', 'thumbs-up',
-            'ticket', 'times', 'times-circle', 'times-circle-o', 'tint', 'toggle-down', 'toggle-left',
-            'toggle-right', 'toggle-up', 'trash-o', 'tree', 'trello', 'trophy', 'truck', 'try', 'tumblr',
-            'tumblr-square', 'turkish-lira', 'twitter', 'twitter-square', 'umbrella', 'underline', 'undo',
-            'university', 'unlink', 'unlock', 'unlock-alt', 'unsorted', 'upload', 'usd', 'user', 'user-md',
-            'users', 'video-camera', 'vimeo-square', 'vine', 'vk', 'volume-down', 'volume-off', 'volume-up',
-            'warning', 'wechat', 'weibo', 'weixin', 'wheelchair', 'windows', 'won', 'wordpress', 'wrench',
-            'xing', 'xing-square', 'yahoo', 'yen', 'youtube', 'youtube-play', 'youtube-square'
+            'fa-adjust', 'fa-adn', 'fa-align-center', 'fa-align-justify', 'fa-align-left', 'fa-align-right', 'fa-ambulance',
+            'fa-anchor', 'fa-android', 'fa-angle-double-down', 'fa-angle-double-left', 'fa-angle-double-right', 'fa-angle-double-up',
+            'fa-angle-down', 'fa-angle-left', 'fa-angle-right', 'fa-angle-up', 'fa-apple', 'fa-archive', 'fa-arrow-circle-down',
+            'fa-arrow-circle-left', 'fa-arrow-circle-o-down', 'fa-arrow-circle-o-left', 'fa-arrow-circle-o-right',
+            'fa-arrow-circle-o-up', 'fa-arrow-circle-right', 'fa-arrow-circle-up', 'fa-arrow-down', 'fa-arrow-left',
+            'fa-arrow-right', 'fa-arrow-up', 'fa-arrows', 'fa-arrows-alt', 'fa-arrows-h', 'fa-arrows-v', 'fa-asterisk',
+            'fa-automobile', 'fa-backward', 'fa-ban', 'fa-bank', 'fa-bar-chart-o', 'fa-barcode', 'fa-bars', 'fa-beer',
+            'fa-behance', 'fa-behance-square', 'fa-bell', 'fa-bell-o', 'fa-bitbucket', 'fa-bitbucket-square', 'fa-bitcoin',
+            'fa-bold', 'fa-bolt', 'fa-bomb', 'fa-book', 'fa-bookmark', 'fa-bookmark-o', 'fa-briefcase', 'fa-btc',
+            'fa-bug', 'fa-building', 'fa-building-o', 'fa-bullhorn', 'fa-bullseye', 'fa-cab', 'fa-calendar', 'fa-calendar-o',
+            'fa-camera', 'fa-camera-retro', 'fa-car', 'fa-caret-down', 'fa-caret-left', 'fa-caret-right',
+            'fa-caret-square-o-down', 'fa-caret-square-o-left', 'fa-caret-square-o-right', 'fa-caret-square-o-up',
+            'fa-caret-up', 'fa-certificate', 'fa-chain', 'fa-chain-broken', 'fa-check', 'fa-check-circle', 'fa-check-circle-o',
+            'fa-check-square', 'fa-check-square-o', 'fa-chevron-circle-down', 'fa-chevron-circle-left',
+            'fa-chevron-circle-right', 'fa-chevron-circle-up', 'fa-chevron-down', 'fa-chevron-left',
+            'fa-chevron-right', 'fa-chevron-up', 'fa-child', 'fa-circle', 'fa-circle-o', 'fa-circle-o-notch',
+            'fa-circle-thin', 'fa-clipboard', 'fa-clock-o', 'fa-cloud', 'fa-cloud-download', 'fa-cloud-upload',
+            'fa-cny', 'fa-code', 'fa-code-fork', 'fa-codepen', 'fa-coffee', 'fa-cog', 'fa-cogs', 'fa-columns',
+            'fa-comment', 'fa-comment-o', 'fa-comments', 'fa-comments-o', 'fa-compass', 'fa-compress', 'fa-copy',
+            'fa-credit-card', 'fa-crop', 'fa-crosshairs', 'fa-css3', 'fa-cube', 'fa-cubes', 'fa-cut', 'fa-cutlery',
+            'fa-dashboard', 'fa-database', 'fa-dedent', 'fa-delicious', 'fa-desktop', 'fa-deviantart', 'fa-digg',
+            'fa-dollar', 'fa-dot-circle-o', 'fa-download', 'fa-dribbble', 'fa-dropbox', 'fa-drupal', 'fa-edit', 'fa-eject',
+            'fa-ellipsis-h', 'fa-ellipsis-v', 'fa-empire', 'fa-envelope', 'fa-envelope-o', 'fa-envelope-square',
+            'fa-eraser', 'fa-eur', 'fa-euro', 'fa-exchange', 'fa-exclamation', 'fa-exclamation-circle',
+            'fa-exclamation-triangle', 'fa-expand', 'fa-external-link', 'fa-external-link-square', 'fa-eye',
+            'fa-eye-slash', 'fa-facebook', 'fa-facebook-square', 'fa-fast-backward', 'fa-fast-forward', 'fa-fax',
+            'fa-female', 'fa-fighter-jet', 'fa-file', 'fa-file-archive-o', 'fa-file-audio-o', 'fa-file-code-o',
+            'fa-file-excel-o', 'fa-file-image-o', 'fa-file-movie-o', 'fa-file-o', 'fa-file-pdf-o', 'fa-file-photo-o',
+            'fa-file-picture-o', 'fa-file-powerpoint-o', 'fa-file-sound-o', 'fa-file-text', 'fa-file-text-o',
+            'fa-file-video-o', 'fa-file-word-o', 'fa-file-zip-o', 'fa-files-o', 'fa-film', 'fa-filter', 'fa-fire',
+            'fa-fire-extinguisher', 'fa-flag', 'fa-flag-checkered', 'fa-flag-o', 'fa-flash', 'fa-flask', 'fa-flickr',
+            'fa-floppy-o', 'fa-folder', 'fa-folder-o', 'fa-folder-open', 'fa-folder-open-o', 'fa-font', 'fa-forward',
+            'fa-foursquare', 'fa-frown-o', 'fa-gamepad', 'fa-gavel', 'fa-gbp', 'fa-ge', 'fa-gear', 'fa-gears', 'fa-gift',
+            'fa-git', 'fa-git-square', 'fa-github', 'fa-github-alt', 'fa-github-square', 'fa-gittip', 'fa-glass', 'fa-globe',
+            'fa-google', 'fa-google-plus', 'fa-google-plus-square', 'fa-graduation-cap', 'fa-group', 'fa-h-square', 'fa-hacker-news',
+            'fa-hand-o-down', 'fa-hand-o-left', 'fa-hand-o-right', 'fa-hand-o-up', 'fa-hdd-o', 'fa-header', 'fa-headphones',
+            'fa-heart', 'fa-heart-o', 'fa-history', 'fa-home', 'fa-hospital-o', 'fa-html5', 'fa-image', 'fa-inbox', 'fa-indent',
+            'fa-info', 'fa-info-circle', 'fa-inr', 'fa-instagram', 'fa-institution', 'fa-italic', 'fa-joomla', 'fa-jpy',
+            'fa-jsfiddle', 'fa-key', 'fa-keyboard-o', 'fa-krw', 'fa-language', 'fa-laptop', 'fa-leaf', 'fa-legal', 'fa-lemon-o',
+            'fa-level-down', 'fa-level-up', 'fa-life-bouy', 'fa-life-ring', 'fa-life-saver', 'fa-lightbulb-o', 'fa-link',
+            'fa-linkedin', 'fa-linkedin-square', 'fa-linux', 'fa-list', 'fa-list-alt', 'fa-list-ol', 'fa-list-ul', 'fa-location-arrow',
+            'fa-lock', 'fa-long-arrow-down', 'fa-long-arrow-left', 'fa-long-arrow-right', 'fa-long-arrow-up', 'fa-magic',
+            'fa-magnet', 'fa-mail-forward', 'fa-mail-reply', 'fa-mail-reply-all', 'fa-male', 'fa-map-marker', 'fa-maxcdn',
+            'fa-medkit', 'fa-meh-o', 'fa-microphone', 'fa-microphone-slash', 'fa-minus', 'fa-minus-circle', 'fa-minus-square',
+            'fa-minus-square-o', 'fa-mobile', 'fa-mobile-phone', 'fa-money', 'fa-moon-o', 'fa-mortar-board', 'fa-music',
+            'fa-navicon', 'fa-openid', 'fa-outdent', 'fa-pagelines', 'fa-paper-plane', 'fa-paper-plane-o', 'fa-paperclip',
+            'fa-paragraph', 'fa-paste', 'fa-pause', 'fa-paw', 'fa-pencil', 'fa-pencil-square', 'fa-pencil-square-o', 'fa-phone',
+            'fa-phone-square', 'fa-photo', 'fa-picture-o', 'fa-pied-piper', 'fa-pied-piper-alt', 'fa-pied-piper-square',
+            'fa-pinterest', 'fa-pinterest-square', 'fa-plane', 'fa-play', 'fa-play-circle', 'fa-play-circle-o', 'fa-plus',
+            'fa-plus-circle', 'fa-plus-square', 'fa-plus-square-o', 'fa-power-off', 'fa-print', 'fa-puzzle-piece', 'fa-qq',
+            'fa-qrcode', 'fa-question', 'fa-question-circle', 'fa-quote-left', 'fa-quote-right', 'fa-ra', 'fa-random',
+            'fa-rebel', 'fa-recycle', 'fa-reddit', 'fa-reddit-square', 'fa-refresh', 'fa-renren', 'fa-reorder', 'fa-repeat',
+            'fa-reply', 'fa-reply-all', 'fa-retweet', 'fa-rmb', 'fa-road', 'fa-rocket', 'fa-rotate-left', 'fa-rotate-right',
+            'fa-rouble', 'fa-rss', 'fa-rss-square', 'fa-rub', 'fa-ruble', 'fa-rupee', 'fa-save', 'fa-scissors', 'fa-search',
+            'fa-search-minus', 'fa-search-plus', 'fa-send', 'fa-send-o', 'fa-share', 'fa-share-alt', 'fa-share-alt-square',
+            'fa-share-square', 'fa-share-square-o', 'fa-shield', 'fa-shopping-cart', 'fa-sign-in', 'fa-sign-out', 'fa-signal',
+            'fa-sitemap', 'fa-skype', 'fa-slack', 'fa-sliders', 'fa-smile-o', 'fa-sort', 'fa-sort-alpha-asc', 'fa-sort-alpha-desc',
+            'fa-sort-amount-asc', 'fa-sort-amount-desc', 'fa-sort-asc', 'fa-sort-desc', 'fa-sort-down', 'fa-sort-numeric-asc',
+            'fa-sort-numeric-desc', 'fa-sort-up', 'fa-soundcloud', 'fa-space-shuttle', 'fa-spinner', 'fa-spoon', 'fa-spotify',
+            'fa-square', 'fa-square-o', 'fa-stack-exchange', 'fa-stack-overflow', 'fa-star', 'fa-star-half', 'fa-star-half-empty',
+            'fa-star-half-full', 'fa-star-half-o', 'fa-star-o', 'fa-steam', 'fa-steam-square', 'fa-step-backward', 'fa-step-forward',
+            'fa-stethoscope', 'fa-stop', 'fa-strikethrough', 'fa-stumbleupon', 'fa-stumbleupon-circle', 'fa-subscript',
+            'fa-suitcase', 'fa-sun-o', 'fa-superscript', 'fa-support', 'fa-table', 'fa-tablet', 'fa-tachometer', 'fa-tag',
+            'fa-tags', 'fa-tasks', 'fa-taxi', 'fa-tencent-weibo', 'fa-terminal', 'fa-text-height', 'fa-text-width', 'fa-th',
+            'fa-th-large', 'fa-th-list', 'fa-thumb-tack', 'fa-thumbs-down', 'fa-thumbs-o-down', 'fa-thumbs-o-up', 'fa-thumbs-up',
+            'fa-ticket', 'fa-times', 'fa-times-circle', 'fa-times-circle-o', 'fa-tint', 'fa-toggle-down', 'fa-toggle-left',
+            'fa-toggle-right', 'fa-toggle-up', 'fa-trash-o', 'fa-tree', 'fa-trello', 'fa-trophy', 'fa-truck', 'fa-try', 'fa-tumblr',
+            'fa-tumblr-square', 'fa-turkish-lira', 'fa-twitter', 'fa-twitter-square', 'fa-umbrella', 'fa-underline', 'fa-undo',
+            'fa-university', 'fa-unlink', 'fa-unlock', 'fa-unlock-alt', 'fa-unsorted', 'fa-upload', 'fa-usd', 'fa-user', 'fa-user-md',
+            'fa-users', 'fa-video-camera', 'fa-vimeo-square', 'fa-vine', 'fa-vk', 'fa-volume-down', 'fa-volume-off', 'fa-volume-up',
+            'fa-warning', 'fa-wechat', 'fa-weibo', 'fa-weixin', 'fa-wheelchair', 'fa-windows', 'fa-won', 'fa-wordpress', 'fa-wrench',
+            'fa-xing', 'fa-xing-square', 'fa-yahoo', 'fa-yen', 'fa-youtube', 'fa-youtube-play', 'fa-youtube-square'
         ];
     }));

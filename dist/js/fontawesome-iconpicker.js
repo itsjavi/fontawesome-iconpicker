@@ -790,7 +790,9 @@
         },
         _updateComponents: function() {
             this.iconpicker.find(".iconpicker-item.iconpicker-selected").removeClass("iconpicker-selected " + this.options.selectedCustomClass);
-            this.iconpicker.find("." + this.options.fullClassFormatter(this.iconpickerValue).replace(/ /g, ".")).parent().addClass("iconpicker-selected " + this.options.selectedCustomClass);
+            if (this.iconpickerValue) {
+                this.iconpicker.find("." + this.options.fullClassFormatter(this.iconpickerValue).replace(/ /g, ".")).parent().addClass("iconpicker-selected " + this.options.selectedCustomClass);
+            }
             if (this.hasComponent()) {
                 var a = this.component.find("i");
                 if (a.length > 0) {

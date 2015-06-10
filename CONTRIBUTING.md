@@ -1,4 +1,5 @@
 ## Submitting issues
+For feature requests, suggestions or ideas, add `[SUGGESTION]` before the title of the issue, for anything else follow the following guidelines.
 
 ### Guidelines
 - Try to reproduce your problem in a separated environment, like in JSFiddle, [here is a template for it](http://jsfiddle.net/mjolnic/6aLndfgq/), that you can fork in the same page.
@@ -8,6 +9,7 @@
   * Your context: Where it happens? In which browser and version (if applicable)?
   * Plugin version (and/or commit reference).
   * jQuery version you use and list of all other plugins/scripts you are using with this one and may cause some conflict.
+  * A link to your JSFiddle (or similar tool) demo where you reproduced the problem
   
 ## Contributing to Source Code
 

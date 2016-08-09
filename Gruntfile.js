@@ -31,7 +31,7 @@ module.exports = function(grunt) {
         uglify: {
             distMin: {
                 options: {
-                    compress: true,
+                    compress: {},
                     beautify: false
                 },
                 files: {

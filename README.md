@@ -2,11 +2,11 @@ fontawesome-iconpicker
 ========================
 
 Font Awesome Icon Picker is a fully customizable plugin for Twitter Bootstrap,
-with a powerful base API, based on [bootstrap-popover-picker](http://mjolnic.github.io/bootstrap-popover-picker/)
+with a powerful base API, based on [bootstrap-popover-picker](https://itsjavi.com/bootstrap-popover-picker/)
 
 You can use Font Awesome or another font icon set of your choice (icon list is totally customizable).
 
-[View demos](http://mjolnic.github.io/fontawesome-iconpicker/)
+[View demos](https://itsjavi.com/fontawesome-iconpicker/)
 
 ## Instantiation
 

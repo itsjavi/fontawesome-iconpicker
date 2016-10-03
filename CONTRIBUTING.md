@@ -2,7 +2,7 @@
 For feature requests, suggestions or ideas, add `[SUGGESTION]` before the title of the issue, for anything else follow the following guidelines.
 
 ### Guidelines
-- Try to reproduce your problem in a separated environment, like in JSFiddle, [here is a template for it](http://jsfiddle.net/mjolnic/6aLndfgq/), that you can fork in the same page.
+- Try to reproduce your problem in a separated environment, like in JSFiddle, [here is a template for it](http://jsfiddle.net/itsjavi/6aLndfgq/), that you can fork in the same page.
 - Before posting your issue, consider adding this information:
   * Expected behaviour: what should happen?
   * Actual behaviour: what happens instead?

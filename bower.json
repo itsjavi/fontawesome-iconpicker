@@ -1,6 +1,6 @@
 {
     "name": "fontawesome-iconpicker",
-    "version": "1.2.0",
+    "version": "1.2.2",
     "main": [
         "dist/css/fontawesome-iconpicker.css",
         "dist/css/fontawesome-iconpicker.min.css",
@@ -8,7 +8,7 @@
         "dist/js/fontawesome-iconpicker.min.js"
     ],
     "dependencies": {
-        "jquery": "1.10 - 3",
+        "jquery": ">=1.10",
         "bootstrap": "^3"
     },
     "ignore": [

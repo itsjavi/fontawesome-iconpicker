@@ -534,10 +534,12 @@
                 return false;
             };
             for (var d in this.options.icons) {
-                var e = a(this.options.templates.iconpickerItem);
-                e.find("i").addClass(this.options.fullClassFormatter(this.options.icons[d]));
-                e.data("iconpickerValue", this.options.icons[d]).on("click.iconpicker", c);
-                this.iconpicker.find(".iconpicker-items").append(e.attr("title", "." + this.options.icons[d]));
+                if (typeof this.options.icons[d] === "string") {
+                    var e = a(this.options.templates.iconpickerItem);
+                    e.find("i").addClass(this.options.fullClassFormatter(this.options.icons[d]));
+                    e.data("iconpickerValue", this.options.icons[d]).on("click.iconpicker", c);
+                    this.iconpicker.find(".iconpicker-items").append(e.attr("title", "." + this.options.icons[d]));
+                }
             }
             this.popover.find(".popover-content").append(this.iconpicker);
             return this.iconpicker;

@@ -243,13 +243,15 @@
                 };
 
                 for (var i in this.options.icons) {
-                    var itemElement = $(this.options.templates.iconpickerItem);
-                    itemElement.find('i')
-                        .addClass(this.options.fullClassFormatter(this.options.icons[i]));
-                    itemElement.data('iconpickerValue', this.options.icons[i])
-                        .on('click.iconpicker', itemClickFn);
-                    this.iconpicker.find('.iconpicker-items').append(itemElement
-                        .attr('title', '.' + this.options.icons[i]));
+                    if (typeof this.options.icons[i] === 'string') {
+                        var itemElement = $(this.options.templates.iconpickerItem);
+                        itemElement.find('i')
+                            .addClass(this.options.fullClassFormatter(this.options.icons[i]));
+                        itemElement.data('iconpickerValue', this.options.icons[i])
+                            .on('click.iconpicker', itemClickFn);
+                        this.iconpicker.find('.iconpicker-items').append(itemElement
+                            .attr('title', '.' + this.options.icons[i]));
+                    }
                 }
 
                 this.popover.find('.popover-content').append(this.iconpicker);

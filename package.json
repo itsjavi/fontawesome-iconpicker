@@ -7,6 +7,7 @@
         "type": "git",
         "url": "git@github.com:itsjavi/fontawesome-iconpicker.git"
     },
+    "main": "dist/js/fontawesome-iconpicker.js",
     "bugs": {
         "url": "https://github.com/itsjavi/fontawesome-iconpicker/issues"
     },

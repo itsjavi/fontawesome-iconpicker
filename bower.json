@@ -1,6 +1,5 @@
 {
     "name": "fontawesome-iconpicker",
-    "version": "1.2.2",
     "main": [
         "dist/css/fontawesome-iconpicker.css",
         "dist/css/fontawesome-iconpicker.min.css",

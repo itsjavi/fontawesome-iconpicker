@@ -73,5 +73,5 @@ $(function () {
                 '<br>' + '<small>&lt;i class="fa ' + e.iconpickerValue + '"&gt;&lt;/i&gt;</small>');
         _selectText(_txt.find('small').get(0));
     }).data('iconpicker');
-    getRemoteCssRules('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+    getRemoteCssRules('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 });

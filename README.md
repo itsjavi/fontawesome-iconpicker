@@ -6,7 +6,7 @@ with a powerful base API, based on [bootstrap-popover-picker](https://itsjavi.co
 
 You can use Font Awesome or another font icon set of your choice (icon list is totally customizable).
 
-[View demos](https://itsjavi.com/fontawesome-iconpicker/)
+[View demos](https://farbelous.github.io/fontawesome-iconpicker/)
 
 ## Instantiation
 

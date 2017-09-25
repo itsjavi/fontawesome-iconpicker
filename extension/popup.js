@@ -52,7 +52,7 @@ function getRemoteCssRules(stylesheet_uri) {
 }
 
 $(function () {
-    $('.iconpicker').iconpicker({
+    $('.iconpicker').html('').iconpicker({
         showFooter: true,
         templates: {
             buttons: '<div></div>',

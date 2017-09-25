@@ -116,13 +116,3 @@ var defaults = {
     }
 };
 ```
-
-## TO-DO
-- [x] Support other icon fonts
-- [x] Fix: input marked as error when it is empty
-- [x] Add role=button to each item, for making them tabbable
-- [x] Ability to use the user input as the filter instead of the popover input
-- [x] Fix bottomRight position when using component mode
-- [x] Better dropdown compatibility
-- [x] Ability to mix various class prefixes and use a customizable class formatter function
-- [ ] ~~Ability to select and copy the icon character (the would need to be hardcoded in js)~~ (Use the chrome extension)

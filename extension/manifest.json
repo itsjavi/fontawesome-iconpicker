@@ -13,5 +13,5 @@
     "default_popup": "popup.html"
   },
   "permissions": [],
-  "content_security_policy":"script-src 'self' https://netdna.bootstrapcdn.com https://code.jquery.com https://itsjavi.com; object-src 'self'"
+  "content_security_policy":"script-src 'self' https://netdna.bootstrapcdn.com https://code.jquery.com https://farbelous.github.io; object-src 'self'"
 }

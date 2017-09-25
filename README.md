@@ -2,7 +2,7 @@ fontawesome-iconpicker
 ========================
 
 Font Awesome Icon Picker is a fully customizable plugin for Twitter Bootstrap,
-with a powerful base API, based on [bootstrap-popover-picker](https://itsjavi.com/bootstrap-popover-picker/)
+with a powerful base API, based on [bootstrap-popover-picker](https://farbelous.github.io/bootstrap-popover-picker/)
 
 You can use Font Awesome or another font icon set of your choice (icon list is totally customizable).
 
@@ -59,7 +59,7 @@ Here are all the possibilities in detail:
             F       7
             E       8
             D C B A 9
-            
+
     0.      inline (no placement, display as inline-block)
     1.      topLeftCorner
     2.      topLeft

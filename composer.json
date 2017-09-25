@@ -8,11 +8,11 @@
     "popover",
     "picker"
   ],
-  "homepage": "https://itsjavi.com/fontawesome-iconpicker/",
+  "homepage": "https://farbelous.github.io/fontawesome-iconpicker/",
   "minimum-stability": "stable",
   "repositories": [{
     "type": "vcs",
-    "url": "https://github.com/itsjavi/fontawesome-iconpicker"
+    "url": "https://github.com/farbelous/fontawesome-iconpicker"
   }],
   "license": "MIT",
   "authors": [
@@ -22,7 +22,7 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/itsjavi/fontawesome-iconpicker/issues",
-    "source": "https://github.com/itsjavi/fontawesome-iconpicker"
+    "issues": "https://github.com/farbelous/fontawesome-iconpicker/issues",
+    "source": "https://github.com/farbelous/fontawesome-iconpicker"
   }
 }

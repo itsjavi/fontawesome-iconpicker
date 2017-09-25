@@ -1,10 +1,10 @@
 /*!
  * Font Awesome Icon Picker
- * https://itsjavi.com/fontawesome-iconpicker/
+ * https://farbelous.github.io/fontawesome-iconpicker/
  *
  * Originally written by (c) 2016 Javi Aguilar
  * Licensed under the MIT License
- * https://github.com/itsjavi/fontawesome-iconpicker/blob/master/LICENSE
+ * https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
  *
  */
 
@@ -70,7 +70,7 @@
                 this.options.placement = 'inline';
             }
 
-            // Is the element an input? Should we search inside for any input?     
+            // Is the element an input? Should we search inside for any input?
             this.input = (this.element.is('input,textarea') ? this.element.addClass('iconpicker-input') : false);
             if (this.input === false) {
                 this.input = (this.container.find(this.options.input));
@@ -384,7 +384,7 @@
                     my: "right top",
                     // of: Which element to position against.
                     of: (this.hasInput() && !this.isInputGroup()) ? this.input : this.container,
-                    // collision: When the positioned element overflows the window (or within element) 
+                    // collision: When the positioned element overflows the window (or within element)
                     // in some direction, move it to an alternative position.
                     collision: (collision === true ? 'flip' : collision),
                     // within: Element to position within, affecting collision detection.

@@ -35,6 +35,7 @@
   text-align: left;
   width: 216px;
   background: #f7f7f7;
+  z-index: 9;
 }
 .iconpicker-popover.popover.top,
 .iconpicker-popover.popover.topLeftCorner,
@@ -322,6 +323,7 @@
 .iconpicker .iconpicker-item.iconpicker-selected {
   box-shadow: none;
   color: #fff;
+  background: #000;
 }
 .iconpicker-component {
   cursor: pointer;

@@ -49,6 +49,13 @@ In order of call:
 * iconpickerDestroy
 * iconpickerDestroyed
 
+```javascript
+// Bind iconpicker events to the element
+$('.my').on('iconpickerSelected', function(event){
+  /* event.iconpickerValue */
+});
+```
+
 ## Popover placement extensions
 
 This plugin comes with more placement options than the original Bootstrap Popover.

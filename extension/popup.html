@@ -2,10 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Font Awesome Icon Picker</title>
+    <title>Font Awesome Icon Picker 2.0</title>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://farbelous.github.io/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css" rel="stylesheet">
+    <link id="fa_stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+    <link href="https://farbelous.github.io/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css"
+          rel="stylesheet">
     <style>
         html, body {
             height: auto;
@@ -29,7 +30,7 @@
         }
 
         .popover.iconpicker-popover .iconpicker-items {
-            max-height: 165px !important;
+            max-height: 245px !important;
         / / each row is 55 px more
         }
 
@@ -39,27 +40,49 @@
         }
 
         .popover .popover-footer .icn {
-            margin: 20px 0 20px 0;
+            font-size: 32px;
+            margin: 10px 0 5px 0;
         }
 
         .popover .popover-footer .txt {
             font-size: 16px;
             font-weight: bold;
-            margin-bottom: 20px;
         }
 
         .popover .popover-footer .txt small {
             display: block;
             font-size: 12px;
             font-weight: normal;
+            margin-top: 10px;
+        }
+
+        .templates {
+            display: none;
+        }
+
+        #subfooter {
+            font-size: 12px;
             margin-top: 20px;
+            padding: 19px 0 10px 0;
+            border-top: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
 
 <div class="iconpicker" data-title="Font Awesome Icon Picker" data-placement="inline">
-  <div class="well" style="text-align:center; margin:0; padding:20px 15px 5px 15px;">Rendering...</div>
+    <div class="well" style="text-align:center; margin:0; padding:20px 15px 5px 15px;">Loading assets...</div>
+</div>
+<div class="templates">
+    <div id="subfooter">
+        Font Awesome Icon Picker
+        <br>
+        <a href="https://github.com/farbelous/fontawesome-iconpicker" target="_blank">
+            <i class="fab fa-github"></i> v2.0
+        </a> (FA v5.0)
+        <br>
+        by <a href="https://github.com/itsjavi" target="_blank">@itsjavi</a>
+    </div>
 </div>
 
 <!--

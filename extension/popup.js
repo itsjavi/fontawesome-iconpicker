@@ -7,7 +7,10 @@
  * https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
  *
  */
-var FA_CSS_RULES = null;
+var FA_CSS_URL = 'https://use.fontawesome.com/releases/v5.0.8/css/all.css';
+var FA_CSS_CLASSES = {};
+var FA_CACHING_TIME = 7 * 24 * 3600 * 1000; // Cache for 7 days
+
 function _selectText(element) {
     var doc = window.document, range = null;
 
@@ -23,55 +26,95 @@ function _selectText(element) {
         selection.addRange(range);
     }
 }
-function _getStyleRuleValue(style, selector) {
-    for (var j = 0, k = FA_CSS_RULES.length; j < k; j++) {
-        var rule = FA_CSS_RULES[j];
-        if (rule.selectorText) {
-            var ruleSplit = rule.selectorText.replace(/ /g, '').split(',');
-            if (ruleSplit.length > 1) {
-                //console.log(ruleSplit);
-            }
+
+function _loadCssRules(stylesheet_uri, callback) {
+    var readyCallback = function (faClasses) {
+        $(function () {
+            callback(faClasses);
+        });
+    };
+
+    chrome.storage.local.get(['faClasses', 'faClassesCacheTime'], function (items) {
+        if (
+            items.faClasses
+            && items.faClassesCacheTime
+            && (items.faClassesCacheTime > Date.now() - FA_CACHING_TIME)
+        ) {
+            callback(items.faClasses);
         } else {
-            ruleSplit = [];
+            $.ajax(stylesheet_uri).done(function (data) {
+                var style_tag = document.createElement('style');
+                style_tag.id = 'fa_stylesheet_inline';
+                style_tag.appendChild(document.createTextNode(data));
+
+                $(style_tag).insertBefore('#fa_stylesheet');
+                FA_CSS_CLASSES = _parseCssRules(document.styleSheets[1].rules);
+
+                $('#fa_stylesheet_inline').remove();
+
+                // Store parsed classes locally, so they won't need to be fetched every time the plugin is opened
+                chrome.storage.local.set({faClasses: FA_CSS_CLASSES, faClassesCacheTime: Date.now()}, function () {
+                });
+                readyCallback(FA_CSS_CLASSES);
+            });
         }
-        if (rule.selectorText && ruleSplit.indexOf(selector) !== -1) {
-            return rule.style[style];
-        }
-    }
-    return null;
-}
-function getRemoteCssRules(stylesheet_uri) {
-    $.ajax(stylesheet_uri).done(function (data) {
-        var style_tag = document.createElement('style');
-        style_tag.id = 'temp_fa_sheet';
-        style_tag.appendChild(document.createTextNode(data));
-        document.head.appendChild(style_tag);
-        FA_CSS_RULES = document.styleSheets[4].cssRules;
-        $('#temp_fa_sheet').remove();
     });
 }
 
+function _parseCssRules(cssRules) {
+    var parsedRules = {};
+    for (var j = 0, k = cssRules.length; j < k; j++) {
+        var rule = cssRules[j], cssClasses = [];
+
+        if (
+            rule['selectorText']
+            && rule['style']
+            && rule.style['content']
+        ) {
+            cssClasses = rule.selectorText.replace(/ /g, '').replace(/\./g, '').split(',');
+            cssClasses.forEach(
+                function (className) {
+                    parsedRules[className] = rule.style.content ? rule.style.content.replace(/"/g, '') : '';
+                }
+            );
+        }
+    }
+    return parsedRules;
+}
+
 $(function () {
-    $('.iconpicker').html('').iconpicker({
-        showFooter: true,
-        templates: {
-            buttons: '<div></div>',
-            search: '<input type="search" class="form-control iconpicker-search" placeholder="Type to filter" />',
-            footer: '<div class="popover-footer"><p class="icn"><i class="fa fa-3x fa-fw"></i></p><p class="txt"></p></div>'
-        }
-    }).on('iconpickerSelected iconpickerUpdated', function (e) {
-        if (!e.iconpickerValue) {
-            return;
-        }
-        var $footer = e.iconpickerInstance.popover.find('.popover-footer').show();
-        console.log(e.iconpickerValue);
-        var _icnChar = _getStyleRuleValue('content', '.' + e.iconpickerValue + '::before');
-        console.log(_icnChar);
-        $footer.find('.icn .fa').html(_icnChar.replace(/"/g, ''));
-        var _txt = $footer.find('.txt')
-            .html(e.iconpickerValue +
-                '<br>' + '<small>&lt;i class="fa ' + e.iconpickerValue + '"&gt;&lt;/i&gt;</small>');
-        _selectText(_txt.find('small').get(0));
-    }).data('iconpicker');
-    getRemoteCssRules('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+    _loadCssRules(FA_CSS_URL, function (cssClasses) {
+        $('.iconpicker').html('').iconpicker({
+            showFooter: true,
+            templates: {
+                buttons: '<div></div>',
+                search: '<input type="search" class="form-control iconpicker-search" placeholder="Type to filter" />',
+                footer: '<div class="popover-footer"><p class="icn"><i class="icn-inner"></i></p><p class="txt"></p></div>'
+            }
+        }).on('iconpickerSelected iconpickerUpdated', function (e) {
+            if (!e.iconpickerValue) {
+                return;
+            }
+            var fontFamily = e.iconpickerValue.match(/fab /) ? 'Font Awesome\\ 5 Brands' : 'Font Awesome\\ 5 Free';
+            var $footer = e.iconpickerInstance.popover.find('.popover-footer').show();
+            var cssClassParts = e.iconpickerValue.split(' ');
+            var cssClass = cssClassParts.pop();
+            var glyphChar = cssClasses[cssClass + '::before'] ? cssClasses[cssClass + '::before'] :
+                (cssClasses[cssClass + ':before'] ? cssClasses[cssClass + ':before'] : '??');
+
+            $footer.find('.icn-inner')
+                .html(glyphChar)
+                .attr('style', 'font-family: ' + fontFamily)
+                .attr('class', 'icn-inner ' + cssClassParts.join(' '))
+            ;
+            var _txt = $footer.find('.txt')
+                .html(e.iconpickerValue +
+                    '<small>&lt;i class="' + e.iconpickerValue + '"&gt;&lt;/i&gt;</small>');
+            _selectText(_txt.find('small').get(0));
+        });
+
+        $(function () {
+            $('.iconpicker .popover-footer').append($('#subfooter'));
+        });
+    });
 });

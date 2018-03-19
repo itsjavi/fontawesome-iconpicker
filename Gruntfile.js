@@ -1,6 +1,63 @@
 'use strict';
 module.exports = function(grunt) {
+    const parsedIconPicker = 'prod/src/js/iconpicker.js';
+    const tempIconsFile = '.icons.temp';
     grunt.initConfig({
+        download: {
+            somefile: {
+                src: ['https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.0.8/advanced-options/metadata/icons.yml'],
+                dest: tempIconsFile
+            },
+        },
+        yaml: {
+            getIcons: {
+                options: {
+                    space: 2,
+                    disableDest: true,
+                    middleware: function(response, sourceJSON, src, dest) {
+                        let targetJSON = {
+                            icons: []
+                        };
+                        sourceJSON = JSON.parse(sourceJSON);
+                        Object.keys(sourceJSON).forEach(function(key) {
+                            let ele = sourceJSON[key];
+                            let icon = 'fa-' + key;
+                            ele.styles.forEach(function(style) {
+                                style = style.toLowerCase();
+                                if (style.startsWith('brand')) {
+                                    targetJSON.icons.push('fab ' + icon);
+                                } else if (style.startsWith('solid')) {
+                                    targetJSON.icons.push('fas ' + icon);
+                                } else if (style.startsWith('regular')) {
+                                    targetJSON.icons.push('far ' + icon);
+                                } else if (style.startsWith('light')) {
+                                    targetJSON.icons.push('fal ' + icon);
+                                }
+                            });
+                        });
+                        grunt.file.write(dest, JSON.stringify(targetJSON));
+                    }
+                },
+                files: [{
+                    expand: false,
+                    src: [tempIconsFile],
+                    dest: tempIconsFile
+                }]
+            },
+        },
+        'string-replace': {
+            dist: {
+                files: {
+                    'prod/': ['src/js/iconpicker.js'],
+                },
+                options: {
+                    replacements: [{
+                        pattern: '//###REPLACE-WITH-FONT-AWESOME-5-FONTS###',
+                        replacement: "<%= grunt.file.read('" + tempIconsFile + "') %>"
+                    }]
+                }
+            }
+        },
         less: {
             dist: {
                 options: {
@@ -26,7 +83,7 @@ module.exports = function(grunt) {
             }
         },
         jsbeautifier: {
-            files: ['Gruntfile.js', 'src/js/*.js']
+            files: ['Gruntfile.js', 'src/js/*.js', parsedIconPicker]
         },
         uglify: {
             distMin: {
@@ -37,7 +94,7 @@ module.exports = function(grunt) {
                 files: {
                     'dist/js/fontawesome-iconpicker.min.js': [
                         'src/js/jquery.ui.pos.js',
-                        'src/js/iconpicker.js'
+                        parsedIconPicker
                     ]
                 }
             },
@@ -49,7 +106,7 @@ module.exports = function(grunt) {
                 files: {
                     'dist/js/fontawesome-iconpicker.js': [
                         'src/js/jquery.ui.pos.js',
-                        'src/js/iconpicker.js'
+                        parsedIconPicker
                     ]
                 }
             }
@@ -72,6 +129,10 @@ module.exports = function(grunt) {
             dist: [
                 'dist/css',
                 'dist/js/*.js'
+            ],
+            temp: [
+                tempIconsFile,
+                'prod/'
             ]
         }
     });
@@ -82,13 +143,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-jsbeautifier');
+    grunt.loadNpmTasks('grunt-yaml');
+    grunt.loadNpmTasks('grunt-http-download');
+    grunt.loadNpmTasks('grunt-string-replace');
 
     // Register tasks
     grunt.registerTask('default', [
-        'clean',
+        'download',
+        'yaml',
+        'string-replace',
+        'clean:dist',
         'less',
         'jsbeautifier',
-        'uglify'
+        'uglify',
+        'clean:temp'
     ]);
     grunt.registerTask('dev', [
         'watch'

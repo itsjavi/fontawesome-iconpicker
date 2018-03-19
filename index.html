@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <title>Font Awesome Icon Picker plugin for Bootstrap</title>
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+        <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
         <link href="dist/css/fontawesome-iconpicker.min.css" rel="stylesheet">
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
@@ -93,19 +94,19 @@ You can use Font Awesome or another font icon set of your choice (icon options a
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label>Default</label>
-                                <input class="form-control icp icp-auto" value="fa-anchor" type="text" />
+                                <input class="form-control icp icp-auto" value="fas fa-anchor" type="text" />
                             </div>
                             <div class="form-group">
                                 <label>As a component</label>
 
                                 <div class="input-group">
-                                    <input data-placement="bottomRight" class="form-control icp icp-auto" value="fa-archive" type="text" />
+                                    <input data-placement="bottomRight" class="form-control icp icp-auto" value="fas fa-archive" type="text" />
                                     <span class="input-group-addon"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>With the input as a search box</label>
-                                <input class="form-control icp icp-auto" data-input-search="true" value="fa-plane" type="text" />
+                                <input class="form-control icp icp-auto" data-input-search="true" value="fas fa-plane" type="text" />
                             </div>
                             <div class="form-group">
                                 <label>Inside dropdowns</label>
@@ -142,7 +143,7 @@ You can use Font Awesome or another font icon set of your choice (icon options a
 {
     //...
     title: 'With custom options',
-    icons: ['fa-github', 'fa-heart', 'fa-html5', 'fa-css3'],
+    icons: ['fab fa-github', 'fas fa-heart', 'fab fa-html5', 'fab fa-css3'],
     selectedCustomClass: 'label label-success',
     mustAccept:true,
     placement:'bottomRight',
@@ -213,6 +214,7 @@ You can use Font Awesome or another font icon set of your choice (icon options a
                     
                     $('.icp-glyphs').iconpicker({
                         title: 'Prepending glypghicons',
+                        // fontAwesome5: true,
                         icons: $.merge(['glyphicon-home', 'glyphicon-repeat', 'glyphicon-search',
                             'glyphicon-arrow-left', 'glyphicon-arrow-right', 'glyphicon-star'], $.iconpicker.defaultOptions.icons),
                         fullClassFormatter: function(val){
@@ -225,13 +227,14 @@ You can use Font Awesome or another font icon set of your choice (icon options a
                     });
                     $('.icp-opts').iconpicker({
                         title: 'With custom options',
-                        icons: ['fa-github', 'fa-heart', 'fa-html5', 'fa-css3'],
+                        icons: ['fab fa-github', 'fas fa-heart', 'fab fa-html5', 'fab fa-css3'],
                         selectedCustomClass: 'label label-success',
                         mustAccept: true,
                         placement: 'bottomRight',
                         showFooter: true,
                         // note that this is ignored cause we have an accept button:
                         hideOnSelect: true,
+                        // fontAwesome5: true,
                         templates: {
                             footer: '<div class="popover-footer">' +
                                     '<div style="text-align:left; font-size:12px;">Placements: \n\

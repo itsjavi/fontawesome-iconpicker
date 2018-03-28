@@ -1,6 +1,6 @@
 // Iconpicker variables:
-@item_size:14px;
-@hover_bg:#eee;
+@item_size: 14px;
+@hover_bg: #eee;
 @num_cols: 4;
 @num_rows: 5;
 @base_spacing: 12px;
@@ -16,29 +16,28 @@
 //##
 
 //** Popover body background color
-@popover-bg:                          #fff;
+@popover-bg: #fff;
 //** Popover maximum width
-@popover-max-width:                   276px;
+@popover-max-width: 276px;
 //** Popover border color
-@popover-border-color:                rgba(0,0,0,.2);
+@popover-border-color: rgba(0, 0, 0, .2);
 //** Popover fallback border color
-@popover-fallback-border-color:       #ccc;
+@popover-fallback-border-color: #ccc;
 
 //** Popover title background color
-@popover-title-bg:                    darken(@popover-bg, 3%);
+@popover-title-bg: darken(@popover-bg, 3%);
 
 //** Popover arrow width
-@popover-arrow-width:                 10px;
+@popover-arrow-width: 10px;
 //** Popover arrow color
-@popover-arrow-color:                 #fff;
+@popover-arrow-color: #fff;
 
 //** Popover outer arrow width
-@popover-arrow-outer-width:           (@popover-arrow-width + 1);
+@popover-arrow-outer-width: (@popover-arrow-width + 1);
 //** Popover outer arrow color
-@popover-arrow-outer-color:           fadein(@popover-border-color, 5%);
+@popover-arrow-outer-color: fadein(@popover-border-color, 5%);
 //** Popover outer arrow fallback color
-@popover-arrow-outer-fallback-color:  darken(@popover-fallback-border-color, 20%);
-
+@popover-arrow-outer-fallback-color: darken(@popover-fallback-border-color, 20%);
 
 // Clearfix
 //
@@ -53,53 +52,50 @@
 // Source: http://nicolasgallagher.com/micro-clearfix-hack/
 
 .clearfix() {
-    &:before,
-        &:after {
-        content: " "; // 1
-        display: table; // 2
-    }
-    &:after {
-        clear: both;
-    }
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
 }
 
-.outer-border(){
-    box-shadow: 0 0 0 1px @border_color;
+.outer-border() {
+  box-shadow: 0 0 0 1px @border_color;
 }
-
 
 //
 // Other Bootstrap Variables:
 // --------------------------------------------------
 
-
 //== Colors
 //
 //## Gray and brand colors for use across Bootstrap.
 
-@gray-darker:            lighten(#000, 13.5%); // #222
-@gray-dark:              lighten(#000, 20%);   // #333
-@gray:                   lighten(#000, 33.5%); // #555
-@gray-light:             lighten(#000, 60%);   // #999
-@gray-lighter:           lighten(#000, 93.5%); // #eee
+@gray-darker: lighten(#000, 13.5%); // #222
+@gray-dark: lighten(#000, 20%); // #333
+@gray: lighten(#000, 33.5%); // #555
+@gray-light: lighten(#000, 60%); // #999
+@gray-lighter: lighten(#000, 93.5%); // #eee
 
-@brand-primary:         #428bca;
-@brand-success:         #5cb85c;
-@brand-info:            #5bc0de;
-@brand-warning:         #f0ad4e;
-@brand-danger:          #d9534f;
-
+@brand-primary: #428bca;
+@brand-success: #5cb85c;
+@brand-info: #5bc0de;
+@brand-warning: #f0ad4e;
+@brand-danger: #d9534f;
 
 //== Scaffolding
 //
 // ## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-@body-bg:               #fff;
+@body-bg: #fff;
 //** Global text color on `<body>`.
-@text-color:            @gray-dark;
+@text-color: @gray-dark;
 
 //** Global textual link color.
-@link-color:            @brand-primary;
+@link-color: @brand-primary;
 //** Link hover color set via `darken()` function.
-@link-hover-color:      darken(@link-color, 15%);
+@link-hover-color: darken(@link-color, 15%);

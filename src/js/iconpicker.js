@@ -267,7 +267,7 @@
             },
             _isEventInsideIconpicker: function(e) {
                 var _t = $(e.target);
-                if ((!_t.hasClass('iconpicker-element')  ||
+                if ((!_t.hasClass('iconpicker-element') ||
                         (_t.hasClass('iconpicker-element') && !_t.is(this.element))) &&
                     (_t.parents('.iconpicker-popover').length === 0)) {
                     return false;
@@ -768,7 +768,7 @@
                 }
             },
             update: function(val, updateOnlyInternal) {
-                val = (val ? val :  this.getSourceValue(this.iconpickerValue));
+                val = (val ? val : this.getSourceValue(this.iconpickerValue));
                 // reads the input or element value again and tries to update the plugin
                 // fallback to the current selected item value
                 this._trigger('iconpickerUpdate', {

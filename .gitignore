@@ -13,3 +13,4 @@ static_server.js
 .idea/
 prod/
 .icons.temp
+/bower_components/

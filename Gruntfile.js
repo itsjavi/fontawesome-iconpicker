@@ -25,13 +25,25 @@ module.exports = function(grunt) {
                             ele.styles.forEach(function(style) {
                                 style = style.toLowerCase();
                                 if (style.startsWith('brand')) {
-                                    targetJSON.icons.push('fab ' + icon);
+                                    targetJSON.icons.push({
+                                        title: 'fab ' + icon,
+                                        searchTerms: ele.search.terms
+                                    });
                                 } else if (style.startsWith('solid')) {
-                                    targetJSON.icons.push('fas ' + icon);
+                                    targetJSON.icons.push({
+                                        title: 'fas ' + icon,
+                                        searchTerms: ele.search.terms
+                                    });
                                 } else if (style.startsWith('regular')) {
-                                    targetJSON.icons.push('far ' + icon);
+                                    targetJSON.icons.push({
+                                        title: 'far ' + icon,
+                                        searchTerms: ele.search.terms
+                                    });
                                 } else if (style.startsWith('light')) {
-                                    targetJSON.icons.push('fal ' + icon);
+                                    targetJSON.icons.push({
+                                        title: 'fal ' + icon,
+                                        searchTerms: ele.search.terms
+                                    });
                                 }
                             });
                         });

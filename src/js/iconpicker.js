@@ -242,14 +242,24 @@
                 };
 
                 for (var i in this.options.icons) {
-                    if (typeof this.options.icons[i] === 'string') {
+                    if (typeof this.options.icons[i].title === 'string') {
                         var itemElement = $(this.options.templates.iconpickerItem);
                         itemElement.find('i')
-                            .addClass(this.options.fullClassFormatter(this.options.icons[i]));
-                        itemElement.data('iconpickerValue', this.options.icons[i])
+                            .addClass(this.options.fullClassFormatter(this.options.icons[i].title));
+                        itemElement.data('iconpickerValue', this.options.icons[i].title)
                             .on('click.iconpicker', itemClickFn);
                         this.iconpicker.find('.iconpicker-items').append(itemElement
-                            .attr('title', '.' + this.options.icons[i]));
+                            .attr('title', '.' + this.options.icons[i].title));
+
+                        if (this.options.icons[i].searchTerms.length > 0) {
+                            var searchTerms = '';
+                            for (var j = 0; j < this.options.icons[i].searchTerms.length; j++) {
+                                searchTerms = searchTerms + this.options.icons[i].searchTerms[j] + ' ';
+                            }
+                            this.iconpicker.find('.iconpicker-items').append(itemElement
+                                .attr('data-search-terms', searchTerms));
+                        }
+
                     }
                 }
 
@@ -589,8 +599,15 @@
 
                 // trim string
                 val = $.trim(val);
+                var e = false;
+                for (var i = 0; i < this.options.icons.length; i++) {
+                    if (this.options.icons[i].title === val) {
+                        e = true;
+                        break;
+                    };
+                }
 
-                if (_helpers.inArray(val, this.options.icons) || isEmpty) {
+                if (e || isEmpty) {
                     return val;
                 }
                 return false;
@@ -696,9 +713,11 @@
                     this.iconpicker.find('.iconpicker-item').each(function() {
                         var $this = $(this);
                         var text = $this.attr('title').toLowerCase();
+                        var searchTerms = $this.attr('data-search-terms') ? $this.attr('data-search-terms').toLowerCase() : '';
+                        text = text + ' ' + searchTerms;
                         var regex = false;
                         try {
-                            regex = new RegExp(filterText, 'g');
+                            regex = new RegExp('(^|\\W)' + filterText, 'g');
                         } catch (e) {
                             regex = false;
                         }

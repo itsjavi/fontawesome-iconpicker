@@ -46,7 +46,9 @@
         var Iconpicker = function(element, options) {
             this._id = Iconpicker._idCounter++;
             this.element = $(element).addClass('iconpicker-element');
-            this._trigger('iconpickerCreate');
+            this._trigger('iconpickerCreate', {
+                iconpickerValue: this.iconpickerValue
+            });
             this.options = $.extend({}, Iconpicker.defaultOptions, this.element.data(), options);
             this.options.templates = $.extend({}, Iconpicker.defaultOptions.templates, this.options.templates);
             this.options.originalPlacement = this.options.placement;
@@ -109,7 +111,9 @@
                 this.show();
             }
 
-            this._trigger('iconpickerCreated');
+            this._trigger('iconpickerCreated', {
+                iconpickerValue: this.iconpickerValue
+            });
         };
 
         // Instance identifier counter
@@ -727,25 +731,33 @@
                 // hide other non-inline pickers
                 $.iconpicker.batch($('.iconpicker-popover.in:not(.inline)').not(this.popover), 'hide');
 
-                this._trigger('iconpickerShow');
+                this._trigger('iconpickerShow', {
+                    iconpickerValue: this.iconpickerValue
+                });
                 this.updatePlacement();
                 this.popover.addClass('in');
                 setTimeout($.proxy(function() {
                     this.popover.css('display', this.isInline() ? '' : 'block');
-                    this._trigger('iconpickerShown');
+                    this._trigger('iconpickerShown', {
+                        iconpickerValue: this.iconpickerValue
+                    });
                 }, this), this.options.animation ? 300 : 1); // animation duration
             },
             hide: function() {
                 if (!this.popover.hasClass('in')) {
                     return false;
                 }
-                this._trigger('iconpickerHide');
+                this._trigger('iconpickerHide', {
+                    iconpickerValue: this.iconpickerValue
+                });
                 this.popover.removeClass('in');
                 setTimeout($.proxy(function() {
                     this.popover.css('display', 'none');
                     this.getSearchInput().val('');
                     this.filter(''); // clear filter
-                    this._trigger('iconpickerHidden');
+                    this._trigger('iconpickerHidden', {
+                        iconpickerValue: this.iconpickerValue
+                    });
                 }, this), this.options.animation ? 300 : 1);
             },
             toggle: function() {
@@ -759,7 +771,9 @@
                 val = (val ? val :  this.getSourceValue(this.iconpickerValue));
                 // reads the input or element value again and tries to update the plugin
                 // fallback to the current selected item value
-                this._trigger('iconpickerUpdate');
+                this._trigger('iconpickerUpdate', {
+                    iconpickerValue: this.iconpickerValue
+                });
 
                 if (updateOnlyInternal === true) {
                     val = this.setValue(val);
@@ -772,11 +786,15 @@
                     this._updateComponents();
                 }
 
-                this._trigger('iconpickerUpdated');
+                this._trigger('iconpickerUpdated', {
+                    iconpickerValue: this.iconpickerValue
+                });
                 return val;
             },
             destroy: function() {
-                this._trigger('iconpickerDestroy');
+                this._trigger('iconpickerDestroy', {
+                    iconpickerValue: this.iconpickerValue
+                });
 
                 // unbinds events and resets everything to the initial state,
                 // including component mode
@@ -787,7 +805,9 @@
 
                 $(this.popover).remove();
 
-                this._trigger('iconpickerDestroyed');
+                this._trigger('iconpickerDestroyed', {
+                    iconpickerValue: this.iconpickerValue
+                });
             },
             disable: function() {
                 if (this.hasInput()) {

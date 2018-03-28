@@ -406,7 +406,9 @@
     var c = function(d, e) {
         this._id = c._idCounter++;
         this.element = a(d).addClass("iconpicker-element");
-        this._trigger("iconpickerCreate");
+        this._trigger("iconpickerCreate", {
+            iconpickerValue: this.iconpickerValue
+        });
         this.options = a.extend({}, c.defaultOptions, this.element.data(), e);
         this.options.templates = a.extend({}, c.defaultOptions.templates, this.options.templates);
         this.options.originalPlacement = this.options.placement;
@@ -451,7 +453,9 @@
         if (this.isInline()) {
             this.show();
         }
-        this._trigger("iconpickerCreated");
+        this._trigger("iconpickerCreated", {
+            iconpickerValue: this.iconpickerValue
+        });
     };
     c._idCounter = 0;
     c.defaultOptions = {
@@ -964,25 +968,33 @@
                 return false;
             }
             a.iconpicker.batch(a(".iconpicker-popover.in:not(.inline)").not(this.popover), "hide");
-            this._trigger("iconpickerShow");
+            this._trigger("iconpickerShow", {
+                iconpickerValue: this.iconpickerValue
+            });
             this.updatePlacement();
             this.popover.addClass("in");
             setTimeout(a.proxy(function() {
                 this.popover.css("display", this.isInline() ? "" : "block");
-                this._trigger("iconpickerShown");
+                this._trigger("iconpickerShown", {
+                    iconpickerValue: this.iconpickerValue
+                });
             }, this), this.options.animation ? 300 : 1);
         },
         hide: function() {
             if (!this.popover.hasClass("in")) {
                 return false;
             }
-            this._trigger("iconpickerHide");
+            this._trigger("iconpickerHide", {
+                iconpickerValue: this.iconpickerValue
+            });
             this.popover.removeClass("in");
             setTimeout(a.proxy(function() {
                 this.popover.css("display", "none");
                 this.getSearchInput().val("");
                 this.filter("");
-                this._trigger("iconpickerHidden");
+                this._trigger("iconpickerHidden", {
+                    iconpickerValue: this.iconpickerValue
+                });
             }, this), this.options.animation ? 300 : 1);
         },
         toggle: function() {
@@ -994,7 +1006,9 @@
         },
         update: function(a, b) {
             a = a ? a : this.getSourceValue(this.iconpickerValue);
-            this._trigger("iconpickerUpdate");
+            this._trigger("iconpickerUpdate", {
+                iconpickerValue: this.iconpickerValue
+            });
             if (b === true) {
                 a = this.setValue(a);
             } else {
@@ -1004,16 +1018,22 @@
             if (a !== false) {
                 this._updateComponents();
             }
-            this._trigger("iconpickerUpdated");
+            this._trigger("iconpickerUpdated", {
+                iconpickerValue: this.iconpickerValue
+            });
             return a;
         },
         destroy: function() {
-            this._trigger("iconpickerDestroy");
+            this._trigger("iconpickerDestroy", {
+                iconpickerValue: this.iconpickerValue
+            });
             this.element.removeData("iconpicker").removeData("iconpickerValue").removeClass("iconpicker-element");
             this._unbindElementEvents();
             this._unbindWindowEvents();
             a(this.popover).remove();
-            this._trigger("iconpickerDestroyed");
+            this._trigger("iconpickerDestroyed", {
+                iconpickerValue: this.iconpickerValue
+            });
         },
         disable: function() {
             if (this.hasInput()) {

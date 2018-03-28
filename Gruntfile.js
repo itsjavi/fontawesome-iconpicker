@@ -101,10 +101,12 @@ module.exports = function(grunt) {
             distMin: {
                 options: {
                     compress: {},
-                    beautify: false
+                    beautify: false,
+                    preserveComments: 'some'
                 },
                 files: {
                     'dist/js/fontawesome-iconpicker.min.js': [
+                        'src/js/license.js',
                         'src/js/jquery.ui.pos.js',
                         parsedIconPicker
                     ]
@@ -113,10 +115,12 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     compress: false,
-                    beautify: true
+                    beautify: true,
+                    preserveComments: 'some'
                 },
                 files: {
                     'dist/js/fontawesome-iconpicker.js': [
+                        'src/js/license.js',
                         'src/js/jquery.ui.pos.js',
                         parsedIconPicker
                     ]

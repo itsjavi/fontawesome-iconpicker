@@ -7,24 +7,6 @@
  * https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
  *
  */
-/*
- * Font Awesome Icon Picker
- * https://farbelous.github.io/fontawesome-iconpicker/
- *
- * Originally written by (c) 2016 Javi Aguilar
- * Licensed under the MIT License
- * https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
- *
- */
-/*
- * Font Awesome Icon Picker
- * https://farbelous.github.io/fontawesome-iconpicker/
- *
- * Originally written by (c) 2016 Javi Aguilar
- * Licensed under the MIT License
- * https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
- *
- */
 .iconpicker-popover.popover {
   position: absolute;
   top: 0;
@@ -33,7 +15,7 @@
   max-width: none;
   padding: 1px;
   text-align: left;
-  width: 216px;
+  width: 234px;
   background: #f7f7f7;
   z-index: 9;
 }

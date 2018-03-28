@@ -1,3 +1,12 @@
+/*!
+ * Font Awesome Icon Picker
+ * https://farbelous.github.io/fontawesome-iconpicker/
+ *
+ * Originally written by (c) 2016 Javi Aguilar
+ * Licensed under the MIT License
+ * https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
+ *
+ */
 (function(a) {
     if (typeof define === "function" && define.amd) {
         define([ "jquery" ], a);
@@ -7,6 +16,16 @@
 })(function(a) {
     a.ui = a.ui || {};
     var b = a.ui.version = "1.12.1";
+    /*!
+     * jQuery UI Position 1.12.1
+     * http://jqueryui.com
+     *
+     * Copyright jQuery Foundation and other contributors
+     * Released under the MIT license.
+     * http://jquery.org/license
+     *
+     * http://api.jqueryui.com/position/
+     */
     (function() {
         var b, c = Math.max, d = Math.abs, e = /left|center|right/, f = /top|center|bottom/, g = /[\+\-]\d+(\.[\d]+)?%?/, h = /^\w+/, i = /%$/, j = a.fn.pos;
         function k(a, b, c) {
@@ -401,8 +420,6 @@
         }
         this.container.addClass("iconpicker-container");
         if (this.isDropdownMenu()) {
-            this.options.templates.search = false;
-            this.options.templates.buttons = false;
             this.options.placement = "inline";
         }
         this.input = this.element.is("input,textarea") ? this.element.addClass("iconpicker-input") : false;
@@ -536,8 +553,6 @@
                 if (b.options.hideOnSelect && b.options.mustAccept === false) {
                     b.hide();
                 }
-                c.preventDefault();
-                return false;
             };
             for (var d in this.options.icons) {
                 if (typeof this.options.icons[d].title === "string") {
@@ -621,12 +636,8 @@
                     if (!c._isEventInsideIconpicker(a) && !c.isInline()) {
                         c.hide();
                     }
-                    a.stopPropagation();
-                    a.preventDefault();
-                    return false;
                 });
             }
-            return false;
         },
         _unbindElementEvents: function() {
             this.popover.off(".iconpicker");

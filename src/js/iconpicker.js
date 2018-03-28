@@ -1,4 +1,4 @@
-/*!
+/*
  * Font Awesome Icon Picker
  * https://farbelous.github.io/fontawesome-iconpicker/
  *
@@ -62,10 +62,6 @@
             this.container.addClass('iconpicker-container');
 
             if (this.isDropdownMenu()) {
-                // if you try to click the dropdown, it is closed, because of that
-                // we'll hide some picker controls
-                this.options.templates.search = false;
-                this.options.templates.buttons = false;
                 this.options.placement = 'inline';
             }
 
@@ -237,8 +233,6 @@
                         // only hide when the accept button is not present
                         _self.hide();
                     }
-                    e.preventDefault();
-                    return false;
                 };
 
                 for (var i in this.options.icons) {
@@ -349,13 +343,8 @@
                         if (!_self._isEventInsideIconpicker(e) && !_self.isInline()) {
                             _self.hide();
                         }
-                        e.stopPropagation();
-                        e.preventDefault();
-                        return false;
                     });
                 }
-
-                return false;
             },
             _unbindElementEvents: function() {
                 this.popover.off('.iconpicker');
@@ -839,5 +828,8 @@
         };
 
         // List of all Font Awesome icons without class prefix
-        Iconpicker.defaultOptions = $.extend(Iconpicker.defaultOptions, //###REPLACE-WITH-FONT-AWESOME-5-FONTS###);
-        }));
+        Iconpicker.defaultOptions = $.extend(
+            Iconpicker.defaultOptions,
+            //###REPLACE-WITH-FONT-AWESOME-5-FONTS###
+        );
+    }));

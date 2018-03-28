@@ -7,10 +7,10 @@ Thumbs.db
 /ignore/
 /ignored/
 /node_modules/
+/bower_components/
 /nbproject/
 static_server.js
 *.php
 .idea/
 prod/
 .icons.temp
-/bower_components/

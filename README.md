@@ -89,7 +89,7 @@ Here are all the possibilities in detail:
 ## Available options
 
 ```javascript
-var defaults = {
+var options = {
     title: false, // Popover title (optional) only if specified in the template
     selected: false, // use this value as the current item and ignore the original
     defaultValue: false, // use this value as the current item if input or element value is empty
@@ -102,7 +102,7 @@ var defaults = {
     searchInFooter: false, // If true, the search will be added to the footer instead of the title
     mustAccept: false, // only applicable when there's an iconpicker-btn-accept button in the popover footer
     selectedCustomClass: 'bg-primary', // Appends this class when to the selected item
-    icons: [], // list of icon classes (declared at the bottom of this script for maintainability)
+    icons: [], // list of icon objects [{title:String, searchTerms:String}]. By default, all Font Awesome icons are included.
     fullClassFormatter: function(val) {
         return 'fa ' + val;
     },

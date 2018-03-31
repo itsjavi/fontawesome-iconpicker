@@ -12,5 +12,5 @@
     "default_popup": "popup.html"
   },
   "permissions": [ "storage" ],
-  "content_security_policy": "script-src 'self' https://netdna.bootstrapcdn.com https://use.fontawesome.com https://code.jquery.com https://farbelous.github.io; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://netdna.bootstrapcdn.com https://use.fontawesome.com https://code.jquery.com https://farbelous.github.io https://farbelous.io; object-src 'self'"
 }

@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Font Awesome Icon Picker 2.0</title>
+    <title>Font Awesome Icon Picker</title>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link id="fa_stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
-    <link href="https://farbelous.github.io/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css"
+    <link href="https://cdn.rawgit.com/farbelous/fontawesome-iconpicker/3.0.0/dist/css/fontawesome-iconpicker.css"
           rel="stylesheet">
     <style>
         html, body {
@@ -36,7 +36,7 @@
 
         .popover .popover-footer {
             text-align: center;
-            display: none;
+            /*display: none;*/
         }
 
         .popover .popover-footer .icn {
@@ -70,18 +70,18 @@
 </head>
 <body>
 
-<div class="iconpicker" data-title="Font Awesome Icon Picker" data-placement="inline">
+<div class="iconpicker" data-title="Font Awesome Icon Picker v2.0.2" data-placement="inline">
     <div class="well" style="text-align:center; margin:0; padding:20px 15px 5px 15px;">Loading assets...</div>
 </div>
 <div class="templates">
     <div id="subfooter">
-        Font Awesome Icon Picker
+        <span>Created by <a href="https://itsjavi.com" target="_blank">Javi Aguilar</a></span>
         <br>
-        <a href="https://github.com/farbelous/fontawesome-iconpicker" target="_blank">
-            <i class="fab fa-github"></i> v2.0
-        </a> (FA v5.0)
+        <span style="font-size:11px">Do you find this extension useful? Please consider making a donation</span>
         <br>
-        by <a href="https://github.com/itsjavi" target="_blank">@itsjavi</a>
+        <a class="btn btn-warning btn-xs" href="https://github.com/itsjavi/itsjavi.github.io/blob/master/BACKERS.md#sponsors--backers" target="_blank">
+            Support this project
+        </a>
     </div>
 </div>
 
@@ -91,9 +91,9 @@
   -
   - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
 -->
-<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://farbelous.github.io/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js"></script>
+<script src="https://cdn.rawgit.com/farbelous/fontawesome-iconpicker/3.0.0/dist/js/fontawesome-iconpicker.js"></script>
 <script src="popup.js"></script>
 </body>
 </html>

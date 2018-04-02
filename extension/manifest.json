@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Font Awesome Icon Picker",
   "description": "Font Awesome Icon Picker extension for Google Chrome",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "icons": {
     "19": "icon.png",
     "128": "icon-128.png"
@@ -11,6 +11,8 @@
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
-  "permissions": [ "storage" ],
-  "content_security_policy": "script-src 'self' https://netdna.bootstrapcdn.com https://use.fontawesome.com https://code.jquery.com https://farbelous.github.io https://farbelous.io; object-src 'self'"
+  "permissions": [
+    "storage"
+  ],
+  "content_security_policy": "script-src 'self' https://netdna.bootstrapcdn.com https://use.fontawesome.com https://code.jquery.com https://farbelous.io https://cdn.rawgit.com; object-src 'self'"
 }

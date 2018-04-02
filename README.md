@@ -4,8 +4,8 @@ fontawesome-iconpicker
 <!--[![Build Status](https://img.shields.io/travis/farbelous/fontawesome-iconpicker/master.svg?style=flat-square)](https://travis-ci.org/farbelous/fontawesome-iconpicker)-->
 <!--[![npm@next](https://img.shields.io/npm/v/fontawesome-iconpicker/next.svg?style=flat-square)](https://www.npmjs.com/package/fontawesome-iconpicker?activeTab=versions)-->
 [![npm](https://img.shields.io/npm/v/fontawesome-iconpicker.svg?style=flat-square)](https://www.npmjs.com/package/fontawesome-iconpicker)
-[![Donate](https://img.shields.io/badge/%E2%9D%A4-Donate%20to%20this%20project-e0a61d.svg?longCache=true&style=flat-square)](https://github.com/farbelous/farbelous.github.io/blob/master/README.md#donate)
-[![Supporters](https://img.shields.io/badge/%F0%9F%92%AA-Supporters-333333.svg?longCache=true&style=flat-square)](https://github.com/farbelous/farbelous.github.io/blob/master/BACKERS.md#backers)
+[![Donate](https://img.shields.io/badge/%E2%9D%A4-Donate%20to%20this%20project-e0a61d.svg?longCache=true&style=flat-square)](https://github.com/itsjavi/itsjavi.github.io/blob/master/BACKERS.md#sponsors--backers)
+[![Supporters](https://img.shields.io/badge/%F0%9F%92%AA-Supporters-333333.svg?longCache=true&style=flat-square)](https://github.com/itsjavi/itsjavi.github.io/blob/master/BACKERS.md#sponsors)
 
 
 Font Awesome Icon Picker is a fully customizable plugin for Twitter Bootstrap,

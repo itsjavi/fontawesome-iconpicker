@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         download: {
             somefile: {
-                src: ['https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.0.8/advanced-options/metadata/icons.yml'],
+                src: ['https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.1.1/advanced-options/metadata/icons.yml'],
                 dest: tempIconsFile
             },
         },

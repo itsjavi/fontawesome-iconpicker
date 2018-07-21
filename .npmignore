@@ -1,4 +1,7 @@
 extension
+*.zip
 *.psd
 composer.json
-.travis.yml
+.*
+node_modules
+CODE_OF_CONDUCT.md

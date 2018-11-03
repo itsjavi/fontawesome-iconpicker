@@ -2,345 +2,336 @@
  * Font Awesome Icon Picker
  * https://farbelous.github.io/fontawesome-iconpicker/
  *
- * Originally written by (c) 2016 Javi Aguilar
- * Licensed under the MIT License
- * https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
- *
+ * @author Javi Aguilar, itsjavi.com
+ * @license MIT License
+ * @see https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
  */
-(function(a) {
+
+
+(function(e) {
     if (typeof define === "function" && define.amd) {
-        define([ "jquery" ], a);
+        define([ "jquery" ], e);
     } else {
-        a(jQuery);
+        e(jQuery);
     }
-})(function(a) {
-    a.ui = a.ui || {};
-    var b = a.ui.version = "1.12.1";
-    /*!
-     * jQuery UI Position 1.12.1
-     * http://jqueryui.com
-     *
-     * Copyright jQuery Foundation and other contributors
-     * Released under the MIT license.
-     * http://jquery.org/license
-     *
-     * http://api.jqueryui.com/position/
-     */
+})(function(L) {
+    L.ui = L.ui || {};
+    var e = L.ui.version = "1.12.1";
     (function() {
-        var b, c = Math.max, d = Math.abs, e = /left|center|right/, f = /top|center|bottom/, g = /[\+\-]\d+(\.[\d]+)?%?/, h = /^\w+/, i = /%$/, j = a.fn.pos;
-        function k(a, b, c) {
-            return [ parseFloat(a[0]) * (i.test(a[0]) ? b / 100 : 1), parseFloat(a[1]) * (i.test(a[1]) ? c / 100 : 1) ];
+        var r, y = Math.max, x = Math.abs, s = /left|center|right/, i = /top|center|bottom/, f = /[\+\-]\d+(\.[\d]+)?%?/, c = /^\w+/, l = /%$/, a = L.fn.pos;
+        function q(e, a, t) {
+            return [ parseFloat(e[0]) * (l.test(e[0]) ? a / 100 : 1), parseFloat(e[1]) * (l.test(e[1]) ? t / 100 : 1) ];
         }
-        function l(b, c) {
-            return parseInt(a.css(b, c), 10) || 0;
+        function C(e, a) {
+            return parseInt(L.css(e, a), 10) || 0;
         }
-        function m(b) {
-            var c = b[0];
-            if (c.nodeType === 9) {
+        function t(e) {
+            var a = e[0];
+            if (a.nodeType === 9) {
                 return {
-                    width: b.width(),
-                    height: b.height(),
+                    width: e.width(),
+                    height: e.height(),
                     offset: {
                         top: 0,
                         left: 0
                     }
                 };
             }
-            if (a.isWindow(c)) {
+            if (L.isWindow(a)) {
                 return {
-                    width: b.width(),
-                    height: b.height(),
+                    width: e.width(),
+                    height: e.height(),
                     offset: {
-                        top: b.scrollTop(),
-                        left: b.scrollLeft()
+                        top: e.scrollTop(),
+                        left: e.scrollLeft()
                     }
                 };
             }
-            if (c.preventDefault) {
+            if (a.preventDefault) {
                 return {
                     width: 0,
                     height: 0,
                     offset: {
-                        top: c.pageY,
-                        left: c.pageX
+                        top: a.pageY,
+                        left: a.pageX
                     }
                 };
             }
             return {
-                width: b.outerWidth(),
-                height: b.outerHeight(),
-                offset: b.offset()
+                width: e.outerWidth(),
+                height: e.outerHeight(),
+                offset: e.offset()
             };
         }
-        a.pos = {
+        L.pos = {
             scrollbarWidth: function() {
-                if (b !== undefined) {
-                    return b;
+                if (r !== undefined) {
+                    return r;
                 }
-                var c, d, e = a("<div " + "style='display:block;position:absolute;width:50px;height:50px;overflow:hidden;'>" + "<div style='height:100px;width:auto;'></div></div>"), f = e.children()[0];
-                a("body").append(e);
-                c = f.offsetWidth;
-                e.css("overflow", "scroll");
-                d = f.offsetWidth;
-                if (c === d) {
-                    d = e[0].clientWidth;
+                var e, a, t = L("<div " + "style='display:block;position:absolute;width:50px;height:50px;overflow:hidden;'>" + "<div style='height:100px;width:auto;'></div></div>"), s = t.children()[0];
+                L("body").append(t);
+                e = s.offsetWidth;
+                t.css("overflow", "scroll");
+                a = s.offsetWidth;
+                if (e === a) {
+                    a = t[0].clientWidth;
                 }
-                e.remove();
-                return b = c - d;
+                t.remove();
+                return r = e - a;
             },
-            getScrollInfo: function(b) {
-                var c = b.isWindow || b.isDocument ? "" : b.element.css("overflow-x"), d = b.isWindow || b.isDocument ? "" : b.element.css("overflow-y"), e = c === "scroll" || c === "auto" && b.width < b.element[0].scrollWidth, f = d === "scroll" || d === "auto" && b.height < b.element[0].scrollHeight;
+            getScrollInfo: function(e) {
+                var a = e.isWindow || e.isDocument ? "" : e.element.css("overflow-x"), t = e.isWindow || e.isDocument ? "" : e.element.css("overflow-y"), s = a === "scroll" || a === "auto" && e.width < e.element[0].scrollWidth, r = t === "scroll" || t === "auto" && e.height < e.element[0].scrollHeight;
                 return {
-                    width: f ? a.pos.scrollbarWidth() : 0,
-                    height: e ? a.pos.scrollbarWidth() : 0
+                    width: r ? L.pos.scrollbarWidth() : 0,
+                    height: s ? L.pos.scrollbarWidth() : 0
                 };
             },
-            getWithinInfo: function(b) {
-                var c = a(b || window), d = a.isWindow(c[0]), e = !!c[0] && c[0].nodeType === 9, f = !d && !e;
+            getWithinInfo: function(e) {
+                var a = L(e || window), t = L.isWindow(a[0]), s = !!a[0] && a[0].nodeType === 9, r = !t && !s;
                 return {
-                    element: c,
-                    isWindow: d,
-                    isDocument: e,
-                    offset: f ? a(b).offset() : {
+                    element: a,
+                    isWindow: t,
+                    isDocument: s,
+                    offset: r ? L(e).offset() : {
                         left: 0,
                         top: 0
                     },
-                    scrollLeft: c.scrollLeft(),
-                    scrollTop: c.scrollTop(),
-                    width: c.outerWidth(),
-                    height: c.outerHeight()
+                    scrollLeft: a.scrollLeft(),
+                    scrollTop: a.scrollTop(),
+                    width: a.outerWidth(),
+                    height: a.outerHeight()
                 };
             }
         };
-        a.fn.pos = function(b) {
-            if (!b || !b.of) {
-                return j.apply(this, arguments);
+        L.fn.pos = function(h) {
+            if (!h || !h.of) {
+                return a.apply(this, arguments);
             }
-            b = a.extend({}, b);
-            var i, n, o, p, q, r, s = a(b.of), t = a.pos.getWithinInfo(b.within), u = a.pos.getScrollInfo(t), v = (b.collision || "flip").split(" "), w = {};
-            r = m(s);
-            if (s[0].preventDefault) {
-                b.at = "left top";
+            h = L.extend({}, h);
+            var m, p, d, T, u, e, b = L(h.of), g = L.pos.getWithinInfo(h.within), k = L.pos.getScrollInfo(g), w = (h.collision || "flip").split(" "), v = {};
+            e = t(b);
+            if (b[0].preventDefault) {
+                h.at = "left top";
             }
-            n = r.width;
-            o = r.height;
-            p = r.offset;
-            q = a.extend({}, p);
-            a.each([ "my", "at" ], function() {
-                var a = (b[this] || "").split(" "), c, d;
-                if (a.length === 1) {
-                    a = e.test(a[0]) ? a.concat([ "center" ]) : f.test(a[0]) ? [ "center" ].concat(a) : [ "center", "center" ];
+            p = e.width;
+            d = e.height;
+            T = e.offset;
+            u = L.extend({}, T);
+            L.each([ "my", "at" ], function() {
+                var e = (h[this] || "").split(" "), a, t;
+                if (e.length === 1) {
+                    e = s.test(e[0]) ? e.concat([ "center" ]) : i.test(e[0]) ? [ "center" ].concat(e) : [ "center", "center" ];
                 }
-                a[0] = e.test(a[0]) ? a[0] : "center";
-                a[1] = f.test(a[1]) ? a[1] : "center";
-                c = g.exec(a[0]);
-                d = g.exec(a[1]);
-                w[this] = [ c ? c[0] : 0, d ? d[0] : 0 ];
-                b[this] = [ h.exec(a[0])[0], h.exec(a[1])[0] ];
+                e[0] = s.test(e[0]) ? e[0] : "center";
+                e[1] = i.test(e[1]) ? e[1] : "center";
+                a = f.exec(e[0]);
+                t = f.exec(e[1]);
+                v[this] = [ a ? a[0] : 0, t ? t[0] : 0 ];
+                h[this] = [ c.exec(e[0])[0], c.exec(e[1])[0] ];
             });
-            if (v.length === 1) {
-                v[1] = v[0];
+            if (w.length === 1) {
+                w[1] = w[0];
             }
-            if (b.at[0] === "right") {
-                q.left += n;
-            } else if (b.at[0] === "center") {
-                q.left += n / 2;
+            if (h.at[0] === "right") {
+                u.left += p;
+            } else if (h.at[0] === "center") {
+                u.left += p / 2;
             }
-            if (b.at[1] === "bottom") {
-                q.top += o;
-            } else if (b.at[1] === "center") {
-                q.top += o / 2;
+            if (h.at[1] === "bottom") {
+                u.top += d;
+            } else if (h.at[1] === "center") {
+                u.top += d / 2;
             }
-            i = k(w.at, n, o);
-            q.left += i[0];
-            q.top += i[1];
+            m = q(v.at, p, d);
+            u.left += m[0];
+            u.top += m[1];
             return this.each(function() {
-                var e, f, g = a(this), h = g.outerWidth(), j = g.outerHeight(), m = l(this, "marginLeft"), r = l(this, "marginTop"), x = h + m + l(this, "marginRight") + u.width, y = j + r + l(this, "marginBottom") + u.height, z = a.extend({}, q), A = k(w.my, g.outerWidth(), g.outerHeight());
-                if (b.my[0] === "right") {
-                    z.left -= h;
-                } else if (b.my[0] === "center") {
-                    z.left -= h / 2;
+                var t, e, f = L(this), c = f.outerWidth(), l = f.outerHeight(), a = C(this, "marginLeft"), s = C(this, "marginTop"), r = c + a + C(this, "marginRight") + k.width, i = l + s + C(this, "marginBottom") + k.height, o = L.extend({}, u), n = q(v.my, f.outerWidth(), f.outerHeight());
+                if (h.my[0] === "right") {
+                    o.left -= c;
+                } else if (h.my[0] === "center") {
+                    o.left -= c / 2;
                 }
-                if (b.my[1] === "bottom") {
-                    z.top -= j;
-                } else if (b.my[1] === "center") {
-                    z.top -= j / 2;
+                if (h.my[1] === "bottom") {
+                    o.top -= l;
+                } else if (h.my[1] === "center") {
+                    o.top -= l / 2;
                 }
-                z.left += A[0];
-                z.top += A[1];
-                e = {
-                    marginLeft: m,
-                    marginTop: r
+                o.left += n[0];
+                o.top += n[1];
+                t = {
+                    marginLeft: a,
+                    marginTop: s
                 };
-                a.each([ "left", "top" ], function(c, d) {
-                    if (a.ui.pos[v[c]]) {
-                        a.ui.pos[v[c]][d](z, {
-                            targetWidth: n,
-                            targetHeight: o,
-                            elemWidth: h,
-                            elemHeight: j,
-                            collisionPosition: e,
-                            collisionWidth: x,
-                            collisionHeight: y,
-                            offset: [ i[0] + A[0], i[1] + A[1] ],
-                            my: b.my,
-                            at: b.at,
-                            within: t,
-                            elem: g
+                L.each([ "left", "top" ], function(e, a) {
+                    if (L.ui.pos[w[e]]) {
+                        L.ui.pos[w[e]][a](o, {
+                            targetWidth: p,
+                            targetHeight: d,
+                            elemWidth: c,
+                            elemHeight: l,
+                            collisionPosition: t,
+                            collisionWidth: r,
+                            collisionHeight: i,
+                            offset: [ m[0] + n[0], m[1] + n[1] ],
+                            my: h.my,
+                            at: h.at,
+                            within: g,
+                            elem: f
                         });
                     }
                 });
-                if (b.using) {
-                    f = function(a) {
-                        var e = p.left - z.left, f = e + n - h, i = p.top - z.top, k = i + o - j, l = {
+                if (h.using) {
+                    e = function(e) {
+                        var a = T.left - o.left, t = a + p - c, s = T.top - o.top, r = s + d - l, i = {
                             target: {
-                                element: s,
-                                left: p.left,
-                                top: p.top,
-                                width: n,
-                                height: o
+                                element: b,
+                                left: T.left,
+                                top: T.top,
+                                width: p,
+                                height: d
                             },
                             element: {
-                                element: g,
-                                left: z.left,
-                                top: z.top,
-                                width: h,
-                                height: j
+                                element: f,
+                                left: o.left,
+                                top: o.top,
+                                width: c,
+                                height: l
                             },
-                            horizontal: f < 0 ? "left" : e > 0 ? "right" : "center",
-                            vertical: k < 0 ? "top" : i > 0 ? "bottom" : "middle"
+                            horizontal: t < 0 ? "left" : a > 0 ? "right" : "center",
+                            vertical: r < 0 ? "top" : s > 0 ? "bottom" : "middle"
                         };
-                        if (n < h && d(e + f) < n) {
-                            l.horizontal = "center";
+                        if (p < c && x(a + t) < p) {
+                            i.horizontal = "center";
                         }
-                        if (o < j && d(i + k) < o) {
-                            l.vertical = "middle";
+                        if (d < l && x(s + r) < d) {
+                            i.vertical = "middle";
                         }
-                        if (c(d(e), d(f)) > c(d(i), d(k))) {
-                            l.important = "horizontal";
+                        if (y(x(a), x(t)) > y(x(s), x(r))) {
+                            i.important = "horizontal";
                         } else {
-                            l.important = "vertical";
+                            i.important = "vertical";
                         }
-                        b.using.call(this, a, l);
+                        h.using.call(this, e, i);
                     };
                 }
-                g.offset(a.extend(z, {
-                    using: f
+                f.offset(L.extend(o, {
+                    using: e
                 }));
             });
         };
-        a.ui.pos = {
-            _trigger: function(a, b, c, d) {
-                if (b.elem) {
-                    b.elem.trigger({
-                        type: c,
-                        position: a,
-                        positionData: b,
-                        triggered: d
+        L.ui.pos = {
+            _trigger: function(e, a, t, s) {
+                if (a.elem) {
+                    a.elem.trigger({
+                        type: t,
+                        position: e,
+                        positionData: a,
+                        triggered: s
                     });
                 }
             },
             fit: {
-                left: function(b, d) {
-                    a.ui.pos._trigger(b, d, "posCollide", "fitLeft");
-                    var e = d.within, f = e.isWindow ? e.scrollLeft : e.offset.left, g = e.width, h = b.left - d.collisionPosition.marginLeft, i = f - h, j = h + d.collisionWidth - g - f, k;
-                    if (d.collisionWidth > g) {
-                        if (i > 0 && j <= 0) {
-                            k = b.left + i + d.collisionWidth - g - f;
-                            b.left += i - k;
-                        } else if (j > 0 && i <= 0) {
-                            b.left = f;
+                left: function(e, a) {
+                    L.ui.pos._trigger(e, a, "posCollide", "fitLeft");
+                    var t = a.within, s = t.isWindow ? t.scrollLeft : t.offset.left, r = t.width, i = e.left - a.collisionPosition.marginLeft, f = s - i, c = i + a.collisionWidth - r - s, l;
+                    if (a.collisionWidth > r) {
+                        if (f > 0 && c <= 0) {
+                            l = e.left + f + a.collisionWidth - r - s;
+                            e.left += f - l;
+                        } else if (c > 0 && f <= 0) {
+                            e.left = s;
                         } else {
-                            if (i > j) {
-                                b.left = f + g - d.collisionWidth;
+                            if (f > c) {
+                                e.left = s + r - a.collisionWidth;
                             } else {
-                                b.left = f;
+                                e.left = s;
                             }
                         }
-                    } else if (i > 0) {
-                        b.left += i;
-                    } else if (j > 0) {
-                        b.left -= j;
+                    } else if (f > 0) {
+                        e.left += f;
+                    } else if (c > 0) {
+                        e.left -= c;
                     } else {
-                        b.left = c(b.left - h, b.left);
+                        e.left = y(e.left - i, e.left);
                     }
-                    a.ui.pos._trigger(b, d, "posCollided", "fitLeft");
+                    L.ui.pos._trigger(e, a, "posCollided", "fitLeft");
                 },
-                top: function(b, d) {
-                    a.ui.pos._trigger(b, d, "posCollide", "fitTop");
-                    var e = d.within, f = e.isWindow ? e.scrollTop : e.offset.top, g = d.within.height, h = b.top - d.collisionPosition.marginTop, i = f - h, j = h + d.collisionHeight - g - f, k;
-                    if (d.collisionHeight > g) {
-                        if (i > 0 && j <= 0) {
-                            k = b.top + i + d.collisionHeight - g - f;
-                            b.top += i - k;
-                        } else if (j > 0 && i <= 0) {
-                            b.top = f;
+                top: function(e, a) {
+                    L.ui.pos._trigger(e, a, "posCollide", "fitTop");
+                    var t = a.within, s = t.isWindow ? t.scrollTop : t.offset.top, r = a.within.height, i = e.top - a.collisionPosition.marginTop, f = s - i, c = i + a.collisionHeight - r - s, l;
+                    if (a.collisionHeight > r) {
+                        if (f > 0 && c <= 0) {
+                            l = e.top + f + a.collisionHeight - r - s;
+                            e.top += f - l;
+                        } else if (c > 0 && f <= 0) {
+                            e.top = s;
                         } else {
-                            if (i > j) {
-                                b.top = f + g - d.collisionHeight;
+                            if (f > c) {
+                                e.top = s + r - a.collisionHeight;
                             } else {
-                                b.top = f;
+                                e.top = s;
                             }
                         }
-                    } else if (i > 0) {
-                        b.top += i;
-                    } else if (j > 0) {
-                        b.top -= j;
+                    } else if (f > 0) {
+                        e.top += f;
+                    } else if (c > 0) {
+                        e.top -= c;
                     } else {
-                        b.top = c(b.top - h, b.top);
+                        e.top = y(e.top - i, e.top);
                     }
-                    a.ui.pos._trigger(b, d, "posCollided", "fitTop");
+                    L.ui.pos._trigger(e, a, "posCollided", "fitTop");
                 }
             },
             flip: {
-                left: function(b, c) {
-                    a.ui.pos._trigger(b, c, "posCollide", "flipLeft");
-                    var e = c.within, f = e.offset.left + e.scrollLeft, g = e.width, h = e.isWindow ? e.scrollLeft : e.offset.left, i = b.left - c.collisionPosition.marginLeft, j = i - h, k = i + c.collisionWidth - g - h, l = c.my[0] === "left" ? -c.elemWidth : c.my[0] === "right" ? c.elemWidth : 0, m = c.at[0] === "left" ? c.targetWidth : c.at[0] === "right" ? -c.targetWidth : 0, n = -2 * c.offset[0], o, p;
-                    if (j < 0) {
-                        o = b.left + l + m + n + c.collisionWidth - g - f;
-                        if (o < 0 || o < d(j)) {
-                            b.left += l + m + n;
+                left: function(e, a) {
+                    L.ui.pos._trigger(e, a, "posCollide", "flipLeft");
+                    var t = a.within, s = t.offset.left + t.scrollLeft, r = t.width, i = t.isWindow ? t.scrollLeft : t.offset.left, f = e.left - a.collisionPosition.marginLeft, c = f - i, l = f + a.collisionWidth - r - i, o = a.my[0] === "left" ? -a.elemWidth : a.my[0] === "right" ? a.elemWidth : 0, n = a.at[0] === "left" ? a.targetWidth : a.at[0] === "right" ? -a.targetWidth : 0, h = -2 * a.offset[0], m, p;
+                    if (c < 0) {
+                        m = e.left + o + n + h + a.collisionWidth - r - s;
+                        if (m < 0 || m < x(c)) {
+                            e.left += o + n + h;
                         }
-                    } else if (k > 0) {
-                        p = b.left - c.collisionPosition.marginLeft + l + m + n - h;
-                        if (p > 0 || d(p) < k) {
-                            b.left += l + m + n;
+                    } else if (l > 0) {
+                        p = e.left - a.collisionPosition.marginLeft + o + n + h - i;
+                        if (p > 0 || x(p) < l) {
+                            e.left += o + n + h;
                         }
                     }
-                    a.ui.pos._trigger(b, c, "posCollided", "flipLeft");
+                    L.ui.pos._trigger(e, a, "posCollided", "flipLeft");
                 },
-                top: function(b, c) {
-                    a.ui.pos._trigger(b, c, "posCollide", "flipTop");
-                    var e = c.within, f = e.offset.top + e.scrollTop, g = e.height, h = e.isWindow ? e.scrollTop : e.offset.top, i = b.top - c.collisionPosition.marginTop, j = i - h, k = i + c.collisionHeight - g - h, l = c.my[1] === "top", m = l ? -c.elemHeight : c.my[1] === "bottom" ? c.elemHeight : 0, n = c.at[1] === "top" ? c.targetHeight : c.at[1] === "bottom" ? -c.targetHeight : 0, o = -2 * c.offset[1], p, q;
-                    if (j < 0) {
-                        q = b.top + m + n + o + c.collisionHeight - g - f;
-                        if (q < 0 || q < d(j)) {
-                            b.top += m + n + o;
+                top: function(e, a) {
+                    L.ui.pos._trigger(e, a, "posCollide", "flipTop");
+                    var t = a.within, s = t.offset.top + t.scrollTop, r = t.height, i = t.isWindow ? t.scrollTop : t.offset.top, f = e.top - a.collisionPosition.marginTop, c = f - i, l = f + a.collisionHeight - r - i, o = a.my[1] === "top", n = o ? -a.elemHeight : a.my[1] === "bottom" ? a.elemHeight : 0, h = a.at[1] === "top" ? a.targetHeight : a.at[1] === "bottom" ? -a.targetHeight : 0, m = -2 * a.offset[1], p, d;
+                    if (c < 0) {
+                        d = e.top + n + h + m + a.collisionHeight - r - s;
+                        if (d < 0 || d < x(c)) {
+                            e.top += n + h + m;
                         }
-                    } else if (k > 0) {
-                        p = b.top - c.collisionPosition.marginTop + m + n + o - h;
-                        if (p > 0 || d(p) < k) {
-                            b.top += m + n + o;
+                    } else if (l > 0) {
+                        p = e.top - a.collisionPosition.marginTop + n + h + m - i;
+                        if (p > 0 || x(p) < l) {
+                            e.top += n + h + m;
                         }
                     }
-                    a.ui.pos._trigger(b, c, "posCollided", "flipTop");
+                    L.ui.pos._trigger(e, a, "posCollided", "flipTop");
                 }
             },
             flipfit: {
                 left: function() {
-                    a.ui.pos.flip.left.apply(this, arguments);
-                    a.ui.pos.fit.left.apply(this, arguments);
+                    L.ui.pos.flip.left.apply(this, arguments);
+                    L.ui.pos.fit.left.apply(this, arguments);
                 },
                 top: function() {
-                    a.ui.pos.flip.top.apply(this, arguments);
-                    a.ui.pos.fit.top.apply(this, arguments);
+                    L.ui.pos.flip.top.apply(this, arguments);
+                    L.ui.pos.fit.top.apply(this, arguments);
                 }
             }
         };
         (function() {
-            var b, c, d, e, f, g = document.getElementsByTagName("body")[0], h = document.createElement("div");
-            b = document.createElement(g ? "div" : "body");
-            d = {
+            var e, a, t, s, r, i = document.getElementsByTagName("body")[0], f = document.createElement("div");
+            e = document.createElement(i ? "div" : "body");
+            t = {
                 visibility: "hidden",
                 width: 0,
                 height: 0,
@@ -348,74 +339,74 @@
                 margin: 0,
                 background: "none"
             };
-            if (g) {
-                a.extend(d, {
+            if (i) {
+                L.extend(t, {
                     position: "absolute",
                     left: "-1000px",
                     top: "-1000px"
                 });
             }
-            for (f in d) {
-                b.style[f] = d[f];
+            for (r in t) {
+                e.style[r] = t[r];
             }
-            b.appendChild(h);
-            c = g || document.documentElement;
-            c.insertBefore(b, c.firstChild);
-            h.style.cssText = "position: absolute; left: 10.7432222px;";
-            e = a(h).offset().left;
-            a.support.offsetFractions = e > 10 && e < 11;
-            b.innerHTML = "";
-            c.removeChild(b);
+            e.appendChild(f);
+            a = i || document.documentElement;
+            a.insertBefore(e, a.firstChild);
+            f.style.cssText = "position: absolute; left: 10.7432222px;";
+            s = L(f).offset().left;
+            L.support.offsetFractions = s > 10 && s < 11;
+            e.innerHTML = "";
+            a.removeChild(e);
         })();
     })();
-    var c = a.ui.position;
+    var a = L.ui.position;
 });
 
-(function(a) {
+(function(e) {
     "use strict";
     if (typeof define === "function" && define.amd) {
-        define([ "jquery" ], a);
+        define([ "jquery" ], e);
     } else if (window.jQuery && !window.jQuery.fn.iconpicker) {
-        a(window.jQuery);
+        e(window.jQuery);
     }
-})(function(a) {
+})(function(l) {
     "use strict";
-    var b = {
-        isEmpty: function(a) {
-            return a === false || a === "" || a === null || a === undefined;
+    var f = {
+        isEmpty: function(e) {
+            return e === false || e === "" || e === null || e === undefined;
         },
-        isEmptyObject: function(a) {
-            return this.isEmpty(a) === true || a.length === 0;
+        isEmptyObject: function(e) {
+            return this.isEmpty(e) === true || e.length === 0;
         },
-        isElement: function(b) {
-            return a(b).length > 0;
+        isElement: function(e) {
+            return l(e).length > 0;
         },
-        isString: function(a) {
-            return typeof a === "string" || a instanceof String;
+        isString: function(e) {
+            return typeof e === "string" || e instanceof String;
         },
-        isArray: function(b) {
-            return a.isArray(b);
+        isArray: function(e) {
+            return l.isArray(e);
         },
-        inArray: function(b, c) {
-            return a.inArray(b, c) !== -1;
+        inArray: function(e, a) {
+            return l.inArray(e, a) !== -1;
         },
-        throwError: function(a) {
-            throw "Font Awesome Icon Picker Exception: " + a;
+        throwError: function(e) {
+            throw "Font Awesome Icon Picker Exception: " + e;
         }
     };
-    var c = function(d, e) {
-        this._id = c._idCounter++;
-        this.element = a(d).addClass("iconpicker-element");
+    var t = function(e, a) {
+        this._id = t._idCounter++;
+        this.element = l(e).addClass("iconpicker-element");
         this._trigger("iconpickerCreate", {
             iconpickerValue: this.iconpickerValue
         });
-        this.options = a.extend({}, c.defaultOptions, this.element.data(), e);
-        this.options.templates = a.extend({}, c.defaultOptions.templates, this.options.templates);
+        this.options = l.extend({}, t.defaultOptions, this.element.data(), a);
+        this.options.templates = l.extend({}, t.defaultOptions.templates, this.options.templates);
         this.options.originalPlacement = this.options.placement;
-        this.container = b.isElement(this.options.container) ? a(this.options.container) : false;
+        this.container = f.isElement(this.options.container) ? l(this.options.container) : false;
         if (this.container === false) {
             if (this.element.is(".dropdown-toggle")) {
-                this.container = a("~ .dropdown-menu:first", this.element);
+                this.container = l("~ .dropdown-menu:first", this.element);
             } else {
                 this.container = this.element.is("input,textarea,button,.btn") ? this.element.parent() : this.element;
             }
@@ -457,8 +448,8 @@
             iconpickerValue: this.iconpickerValue
         });
     };
-    c._idCounter = 0;
-    c.defaultOptions = {
+    t._idCounter = 0;
+    t.defaultOptions = {
         title: false,
         selected: false,
         defaultValue: false,
@@ -471,8 +462,8 @@
         mustAccept: false,
         selectedCustomClass: "bg-primary",
         icons: [],
-        fullClassFormatter: function(a) {
-            return a;
+        fullClassFormatter: function(e) {
+            return e;
         },
         input: "input,.iconpicker-input",
         inputSearch: false,
@@ -487,46 +478,46 @@
             iconpickerItem: '<a role="button" href="#" class="iconpicker-item"><i></i></a>'
         }
     };
-    c.batch = function(b, c) {
-        var d = Array.prototype.slice.call(arguments, 2);
-        return a(b).each(function() {
-            var b = a(this).data("iconpicker");
-            if (!!b) {
-                b[c].apply(b, d);
+    t.batch = function(e, a) {
+        var t = Array.prototype.slice.call(arguments, 2);
+        return l(e).each(function() {
+            var e = l(this).data("iconpicker");
+            if (!!e) {
+                e[a].apply(e, t);
             }
         });
     };
-    c.prototype = {
-        constructor: c,
+    t.prototype = {
+        constructor: t,
         options: {},
         _id: 0,
-        _trigger: function(b, c) {
-            c = c || {};
-            this.element.trigger(a.extend({
-                type: b,
+        _trigger: function(e, a) {
+            a = a || {};
+            this.element.trigger(l.extend({
+                type: e,
                 iconpickerInstance: this
-            }, c));
+            }, a));
         },
         _createPopover: function() {
-            this.popover = a(this.options.templates.popover);
-            var c = this.popover.find(".popover-title");
+            this.popover = l(this.options.templates.popover);
+            var e = this.popover.find(".popover-title");
             if (!!this.options.title) {
-                c.append(a('<div class="popover-title-text">' + this.options.title + "</div>"));
+                e.append(l('<div class="popover-title-text">' + this.options.title + "</div>"));
             }
             if (this.hasSeparatedSearchInput() && !this.options.searchInFooter) {
-                c.append(this.options.templates.search);
+                e.append(this.options.templates.search);
             } else if (!this.options.title) {
-                c.remove();
+                e.remove();
             }
-            if (this.options.showFooter && !b.isEmpty(this.options.templates.footer)) {
-                var d = a(this.options.templates.footer);
+            if (this.options.showFooter && !f.isEmpty(this.options.templates.footer)) {
+                var a = l(this.options.templates.footer);
                 if (this.hasSeparatedSearchInput() && this.options.searchInFooter) {
-                    d.append(a(this.options.templates.search));
+                    a.append(l(this.options.templates.search));
                 }
-                if (!b.isEmpty(this.options.templates.buttons)) {
-                    d.append(a(this.options.templates.buttons));
+                if (!f.isEmpty(this.options.templates.buttons)) {
+                    a.append(l(this.options.templates.buttons));
                 }
-                this.popover.append(d);
+                this.popover.append(a);
             }
             if (this.options.animation === true) {
                 this.popover.addClass("fade");
@@ -534,111 +525,115 @@
             return this.popover;
         },
         _createIconpicker: function() {
-            var b = this;
-            this.iconpicker = a(this.options.templates.iconpicker);
-            var c = function(c) {
-                var d = a(this);
-                if (d.is("i")) {
-                    d = d.parent();
+            var t = this;
+            this.iconpicker = l(this.options.templates.iconpicker);
+            var e = function(e) {
+                var a = l(this);
+                if (a.is("i")) {
+                    a = a.parent();
                 }
-                b._trigger("iconpickerSelect", {
-                    iconpickerItem: d,
-                    iconpickerValue: b.iconpickerValue
+                t._trigger("iconpickerSelect", {
+                    iconpickerItem: a,
+                    iconpickerValue: t.iconpickerValue
                 });
-                if (b.options.mustAccept === false) {
-                    b.update(d.data("iconpickerValue"));
-                    b._trigger("iconpickerSelected", {
+                if (t.options.mustAccept === false) {
+                    t.update(a.data("iconpickerValue"));
+                    t._trigger("iconpickerSelected", {
                         iconpickerItem: this,
-                        iconpickerValue: b.iconpickerValue
+                        iconpickerValue: t.iconpickerValue
                     });
                 } else {
-                    b.update(d.data("iconpickerValue"), true);
+                    t.update(a.data("iconpickerValue"), true);
                 }
-                if (b.options.hideOnSelect && b.options.mustAccept === false) {
-                    b.hide();
+                if (t.options.hideOnSelect && t.options.mustAccept === false) {
+                    t.hide();
                 }
             };
-            for (var d in this.options.icons) {
-                if (typeof this.options.icons[d].title === "string") {
-                    var e = a(this.options.templates.iconpickerItem);
-                    e.find("i").addClass(this.options.fullClassFormatter(this.options.icons[d].title));
-                    e.data("iconpickerValue", this.options.icons[d].title).on("click.iconpicker", c);
-                    this.iconpicker.find(".iconpicker-items").append(e.attr("title", "." + this.options.icons[d].title));
-                    if (this.options.icons[d].searchTerms.length > 0) {
+            var a = l(this.options.templates.iconpickerItem);
+            var s = [];
+            for (var r in this.options.icons) {
+                if (typeof this.options.icons[r].title === "string") {
+                    var i = a.clone();
+                    i.find("i").addClass(this.options.fullClassFormatter(this.options.icons[r].title));
+                    i.data("iconpickerValue", this.options.icons[r].title).on("click.iconpicker", e);
+                    i.attr("title", "." + this.options.icons[r].title);
+                    if (this.options.icons[r].searchTerms.length > 0) {
                         var f = "";
-                        for (var g = 0; g < this.options.icons[d].searchTerms.length; g++) {
-                            f = f + this.options.icons[d].searchTerms[g] + " ";
+                        for (var c = 0; c < this.options.icons[r].searchTerms.length; c++) {
+                            f = f + this.options.icons[r].searchTerms[c] + " ";
                         }
-                        this.iconpicker.find(".iconpicker-items").append(e.attr("data-search-terms", f));
+                        i.attr("data-search-terms", f);
                     }
+                    s.push(i);
                 }
             }
+            this.iconpicker.find(".iconpicker-items").append(s);
             this.popover.find(".popover-content").append(this.iconpicker);
             return this.iconpicker;
         },
-        _isEventInsideIconpicker: function(b) {
-            var c = a(b.target);
-            if ((!c.hasClass("iconpicker-element") || c.hasClass("iconpicker-element") && !c.is(this.element)) && c.parents(".iconpicker-popover").length === 0) {
+        _isEventInsideIconpicker: function(e) {
+            var a = l(e.target);
+            if ((!a.hasClass("iconpicker-element") || a.hasClass("iconpicker-element") && !a.is(this.element)) && a.parents(".iconpicker-popover").length === 0) {
                 return false;
             }
             return true;
         },
         _bindElementEvents: function() {
-            var c = this;
+            var a = this;
             this.getSearchInput().on("keyup.iconpicker", function() {
-                c.filter(a(this).val().toLowerCase());
+                a.filter(l(this).val().toLowerCase());
             });
             this.getAcceptButton().on("click.iconpicker", function() {
-                var a = c.iconpicker.find(".iconpicker-selected").get(0);
-                c.update(c.iconpickerValue);
-                c._trigger("iconpickerSelected", {
-                    iconpickerItem: a,
-                    iconpickerValue: c.iconpickerValue
+                var e = a.iconpicker.find(".iconpicker-selected").get(0);
+                a.update(a.iconpickerValue);
+                a._trigger("iconpickerSelected", {
+                    iconpickerItem: e,
+                    iconpickerValue: a.iconpickerValue
                 });
-                if (!c.isInline()) {
-                    c.hide();
+                if (!a.isInline()) {
+                    a.hide();
                 }
             });
             this.getCancelButton().on("click.iconpicker", function() {
-                if (!c.isInline()) {
-                    c.hide();
+                if (!a.isInline()) {
+                    a.hide();
                 }
             });
-            this.element.on("focus.iconpicker", function(a) {
-                c.show();
-                a.stopPropagation();
+            this.element.on("focus.iconpicker", function(e) {
+                a.show();
+                e.stopPropagation();
             });
             if (this.hasComponent()) {
                 this.component.on("click.iconpicker", function() {
-                    c.toggle();
+                    a.toggle();
                 });
             }
             if (this.hasInput()) {
-                this.input.on("keyup.iconpicker", function(d) {
-                    if (!b.inArray(d.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
-                        c.update();
+                this.input.on("keyup.iconpicker", function(e) {
+                    if (!f.inArray(e.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
+                        a.update();
                     } else {
-                        c._updateFormGroupStatus(c.getValid(this.value) !== false);
+                        a._updateFormGroupStatus(a.getValid(this.value) !== false);
                     }
-                    if (c.options.inputSearch === true) {
-                        c.filter(a(this).val().toLowerCase());
+                    if (a.options.inputSearch === true) {
+                        a.filter(l(this).val().toLowerCase());
                     }
                 });
             }
         },
         _bindWindowEvents: function() {
-            var b = a(window.document);
-            var c = this;
-            var d = ".iconpicker.inst" + this._id;
-            a(window).on("resize.iconpicker" + d + " orientationchange.iconpicker" + d, function(a) {
-                if (c.popover.hasClass("in")) {
-                    c.updatePlacement();
+            var e = l(window.document);
+            var a = this;
+            var t = ".iconpicker.inst" + this._id;
+            l(window).on("resize.iconpicker" + t + " orientationchange.iconpicker" + t, function(e) {
+                if (a.popover.hasClass("in")) {
+                    a.updatePlacement();
                 }
             });
-            if (!c.isInline()) {
-                b.on("mouseup" + d, function(a) {
-                    if (!c._isEventInsideIconpicker(a) && !c.isInline()) {
-                        c.hide();
+            if (!a.isInline()) {
+                e.on("mouseup" + t, function(e) {
+                    if (!a._isEventInsideIconpicker(e) && !a.isInline()) {
+                        a.hide();
                     }
                 });
             }
@@ -657,141 +652,141 @@
             }
         },
         _unbindWindowEvents: function() {
-            a(window).off(".iconpicker.inst" + this._id);
-            a(window.document).off(".iconpicker.inst" + this._id);
+            l(window).off(".iconpicker.inst" + this._id);
+            l(window.document).off(".iconpicker.inst" + this._id);
         },
-        updatePlacement: function(b, c) {
-            b = b || this.options.placement;
-            this.options.placement = b;
-            c = c || this.options.collision;
-            c = c === true ? "flip" : c;
-            var d = {
+        updatePlacement: function(e, a) {
+            e = e || this.options.placement;
+            this.options.placement = e;
+            a = a || this.options.collision;
+            a = a === true ? "flip" : a;
+            var t = {
                 at: "right bottom",
                 my: "right top",
                 of: this.hasInput() && !this.isInputGroup() ? this.input : this.container,
-                collision: c === true ? "flip" : c,
+                collision: a === true ? "flip" : a,
                 within: window
             };
             this.popover.removeClass("inline topLeftCorner topLeft top topRight topRightCorner " + "rightTop right rightBottom bottomRight bottomRightCorner " + "bottom bottomLeft bottomLeftCorner leftBottom left leftTop");
-            if (typeof b === "object") {
-                return this.popover.pos(a.extend({}, d, b));
+            if (typeof e === "object") {
+                return this.popover.pos(l.extend({}, t, e));
             }
-            switch (b) {
+            switch (e) {
               case "inline":
                 {
-                    d = false;
+                    t = false;
                 }
                 break;
 
               case "topLeftCorner":
                 {
-                    d.my = "right bottom";
-                    d.at = "left top";
+                    t.my = "right bottom";
+                    t.at = "left top";
                 }
                 break;
 
               case "topLeft":
                 {
-                    d.my = "left bottom";
-                    d.at = "left top";
+                    t.my = "left bottom";
+                    t.at = "left top";
                 }
                 break;
 
               case "top":
                 {
-                    d.my = "center bottom";
-                    d.at = "center top";
+                    t.my = "center bottom";
+                    t.at = "center top";
                 }
                 break;
 
               case "topRight":
                 {
-                    d.my = "right bottom";
-                    d.at = "right top";
+                    t.my = "right bottom";
+                    t.at = "right top";
                 }
                 break;
 
               case "topRightCorner":
                 {
-                    d.my = "left bottom";
-                    d.at = "right top";
+                    t.my = "left bottom";
+                    t.at = "right top";
                 }
                 break;
 
               case "rightTop":
                 {
-                    d.my = "left bottom";
-                    d.at = "right center";
+                    t.my = "left bottom";
+                    t.at = "right center";
                 }
                 break;
 
               case "right":
                 {
-                    d.my = "left center";
-                    d.at = "right center";
+                    t.my = "left center";
+                    t.at = "right center";
                 }
                 break;
 
               case "rightBottom":
                 {
-                    d.my = "left top";
-                    d.at = "right center";
+                    t.my = "left top";
+                    t.at = "right center";
                 }
                 break;
 
               case "bottomRightCorner":
                 {
-                    d.my = "left top";
-                    d.at = "right bottom";
+                    t.my = "left top";
+                    t.at = "right bottom";
                 }
                 break;
 
               case "bottomRight":
                 {
-                    d.my = "right top";
-                    d.at = "right bottom";
+                    t.my = "right top";
+                    t.at = "right bottom";
                 }
                 break;
 
               case "bottom":
                 {
-                    d.my = "center top";
-                    d.at = "center bottom";
+                    t.my = "center top";
+                    t.at = "center bottom";
                 }
                 break;
 
               case "bottomLeft":
                 {
-                    d.my = "left top";
-                    d.at = "left bottom";
+                    t.my = "left top";
+                    t.at = "left bottom";
                 }
                 break;
 
               case "bottomLeftCorner":
                 {
-                    d.my = "right top";
-                    d.at = "left bottom";
+                    t.my = "right top";
+                    t.at = "left bottom";
                 }
                 break;
 
               case "leftBottom":
                 {
-                    d.my = "right top";
-                    d.at = "left center";
+                    t.my = "right top";
+                    t.at = "left center";
                 }
                 break;
 
               case "left":
                 {
-                    d.my = "right center";
-                    d.at = "left center";
+                    t.my = "right center";
+                    t.at = "left center";
                 }
                 break;
 
               case "leftTop":
                 {
-                    d.my = "right bottom";
-                    d.at = "left center";
+                    t.my = "right bottom";
+                    t.at = "left center";
                 }
                 break;
 
@@ -804,8 +799,8 @@
             this.popover.css({
                 display: this.options.placement === "inline" ? "" : "block"
             });
-            if (d !== false) {
-                this.popover.pos(d).css("maxWidth", a(window).width() - this.container.offset().left - 5);
+            if (t !== false) {
+                this.popover.pos(t).css("maxWidth", l(window).width() - this.container.offset().left - 5);
             } else {
                 this.popover.css({
                     top: "auto",
@@ -824,17 +819,17 @@
                 this.iconpicker.find("." + this.options.fullClassFormatter(this.iconpickerValue).replace(/ /g, ".")).parent().addClass("iconpicker-selected " + this.options.selectedCustomClass);
             }
             if (this.hasComponent()) {
-                var a = this.component.find("i");
-                if (a.length > 0) {
-                    a.attr("class", this.options.fullClassFormatter(this.iconpickerValue));
+                var e = this.component.find("i");
+                if (e.length > 0) {
+                    e.attr("class", this.options.fullClassFormatter(this.iconpickerValue));
                 } else {
                     this.component.html(this.getHtml());
                 }
             }
         },
-        _updateFormGroupStatus: function(a) {
+        _updateFormGroupStatus: function(e) {
             if (this.hasInput()) {
-                if (a !== false) {
+                if (e !== false) {
                     this.input.parents(".form-group:first").removeClass("has-error");
                 } else {
                     this.input.parents(".form-group:first").addClass("has-error");
@@ -843,35 +838,35 @@
             }
             return false;
         },
-        getValid: function(c) {
-            if (!b.isString(c)) {
-                c = "";
+        getValid: function(e) {
+            if (!f.isString(e)) {
+                e = "";
             }
-            var d = c === "";
-            c = a.trim(c);
-            var e = false;
-            for (var f = 0; f < this.options.icons.length; f++) {
-                if (this.options.icons[f].title === c) {
-                    e = true;
+            var a = e === "";
+            e = l.trim(e);
+            var t = false;
+            for (var s = 0; s < this.options.icons.length; s++) {
+                if (this.options.icons[s].title === e) {
+                    t = true;
                     break;
                 }
             }
-            if (e || d) {
-                return c;
+            if (t || a) {
+                return e;
             }
             return false;
         },
-        setValue: function(a) {
-            var b = this.getValid(a);
-            if (b !== false) {
-                this.iconpickerValue = b;
+        setValue: function(e) {
+            var a = this.getValid(e);
+            if (a !== false) {
+                this.iconpickerValue = a;
                 this._trigger("iconpickerSetValue", {
-                    iconpickerValue: b
+                    iconpickerValue: a
                 });
                 return this.iconpickerValue;
             } else {
                 this._trigger("iconpickerInvalid", {
-                    iconpickerValue: a
+                    iconpickerValue: e
                 });
                 return false;
             }
@@ -879,32 +874,32 @@
         getHtml: function() {
             return '<i class="' + this.options.fullClassFormatter(this.iconpickerValue) + '"></i>';
         },
-        setSourceValue: function(a) {
-            a = this.setValue(a);
-            if (a !== false && a !== "") {
+        setSourceValue: function(e) {
+            e = this.setValue(e);
+            if (e !== false && e !== "") {
                 if (this.hasInput()) {
                     this.input.val(this.iconpickerValue);
                 } else {
                     this.element.data("iconpickerValue", this.iconpickerValue);
                 }
                 this._trigger("iconpickerSetSourceValue", {
-                    iconpickerValue: a
+                    iconpickerValue: e
                 });
             }
-            return a;
+            return e;
         },
-        getSourceValue: function(a) {
-            a = a || this.options.defaultValue;
-            var b = a;
+        getSourceValue: function(e) {
+            e = e || this.options.defaultValue;
+            var a = e;
             if (this.hasInput()) {
-                b = this.input.val();
+                a = this.input.val();
             } else {
-                b = this.element.data("iconpickerValue");
+                a = this.element.data("iconpickerValue");
             }
-            if (b === undefined || b === "" || b === null || b === false) {
-                b = a;
+            if (a === undefined || a === "" || a === null || a === false) {
+                a = e;
             }
-            return b;
+            return a;
         },
         hasInput: function() {
             return this.input !== false;
@@ -936,44 +931,44 @@
         getSearchInput: function() {
             return this.popover.find(".iconpicker-search");
         },
-        filter: function(c) {
-            if (b.isEmpty(c)) {
+        filter: function(r) {
+            if (f.isEmpty(r)) {
                 this.iconpicker.find(".iconpicker-item").show();
-                return a(false);
+                return l(false);
             } else {
-                var d = [];
+                var i = [];
                 this.iconpicker.find(".iconpicker-item").each(function() {
-                    var b = a(this);
-                    var e = b.attr("title").toLowerCase();
-                    var f = b.attr("data-search-terms") ? b.attr("data-search-terms").toLowerCase() : "";
-                    e = e + " " + f;
-                    var g = false;
+                    var e = l(this);
+                    var a = e.attr("title").toLowerCase();
+                    var t = e.attr("data-search-terms") ? e.attr("data-search-terms").toLowerCase() : "";
+                    a = a + " " + t;
+                    var s = false;
                     try {
-                        g = new RegExp("(^|\\W)" + c, "g");
-                    } catch (a) {
-                        g = false;
+                        s = new RegExp("(^|\\W)" + r, "g");
+                    } catch (e) {
+                        s = false;
                     }
-                    if (g !== false && e.match(g)) {
-                        d.push(b);
-                        b.show();
+                    if (s !== false && a.match(s)) {
+                        i.push(e);
+                        e.show();
                     } else {
-                        b.hide();
+                        e.hide();
                     }
                 });
-                return d;
+                return i;
             }
         },
         show: function() {
             if (this.popover.hasClass("in")) {
                 return false;
             }
-            a.iconpicker.batch(a(".iconpicker-popover.in:not(.inline)").not(this.popover), "hide");
+            l.iconpicker.batch(l(".iconpicker-popover.in:not(.inline)").not(this.popover), "hide");
             this._trigger("iconpickerShow", {
                 iconpickerValue: this.iconpickerValue
             });
             this.updatePlacement();
             this.popover.addClass("in");
-            setTimeout(a.proxy(function() {
+            setTimeout(l.proxy(function() {
                 this.popover.css("display", this.isInline() ? "" : "block");
                 this._trigger("iconpickerShown", {
                     iconpickerValue: this.iconpickerValue
@@ -988,7 +983,7 @@
                 iconpickerValue: this.iconpickerValue
             });
             this.popover.removeClass("in");
-            setTimeout(a.proxy(function() {
+            setTimeout(l.proxy(function() {
                 this.popover.css("display", "none");
                 this.getSearchInput().val("");
                 this.filter("");
@@ -1004,24 +999,24 @@
                 this.show(true);
             }
         },
-        update: function(a, b) {
-            a = a ? a : this.getSourceValue(this.iconpickerValue);
+        update: function(e, a) {
+            e = e ? e : this.getSourceValue(this.iconpickerValue);
             this._trigger("iconpickerUpdate", {
                 iconpickerValue: this.iconpickerValue
             });
-            if (b === true) {
-                a = this.setValue(a);
+            if (a === true) {
+                e = this.setValue(e);
             } else {
-                a = this.setSourceValue(a);
-                this._updateFormGroupStatus(a !== false);
+                e = this.setSourceValue(e);
+                this._updateFormGroupStatus(e !== false);
             }
-            if (a !== false) {
+            if (e !== false) {
                 this._updateComponents();
             }
             this._trigger("iconpickerUpdated", {
                 iconpickerValue: this.iconpickerValue
             });
-            return a;
+            return e;
         },
         destroy: function() {
             this._trigger("iconpickerDestroy", {
@@ -1030,7 +1025,7 @@
             this.element.removeData("iconpicker").removeData("iconpickerValue").removeClass("iconpicker-element");
             this._unbindElementEvents();
             this._unbindWindowEvents();
-            a(this.popover).remove();
+            l(this.popover).remove();
             this._trigger("iconpickerDestroyed", {
                 iconpickerValue: this.iconpickerValue
             });
@@ -1059,16 +1054,16 @@
             return this.options.placement === "inline" || this.popover.hasClass("inline");
         }
     };
-    a.iconpicker = c;
-    a.fn.iconpicker = function(b) {
+    l.iconpicker = t;
+    l.fn.iconpicker = function(a) {
         return this.each(function() {
-            var d = a(this);
-            if (!d.data("iconpicker")) {
-                d.data("iconpicker", new c(this, typeof b === "object" ? b : {}));
+            var e = l(this);
+            if (!e.data("iconpicker")) {
+                e.data("iconpicker", new t(this, typeof a === "object" ? a : {}));
             }
         });
     };
-    c.defaultOptions = a.extend(c.defaultOptions, {
+    t.defaultOptions = l.extend(t.defaultOptions, {
         icons: [ {
             title: "fab fa-500px",
             searchTerms: []

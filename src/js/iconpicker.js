@@ -1,11 +1,10 @@
-/*
+/*!
  * Font Awesome Icon Picker
  * https://farbelous.github.io/fontawesome-iconpicker/
  *
- * Originally written by (c) 2016 Javi Aguilar
- * Licensed under the MIT License
- * https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
- *
+ * @author Javi Aguilar, itsjavi.com
+ * @license MIT License
+ * @see https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
  */
 
 (function(factory) {
@@ -260,7 +259,7 @@
                         $elementsToAppend.push(itemElement);
                     }
                 }
-                this.iconpicker.find('.iconpicker-items').append($elementsToAppend);                
+                this.iconpicker.find('.iconpicker-items').append($elementsToAppend);
                 this.popover.find('.popover-content').append(this.iconpicker);
 
                 return this.iconpicker;

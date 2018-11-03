@@ -1,4 +1,15 @@
 'use strict';
+
+const jsBanner = `/*!
+ * Font Awesome Icon Picker
+ * https://farbelous.github.io/fontawesome-iconpicker/
+ *
+ * @author Javi Aguilar, itsjavi.com
+ * @license MIT License
+ * @see https://github.com/farbelous/fontawesome-iconpicker/blob/master/LICENSE
+ */
+ `;
+
 module.exports = function(grunt) {
     const parsedIconPicker = 'prod/src/js/iconpicker.js';
     const tempIconsFile = '.icons.temp';
@@ -102,11 +113,11 @@ module.exports = function(grunt) {
                 options: {
                     compress: {},
                     beautify: false,
-                    preserveComments: 'some'
+                    comments: 'some',
+                    banner: jsBanner
                 },
                 files: {
                     'dist/js/fontawesome-iconpicker.min.js': [
-                        'src/js/license.js',
                         'src/js/jquery.ui.pos.js',
                         parsedIconPicker
                     ]
@@ -116,11 +127,11 @@ module.exports = function(grunt) {
                 options: {
                     compress: false,
                     beautify: true,
-                    preserveComments: 'some'
+                    comments: 'some',
+                    banner: jsBanner
                 },
                 files: {
                     'dist/js/fontawesome-iconpicker.js': [
-                        'src/js/license.js',
                         'src/js/jquery.ui.pos.js',
                         parsedIconPicker
                     ]

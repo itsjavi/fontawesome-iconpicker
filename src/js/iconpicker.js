@@ -148,7 +148,7 @@
                     ' <button class="iconpicker-btn iconpicker-btn-accept btn btn-primary btn-sm">Accept</button>',
                 search: '<input type="search" class="form-control iconpicker-search" placeholder="Type to filter" />',
                 iconpicker: '<div class="iconpicker"><div class="iconpicker-items"></div></div>',
-                iconpickerItem: '<a role="button" href="#" class="iconpicker-item"><i></i></a>',
+                iconpickerItem: '<a role="button" href="javascript:;" class="iconpicker-item"><i></i></a>',
             }
         };
 

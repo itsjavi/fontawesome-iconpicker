@@ -239,28 +239,28 @@
                     }
                 };
 
+                var $itemElementTemplate = $(this.options.templates.iconpickerItem);
+                var $elementsToAppend = [];
                 for (var i in this.options.icons) {
                     if (typeof this.options.icons[i].title === 'string') {
-                        var itemElement = $(this.options.templates.iconpickerItem);
+                        var itemElement = $itemElementTemplate.clone();
                         itemElement.find('i')
                             .addClass(this.options.fullClassFormatter(this.options.icons[i].title));
                         itemElement.data('iconpickerValue', this.options.icons[i].title)
                             .on('click.iconpicker', itemClickFn);
-                        this.iconpicker.find('.iconpicker-items').append(itemElement
-                            .attr('title', '.' + this.options.icons[i].title));
 
+                        itemElement.attr('title', '.' + this.options.icons[i].title);
                         if (this.options.icons[i].searchTerms.length > 0) {
                             var searchTerms = '';
                             for (var j = 0; j < this.options.icons[i].searchTerms.length; j++) {
                                 searchTerms = searchTerms + this.options.icons[i].searchTerms[j] + ' ';
                             }
-                            this.iconpicker.find('.iconpicker-items').append(itemElement
-                                .attr('data-search-terms', searchTerms));
+                            itemElement.attr('data-search-terms', searchTerms);
                         }
-
+                        $elementsToAppend.push(itemElement);
                     }
                 }
-
+                this.iconpicker.find('.iconpicker-items').append($elementsToAppend);                
                 this.popover.find('.popover-content').append(this.iconpicker);
 
                 return this.iconpicker;

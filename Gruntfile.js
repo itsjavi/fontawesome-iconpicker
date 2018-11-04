@@ -1,5 +1,6 @@
 'use strict';
 
+const FONTAWESOME_VERSION = '5.5.0';
 const jsBanner = `/*!
  * Font Awesome Icon Picker
  * https://farbelous.github.io/fontawesome-iconpicker/
@@ -16,7 +17,11 @@ module.exports = function(grunt) {
     grunt.initConfig({
         download: {
             somefile: {
-                src: ['https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.1.1/advanced-options/metadata/icons.yml'],
+                src: [
+                    'https://raw.githubusercontent.com/FortAwesome/Font-Awesome/' +
+                    FONTAWESOME_VERSION +
+                    '/advanced-options/metadata/icons.yml'
+                ],
                 dest: tempIconsFile
             },
         },
